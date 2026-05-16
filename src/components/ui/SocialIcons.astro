@@ -1,0 +1,52 @@
+---
+import { site } from '../../data/site';
+import telegramSvg from '../../icons/telegram.svg?raw';
+import maxSvg from '../../icons/max.svg?raw';
+import vkSvg from '../../icons/vk.svg?raw';
+
+interface Props {
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'light' | 'dark';
+  class?: string;
+}
+
+const { size = 'md', variant = 'dark', class: className = '' } = Astro.props;
+
+const sizeClasses = {
+  sm: 'w-5 h-5',
+  md: 'w-6 h-6',
+  lg: 'w-8 h-8',
+};
+
+const variantClasses = {
+  // dark — для светлых фонов: тёмная иконка
+  dark: 'text-indigo hover:text-cta',
+  // light — для тёмных фонов (footer на индиго): белая иконка
+  light: 'text-text-inverse hover:text-cta',
+};
+
+const linkBase = `inline-flex items-center justify-center transition-colors ${variantClasses[variant]}`;
+const iconClass = sizeClasses[size];
+
+const items = [
+  { href: site.social.telegram.channel, label: 'Telegram', svg: telegramSvg },
+  { href: site.social.max.url, label: 'MAX', svg: maxSvg },
+  { href: site.social.vk.url, label: 'VK', svg: vkSvg },
+];
+---
+
+<ul class={`flex items-center gap-3 ${className}`}>
+  {items.map((item) => (
+    <li>
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        class={linkBase}
+        aria-label={`Открыть ${item.label} в новой вкладке`}
+      >
+        <span class={iconClass} set:html={item.svg} />
+      </a>
+    </li>
+  ))}
+</ul>

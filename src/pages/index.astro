@@ -1,32 +1,29 @@
 ---
-import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SocialIcons from '../components/ui/SocialIcons.astro';
+import { site } from '../data/site';
 ---
 
-<!doctype html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Доброе Начало — частная школа-сад в Нахабино</title>
-    <meta name="description" content="Сайт находится в разработке. Запуск скоро." />
-    <meta name="robots" content="noindex, nofollow" />
-  </head>
-  <body class="min-h-screen flex items-center justify-center bg-bg">
-    <main class="text-center px-6 max-w-2xl">
-      <h1 class="text-hero text-indigo mb-4">Доброе Начало</h1>
-      <p class="text-xl text-text-muted mb-8">Частная школа-сад в Нахабино. Сайт в разработке.</p>
+<BaseLayout>
+  <main class="min-h-screen flex items-center justify-center px-6">
+    <div class="text-center max-w-2xl">
+      <h1 class="text-hero text-indigo mb-4">{site.name}</h1>
+      <p class="text-xl text-text-muted mb-8">{site.tagline}. Сайт в разработке.</p>
 
       <a
-        href="tel:+79858543655"
+        href={site.phone.href}
         class="inline-block bg-cta hover:bg-cta-hover text-text-inverse font-semibold px-8 py-4 rounded-lg shadow-cta transition-colors"
       >
-        +7 985 854-36-55
+        {site.phone.display}
       </a>
 
-      <div class="mt-12 grid grid-cols-2 gap-4 text-sm">
-        <div class="p-4 rounded-md bg-bg-soft text-text">bg-soft (голубой)</div>
-        <div class="p-4 rounded-md bg-bg-warm text-text">bg-warm (кремовый)</div>
+      <div class="mt-10 flex justify-center">
+        <SocialIcons size="lg" variant="dark" />
       </div>
-    </main>
-  </body>
-</html>
+
+      <p class="mt-8 text-sm text-text-muted">
+        {site.address.locality}, {site.address.street} · {site.address.nearestStation}
+      </p>
+    </div>
+  </main>
+</BaseLayout>
