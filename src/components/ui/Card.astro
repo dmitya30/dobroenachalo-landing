@@ -1,0 +1,35 @@
+---
+interface Props {
+  /** Цвет фона. По умолчанию белый. */
+  variant?: 'white' | 'soft' | 'warm';
+  /** Включить hover-эффект (для интерактивных карточек) */
+  interactive?: boolean;
+  /** Тег корня. По умолчанию <article>. */
+  as?: 'article' | 'div' | 'li';
+  class?: string;
+}
+
+const {
+  variant = 'white',
+  interactive = false,
+  as: Tag = 'article',
+  class: className = '',
+} = Astro.props;
+
+const variants = {
+  white: 'bg-bg',
+  soft: 'bg-bg-soft',
+  warm: 'bg-bg-warm',
+};
+
+const interactiveClass = interactive
+  ? 'transition-shadow hover:shadow-[var(--shadow-card-hover)]'
+  : '';
+
+const classes = `${variants[variant]} rounded-2xl p-6 md:p-8 shadow-[var(--shadow-card)] ${interactiveClass} ${className}`;
+---
+
+<Tag class={classes}>
+  <slot name="header" />
+  <slot />
+</Tag>

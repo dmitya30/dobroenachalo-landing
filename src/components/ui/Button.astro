@@ -1,0 +1,57 @@
+---
+interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  type?: 'button' | 'submit';
+  /** Открыть href в новой вкладке */
+  external?: boolean;
+  /** aria-label, если внутри только иконка */
+  label?: string;
+  class?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  external = false,
+  label,
+  class: className = '',
+} = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center font-semibold rounded-lg transition-colors focus-visible:outline-none whitespace-nowrap';
+
+const variants = {
+  primary: 'bg-cta hover:bg-cta-hover text-text-inverse shadow-cta',
+  secondary:
+    'bg-bg text-indigo border border-indigo hover:bg-indigo hover:text-text-inverse',
+  ghost: 'bg-transparent text-indigo hover:bg-bg-soft',
+};
+
+const sizes = {
+  sm: 'px-4 py-2 text-sm',
+  md: 'px-6 py-3 text-base',
+  lg: 'px-8 py-4 text-lg',
+};
+
+const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
+const isExternal = external || (href?.startsWith('http') ?? false);
+---
+
+{href ? (
+  <a
+    href={href}
+    class={classes}
+    aria-label={label}
+    {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
+  >
+    <slot />
+  </a>
+) : (
+  <button type={type} class={classes} aria-label={label}>
+    <slot />
+  </button>
+)}

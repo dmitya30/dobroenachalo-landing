@@ -1,0 +1,53 @@
+---
+interface Props {
+  /** Заголовок (видимый всегда) */
+  summary: string;
+  /** Раскрыть по умолчанию */
+  defaultOpen?: boolean;
+  /** Размер: card (с фоном, padding) или inline (без обвёртки) */
+  variant?: 'card' | 'inline';
+  class?: string;
+}
+
+const {
+  summary,
+  defaultOpen = false,
+  variant = 'card',
+  class: className = '',
+} = Astro.props;
+
+const wrapperClass =
+  variant === 'card'
+    ? `bg-bg rounded-2xl p-6 md:p-8 shadow-[var(--shadow-card)] ${className}`
+    : className;
+
+const summaryClass =
+  'flex items-center justify-between gap-4 cursor-pointer list-none font-semibold text-text';
+---
+
+<details open={defaultOpen} class={wrapperClass}>
+  <summary class={summaryClass}>
+    <span>{summary}</span>
+    <svg
+      class="w-5 h-5 shrink-0 transition-transform group-open:rotate-180"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </summary>
+  <div class="mt-4 text-text-muted">
+    <slot />
+  </div>
+</details>
+
+<style>
+  /* Убрать дефолтный маркер у summary */
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] > summary svg { transform: rotate(180deg); }
+</style>

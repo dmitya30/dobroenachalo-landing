@@ -1,0 +1,33 @@
+---
+interface Props {
+  /** Маленький подзаголовок над H2 — capitalized */
+  eyebrow?: string;
+  /** Основной H2 */
+  title: string;
+  /** Параграф под H2 — описание секции */
+  lead?: string;
+  /** Выравнивание текста */
+  align?: 'left' | 'center';
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  lead,
+  align = 'center',
+  class: className = '',
+} = Astro.props;
+
+const alignClass = align === 'center' ? 'text-center mx-auto' : 'text-left';
+---
+
+<header class={`max-w-3xl ${alignClass} ${className}`}>
+  {eyebrow && (
+    <p class="text-sm font-semibold uppercase tracking-wider text-cta mb-3">
+      {eyebrow}
+    </p>
+  )}
+  <h2 class="text-h2 text-indigo mb-4">{title}</h2>
+  {lead && <p class="text-lg text-text-muted">{lead}</p>}
+</header>

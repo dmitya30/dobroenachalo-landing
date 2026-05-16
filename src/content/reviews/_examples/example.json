@@ -1,0 +1,10 @@
+{
+  "author": "Пример",
+  "role": "родитель",
+  "text": "Пример отзыва. Будет заменён в диалоге №2.",
+  "rating": 5,
+  "source": "yandex",
+  "featured": false,
+  "short": true,
+  "date": "2025-01-01"
+}
