@@ -3,9 +3,17 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 
+// На время разработки сайт публикуется в подпапку
+// dmitya30.github.io/dobroenachalo-landing/.
+// Перед переездом на custom domain dobroenachalo.ru (корень) — выставить SITE_BASE=""
+// или просто убрать переменную в workflow.
+const SITE_BASE = process.env.SITE_BASE ?? '/dobroenachalo-landing';
+const SITE_URL = process.env.SITE_URL ?? 'https://dmitya30.github.io';
+
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://dobroenachalo.ru',
+  site: SITE_URL,
+  base: SITE_BASE,
   output: 'static',
   integrations: [sitemap()],
   vite: {
@@ -13,9 +21,5 @@ export default defineConfig({
   },
   build: {
     inlineStylesheets: 'auto',
-  },
-  image: {
-    // sharp по умолчанию в Astro 6, секцию image оставляю на случай
-    // если позднее понадобятся доп. настройки качества/форматов
   },
 });
