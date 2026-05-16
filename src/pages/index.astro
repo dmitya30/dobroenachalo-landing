@@ -11,13 +11,22 @@ import '../styles/global.css';
     <meta name="description" content="Сайт находится в разработке. Запуск скоро." />
     <meta name="robots" content="noindex, nofollow" />
   </head>
-  <body class="min-h-screen flex items-center justify-center bg-white text-slate-800 font-sans">
-    <main class="text-center px-6">
-      <h1 class="text-4xl font-semibold mb-3">Доброе Начало</h1>
-      <p class="text-lg text-slate-600">Сайт в разработке.</p>
-      <p class="mt-4 text-base">
-        Звонок и запись: <a href="tel:+79858543655" class="text-indigo-700 underline">+7 985 854-36-55</a>
-      </p>
+  <body class="min-h-screen flex items-center justify-center bg-bg">
+    <main class="text-center px-6 max-w-2xl">
+      <h1 class="text-hero text-indigo mb-4">Доброе Начало</h1>
+      <p class="text-xl text-text-muted mb-8">Частная школа-сад в Нахабино. Сайт в разработке.</p>
+
+      <a
+        href="tel:+79858543655"
+        class="inline-block bg-cta hover:bg-cta-hover text-text-inverse font-semibold px-8 py-4 rounded-lg shadow-cta transition-colors"
+      >
+        +7 985 854-36-55
+      </a>
+
+      <div class="mt-12 grid grid-cols-2 gap-4 text-sm">
+        <div class="p-4 rounded-md bg-bg-soft text-text">bg-soft (голубой)</div>
+        <div class="p-4 rounded-md bg-bg-warm text-text">bg-warm (кремовый)</div>
+      </div>
     </main>
   </body>
 </html>

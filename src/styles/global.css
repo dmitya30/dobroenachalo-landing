@@ -1,1 +1,98 @@
 @import "tailwindcss";
+
+/* Self-hosted fonts via fontsource */
+@import "@fontsource-variable/manrope";
+@import "@fontsource/cormorant-garamond/400.css";
+@import "@fontsource/cormorant-garamond/600.css";
+
+/* =========================================================================
+   Design tokens (Tailwind 4 @theme)
+   ВАЖНО: точные HEX бренда ждём от клиента (см. CONTEXT.md §13).
+   Текущие значения — рабочие, из Blueprint v0.1.
+   ========================================================================= */
+@theme {
+  /* --- Цвета бренда (raw) --- */
+  --color-indigo: #3D3F7A;
+  --color-indigo-dark: #2D2F5A;
+  --color-orange: #F5A35B;
+  --color-orange-dark: #E08840;
+  --color-blue-soft: #BFE3EC;
+  --color-cream: #FCE4CF;
+
+  /* --- Семантические алиасы (используем в компонентах) --- */
+  --color-bg: #FFFFFF;
+  --color-bg-soft: var(--color-blue-soft);
+  --color-bg-warm: var(--color-cream);
+  --color-text: var(--color-indigo);
+  --color-text-muted: #5A5C8A;
+  --color-text-inverse: #FFFFFF;
+  --color-cta: var(--color-orange);
+  --color-cta-hover: var(--color-orange-dark);
+  --color-border: #E5E7EB;
+
+  /* --- Типографика --- */
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-sans: "Manrope Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Семантические размеры для главных заголовков (адаптив через clamp) */
+  --text-hero: clamp(2.5rem, 5vw, 4.5rem);
+  --text-hero--line-height: 1.05;
+  --text-h2: clamp(2rem, 4vw, 3rem);
+  --text-h2--line-height: 1.15;
+  --text-h3: clamp(1.5rem, 3vw, 2rem);
+  --text-h3--line-height: 1.25;
+
+  /* --- Радиусы --- */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+
+  /* --- Тени --- */
+  --shadow-card: 0 4px 20px rgba(61, 63, 122, 0.08);
+  --shadow-card-hover: 0 8px 32px rgba(61, 63, 122, 0.12);
+  --shadow-cta: 0 6px 20px rgba(245, 163, 91, 0.35);
+
+  /* --- Анимации --- */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =========================================================================
+   Глобальные стили
+   ========================================================================= */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-bg);
+  font-feature-settings: "kern", "liga", "calt";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Доступный фокус */
+:focus-visible {
+  outline: 2px solid var(--color-cta);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Уважаем prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
