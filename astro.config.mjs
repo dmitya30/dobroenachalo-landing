@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
+import icon from 'astro-icon';
 
 // На время разработки сайт публикуется в подпапку
 // dmitya30.github.io/dobroenachalo-landing/.
@@ -15,7 +16,7 @@ export default defineConfig({
   site: SITE_URL,
   base: SITE_BASE,
   output: 'static',
-  integrations: [sitemap()],
+  integrations: [sitemap(), icon()],
   vite: {
     plugins: [tailwindcss()],
   },
