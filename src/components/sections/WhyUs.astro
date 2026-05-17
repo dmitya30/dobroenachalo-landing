@@ -1,0 +1,71 @@
+---
+import { Icon } from 'astro-icon/components';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Card from '../ui/Card.astro';
+
+interface Tile {
+  icon: string;
+  title: string;
+  text: string;
+}
+
+const tiles: Tile[] = [
+  {
+    icon: 'lucide:trees',
+    title: 'Закрытая территория в сосновом бору',
+    text: 'Отдельное здание, охрана, прогулки на свежем воздухе. Тишина и кислород вместо шумного двора.',
+  },
+  {
+    icon: 'lucide:users',
+    title: 'Классы до 10 детей',
+    text: 'Учитель замечает каждого. Никто не теряется в толпе, никто не остаётся непонятым.',
+  },
+  {
+    icon: 'lucide:utensils-crossed',
+    title: 'Питание от детского нутрициолога',
+    text: 'Меню составляет специалист по детскому питанию. Свежие продукты, готовка на месте.',
+  },
+  {
+    icon: 'lucide:book-open',
+    title: 'Программа Выготского — Эльконина — Давыдова',
+    text: 'Развитие понятийного мышления, а не зубрёжки. Углублённая математика, английский с детского сада.',
+  },
+  {
+    icon: 'lucide:train-front',
+    title: '380 м от МЦД «Нахабино Ясное»',
+    text: 'Удобно из коттеджных посёлков и из Москвы. Парковка для родителей.',
+  },
+  {
+    icon: 'lucide:infinity',
+    title: 'Единый путь: сад → школа → лагерь',
+    text: 'Ребёнок не меняет среду 10 лет. Те же педагоги, те же друзья, тот же дом.',
+  },
+];
+---
+
+<section id="why-us" class="bg-bg py-16 md:py-20 lg:py-24">
+  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Почему мы"
+      title="Почему родители выбирают «Доброе Начало»"
+      lead="Шесть причин, по которым семьи приезжают к нам из Москвы и коттеджных посёлков"
+      class="mb-12 md:mb-16"
+    />
+
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 list-none p-0">
+      {tiles.map((tile) => (
+        <Card as="li" variant="soft" class="flex flex-col gap-4">
+          <div class="flex items-center justify-center w-14 h-14 rounded-xl bg-bg text-cta shrink-0">
+            <Icon name={tile.icon} class="w-8 h-8" aria-hidden="true" />
+          </div>
+          <h3 class="text-xl font-semibold text-indigo leading-snug">
+            {tile.title}
+          </h3>
+          <p class="text-base text-text-muted leading-relaxed">
+            {tile.text}
+          </p>
+        </Card>
+      ))}
+    </ul>
+  </div>
+</section>
