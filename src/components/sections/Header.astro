@@ -13,11 +13,13 @@ const nav = [
   { href: '#reviews', label: 'Отзывы' },
   { href: '#contacts', label: 'Контакты' },
 ];
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <header class="sticky top-0 z-50 bg-bg/95 backdrop-blur border-b border-border">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-    <a href="/" class="flex-shrink-0" aria-label={site.name}>
+    <a href={base} class="flex-shrink-0" aria-label={`${site.name} — на главную`}>
       <Logo variant="compact" height={40} />
     </a>
 
@@ -29,19 +31,19 @@ const nav = [
       ))}
     </nav>
 
-    <div class="hidden md:flex items-center gap-4">
-      <Button href={site.phone.href} variant="primary" size="sm">
-        {site.phone.display}
+    <div class="hidden md:flex items-center gap-3">
+      <Button href={site.phone.href} variant="primary" size="md" label={`Позвонить ${site.phone.display}`}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        <span>Позвонить</span>
       </Button>
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-text-muted whitespace-nowrap">Написать:</span>
-        <SocialIcons mode="contacts" size="sm" variant="dark" />
-      </div>
+      <SocialIcons mode="contacts" size="md" variant="dark" />
     </div>
 
     <details class="lg:hidden relative">
       <summary class="list-none cursor-pointer p-2 text-indigo" aria-label="Открыть меню">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
           <line x1="3" y1="6" x2="21" y2="6"/>
           <line x1="3" y1="12" x2="21" y2="12"/>
           <line x1="3" y1="18" x2="21" y2="18"/>
@@ -52,11 +54,13 @@ const nav = [
           <a href={item.href} class="text-sm text-indigo hover:text-cta">{item.label}</a>
         ))}
         <div class="border-t border-border pt-3 flex flex-col gap-3">
-          <Button href={site.phone.href} variant="primary" size="sm">{site.phone.display}</Button>
-          <div class="flex items-center gap-2">
-            <span class="text-xs text-text-muted">Написать:</span>
-            <SocialIcons mode="contacts" size="sm" variant="dark" />
-          </div>
+          <Button href={site.phone.href} variant="primary" size="sm" label={`Позвонить ${site.phone.display}`}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>Позвонить</span>
+          </Button>
+          <SocialIcons mode="contacts" size="sm" variant="dark" />
         </div>
       </div>
     </details>
