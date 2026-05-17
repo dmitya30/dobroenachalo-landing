@@ -119,10 +119,19 @@ H1/H2/H3 — `letter-spacing: -0.01em` (задано в global.css).
 
 ## 6. Иконки
 
-- **Соцсети** (TG, Макс, VK) — кастомные SVG в `src/icons/`, плоские брендовые цвета.
-- **Внутри секций** (Trees, Users, Apple, Book, Train, Repeat и т.п.) — `astro-icon` + `@iconify-json/lucide`, цвет через `currentColor` (обычно `text-cta` оранжевый или `text-indigo`).
-- **Offer Cards** — кастомные line-icons 24×24, stroke 1.5, `currentColor`. Сюжеты по CONTEXT: домик с солнцем, открытая книга, палатка, шахматный конь.
-- **Эмодзи в текстах (texts.md)** — заменяются на lucide-иконки на этапе сборки.
+**Библиотека:** `astro-icon` + `@iconify-json/lucide` (установлены и подключены в `astro.config.mjs`). Используются через компонент `<Icon name="lucide:..." />`.
+
+**Правило выбора между Lucide и кастомным SVG:**
+- **Lucide через `<Icon>`** — для контурных утилитарных иконок (UI-элементы, чипы, состояния). Цвет через `currentColor` (обычно `text-cta` или `text-indigo`). Размеры через Tailwind (`w-4 h-4`, `w-5 h-5`, `w-6 h-6`).
+- **Кастомный inline SVG** — для:
+  - залитых форм (например, звезда в `RatingBadge` — заливка через Lucide не сработала, оставлен inline SVG с `fill="currentColor"`);
+  - брендовых иконок соцсетей (TG, Макс, VK — лежат в `src/icons/`, плоские брендовые цвета, без градиентов).
+
+**Уже подключённые Lucide-иконки:** `phone`, `menu`, `users`, `trees`, `train-front`, `star` (для контурных контекстов).
+
+**Offer Cards** — кастомные line-icons 24×24, stroke 1.5, `currentColor`. Сюжеты по CONTEXT: домик с солнцем, открытая книга, палатка, шахматный конь.
+
+**Эмодзи в текстах (texts.md)** — заменяются на Lucide-иконки на этапе сборки соответствующих секций.
 
 ---
 

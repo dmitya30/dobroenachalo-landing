@@ -1,6 +1,6 @@
 # PROGRESS.md — Журнал прогресса разработки
 
-**Последнее обновление:** 2026-05-17 (обновлено)
+**Последнее обновление:** 2026-05-17 (вечер)
 **Назначение:** живой снимок состояния проекта. Обновляется после каждого подтверждённого шага. Источник истины «что готово / в работе / впереди».
 
 ---
@@ -36,20 +36,22 @@
 - **Документация в репозитории**: docs/ (Blueprint, CONTEXT, Handoff, Dialog-1, texts, DESIGN, PROGRESS, DECISIONS)
 - **Sharp установлен**, локальный `pnpm build` проходит
 - **Секции 1, 2, 16 готовы по DESIGN.md:**
-  - Header.astro — CTA «Позвонить» + иконка, контакты-режим SocialIcons, BASE_URL для лого-ссылки
+  - Header.astro — CTA «Позвонить» + иконка телефона, контакты-режим SocialIcons, BASE_URL для лого-ссылки
   - Hero.astro — H1 «Частная школа-сад в сосновом лесу под Москвой», 4 чипа (RatingBadge + 3 info), адаптивный градиент, CTA-блок с телефоном и мессенджерами
   - Footer.astro — 4 колонки (лого-mark / навигация / контакты / соцсети), юр.данные в подвале
   - index.astro — собирает Header + Hero + Footer, остальные секции = заглушка
 - **RatingBadge расширен:** prop `variant: 'default' | 'on-dark'` для тёмных фонов
+- **`astro-icon` + `@iconify-json/lucide` установлены** (интеграция подключена в astro.config.mjs)
+- **Иконки в Header / Hero — переведены на `<Icon name="lucide:..." />`**: phone, menu, users, trees, train-front
+- **Звезда в RatingBadge — кастомный inline SVG с заливкой** (Lucide-звезда контурная, заливка через style не применилась)
 
 ### 🔧 В работе
 
-- Подготовка к сборке следующих секций по Blueprint
+- Подготовка к секции OfferCards (3 в Blueprint)
 
 ### ⏭ Следующие шаги (по Handoff)
 
-1. Установить `astro-icon` + `@iconify-json/lucide` (для иконок в секциях Why Us, Offer Cards и др.)
-2. Сборка 13 оставшихся секций по Blueprint:
+1. Сборка 13 оставшихся секций по Blueprint:
    - 3. OfferCards (4 карточки форматов с ценами)
    - 4. WhyUs (6 плиток)
    - 5. Philosophy (founder story)
@@ -63,11 +65,11 @@
    - 13. HowToEnroll (3 шага)
    - 14. FAQ (из коллекции)
    - 15. Contacts (карта + контакты)
-3. Два островка: ReviewSlider, Lightbox
-4. SEO: meta, OG, schema.org (EducationalOrganization + AggregateRating + FAQPage), sitemap, robots.txt
-5. Yandex.Metrica + 14 целей (как только получим ID)
-6. Lighthouse-аудит, оптимизация до 95+/95+/100/100
-7. Переход на custom domain dobroenachalo.ru (CNAME, DNS, HTTPS, снять `base` в astro.config, снять `noindex`)
+2. Два островка: ReviewSlider, Lightbox
+3. SEO: meta, OG, schema.org (EducationalOrganization + AggregateRating + FAQPage), sitemap, robots.txt
+4. Yandex.Metrica + 14 целей (как только получим ID)
+5. Lighthouse-аудит, оптимизация до 95+/95+/100/100
+6. Переход на custom domain dobroenachalo.ru (CNAME, DNS, HTTPS, снять `base` в astro.config, снять `noindex`)
 
 ### 🚧 Открытые блокеры
 
@@ -86,4 +88,3 @@
   - Архитектура → Blueprint.md
   - Тексты → texts.md
   - Решения → DECISIONS.md
-
