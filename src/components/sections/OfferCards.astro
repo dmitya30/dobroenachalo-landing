@@ -1,0 +1,106 @@
+---
+import Card from '../ui/Card.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import iconKindergarten from '../../icons/offer/offer-kindergarten.svg';
+import iconSchool from '../../icons/offer/offer-school.svg';
+import iconCamp from '../../icons/offer/offer-camp.svg';
+import iconClasses from '../../icons/offer/offer-classes.svg';
+
+interface Offer {
+  href: string;
+  icon: { src: string; width: number; height: number; format: string };
+  title: string;
+  ageOrMeta: string;
+  description: string;
+  price: string;
+  priceNote?: string;
+}
+
+const offers: Offer[] = [
+  {
+    href: '#kindergarten',
+    icon: iconKindergarten,
+    title: 'Детский сад',
+    ageOrMeta: 'Дети 2,5–7 лет',
+    description:
+      'Развитие через игру, ранний английский, питание от детского нутрициолога',
+    price: 'от 38 000 ₽ / мес',
+  },
+  {
+    href: '#school',
+    icon: iconSchool,
+    title: 'Начальная школа',
+    ageOrMeta: '1–4 классы',
+    description:
+      'Программа Выготского — Эльконина — Давыдова, классы до 10 детей',
+    price: 'от 48 000 ₽ / мес',
+  },
+  {
+    href: '#camp',
+    icon: iconCamp,
+    title: 'Летний лагерь 2026',
+    ageOrMeta: '12 тематических смен · июнь — август',
+    description: 'Без телефонов и компьютеров. Настоящее счастливое детство',
+    price: 'от 19 000 ₽ / смена',
+    priceNote: 'при раннем бронировании',
+  },
+  {
+    href: '#classes',
+    icon: iconClasses,
+    title: 'Кружки и секции',
+    ageOrMeta: 'Шахматы, столярка, логопед, акробатика, подготовка к школе',
+    description: 'Для своих и приходящих детей',
+    price: 'пробное - бесплатно',
+  },
+];
+---
+
+<section id="offers" class="py-16 md:py-20 lg:py-24 bg-bg-soft">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Форматы"
+      title="Выберите формат для вашего ребёнка"
+      class="mb-12 md:mb-16"
+    />
+
+    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {offers.map((offer) => (
+        <li>
+          <a
+            href={offer.href}
+            class="group block h-full rounded-2xl bg-bg shadow-[var(--shadow-card)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta focus-visible:ring-offset-2"
+          >
+            <div class="flex h-full flex-col items-center p-6 md:p-8 text-center">
+              <img
+                src={offer.icon.src}
+                alt=""
+                width="96"
+                height="96"
+                loading="lazy"
+                decoding="async"
+                class="w-20 h-20 md:w-24 md:h-24 mb-5"
+              />
+              <p class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">
+                {offer.ageOrMeta}
+              </p>
+              <h3 class="text-h3 text-indigo mb-3">{offer.title}</h3>
+              <p class="text-base text-text mb-6 flex-grow">
+                {offer.description}
+              </p>
+              <p class="text-xl font-semibold text-indigo">
+                {offer.price}
+              </p>
+              {offer.priceNote && (
+                <p class="mt-1 text-sm text-text-muted">{offer.priceNote}</p>
+              )}
+              <span class="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-cta group-hover:gap-2 transition-all">
+                Подробнее
+                <span aria-hidden="true">→</span>
+              </span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

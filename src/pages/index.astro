@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/sections/Header.astro';
 import Hero from '../components/sections/Hero.astro';
+import OfferCards from '../components/sections/OfferCards.astro';
 import Footer from '../components/sections/Footer.astro';
 import { site } from '../data/site';
 ---
@@ -14,9 +15,10 @@ import { site } from '../data/site';
   <Header />
   <main>
     <Hero />
-    <!-- Здесь будут OfferCards, WhyUs, Philosophy, Kindergarten, School, Camp, Classes, Team, Reviews, SchoolLife, HowToEnroll, FAQ, Contacts -->
+    <OfferCards />
+    <!-- Здесь будут WhyUs, Philosophy, Kindergarten, School, Camp, Classes, Team, Reviews, SchoolLife, HowToEnroll, FAQ, Contacts -->
     <section class="py-20 text-center text-text-muted">
-      <p>Остальные секции в разработке. Прокрутите вверх, чтобы посмотреть Hero.</p>
+      <p>Остальные секции в разработке.</p>
     </section>
   </main>
   <Footer />
