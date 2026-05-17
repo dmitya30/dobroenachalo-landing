@@ -1,33 +1,82 @@
 ---
 import { Image } from 'astro:assets';
 import Button from '../ui/Button.astro';
+import RatingBadge from '../ui/RatingBadge.astro';
 import { site } from '../../data/site';
 import heroImage from '../../assets/hero/hero-01-08-05-375.jpg';
 import telegramSvg from '../../icons/telegram.svg?raw';
 import maxSvg from '../../icons/max.svg?raw';
+
+// Чипы под H1 (рейтинг рендерится отдельно через RatingBadge)
+const chips = [
+  { icon: 'users', label: 'Классы до 10 детей' },
+  { icon: 'trees', label: 'Сосновый бор, закрытая территория' },
+  { icon: 'train', label: site.address.nearestStation },
+];
 ---
 
-<section class="relative min-h-[600px] flex items-center overflow-hidden">
+<section class="relative min-h-[600px] lg:min-h-[640px] flex items-center overflow-hidden">
   <Image
     src={heroImage}
-    alt="Дети школы-сада Доброе Начало"
+    alt="Дети школы-сада «Доброе Начало» на прогулке в сосновом лесу"
     class="absolute inset-0 w-full h-full object-cover"
     loading="eager"
     widths={[640, 960, 1280, 1920]}
     sizes="100vw"
   />
-  <div class="absolute inset-0 bg-gradient-to-r from-indigo/80 via-indigo/50 to-transparent"></div>
 
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
+  {/* Градиент: на мобиле вертикальный (текст внизу читаем), на десктопе — слева направо */}
+  <div class="absolute inset-0 bg-gradient-to-b from-indigo/40 via-indigo/70 to-indigo/90 md:bg-gradient-to-r md:from-indigo/85 md:via-indigo/60 md:to-transparent"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 w-full">
     <div class="max-w-2xl text-text-inverse">
-      <p class="text-sm uppercase tracking-wider mb-4 opacity-90">{site.tagline}</p>
-      <h1 class="text-hero font-display mb-6">{site.name}</h1>
-      <p class="text-xl mb-8 opacity-95">
-        Дети {site.ageRange.from}-{site.ageRange.to} лет в сосновом лесу. Классы до 10 человек, {site.address.nearestStation}.
+      <p class="text-sm uppercase tracking-wider mb-4 opacity-90 font-sans">
+        {site.tagline}
       </p>
 
-      <div class="flex flex-col gap-4">
-        <Button href={site.phone.href} variant="primary" size="lg" class="self-start">
+      <h1 class="text-hero mb-6">
+        Частная школа-сад в сосновом лесу под Москвой
+      </h1>
+
+      <p class="text-lg md:text-xl mb-8 opacity-95 font-sans">
+        От {site.ageRange.from.toString().replace('.', ',')} лет до уверенного старта в 5 классе. Единый путь сад → школа → лагерь.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-2 md:gap-3 mb-8">
+        <RatingBadge size="sm" variant="on-dark" />
+        {chips.map((chip) => (
+          <span class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-full px-3 py-1.5 text-sm">
+            {chip.icon === 'users' && (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            )}
+            {chip.icon === 'trees' && (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2L7 8h3v6l-3 4h10l-3-4v-6h3z"/>
+                <line x1="12" y1="18" x2="12" y2="22"/>
+              </svg>
+            )}
+            {chip.icon === 'train' && (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="4" y="3" width="16" height="16" rx="2"/>
+                <path d="M4 11h16"/>
+                <path d="M8 19l-2 3"/>
+                <path d="M16 19l2 3"/>
+                <circle cx="8.5" cy="15" r="0.5" fill="currentColor"/>
+                <circle cx="15.5" cy="15" r="0.5" fill="currentColor"/>
+              </svg>
+            )}
+            <span>{chip.label}</span>
+          </span>
+        ))}
+      </div>
+
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+        <Button href={site.phone.href} variant="primary" size="lg">
           Записаться на пробный день
         </Button>
 
@@ -36,7 +85,7 @@ import maxSvg from '../../icons/max.svg?raw';
             {site.phone.display}
           </a>
           <span aria-hidden="true" class="opacity-50">|</span>
-          <span>Написать в</span>
+          <span class="opacity-90">Написать в</span>
           <a
             href={site.social.telegram.contact}
             target="_blank"
