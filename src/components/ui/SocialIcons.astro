@@ -7,10 +7,20 @@ import vkSvg from '../../icons/vk.svg?raw';
 interface Props {
   size?: 'sm' | 'md' | 'lg';
   variant?: 'light' | 'dark';
+  /**
+   * channels - публичные ресурсы (TG-канал, Макс, VK) для футера.
+   * contacts - личные контакты для связи (TG-менеджер, Макс) для хедера/hero.
+   */
+  mode?: 'channels' | 'contacts';
   class?: string;
 }
 
-const { size = 'md', variant = 'dark', class: className = '' } = Astro.props;
+const {
+  size = 'md',
+  variant = 'dark',
+  mode = 'channels',
+  class: className = '',
+} = Astro.props;
 
 const sizeClasses = {
   sm: 'w-5 h-5',
@@ -19,20 +29,25 @@ const sizeClasses = {
 };
 
 const variantClasses = {
-  // dark — для светлых фонов: тёмная иконка
-  dark: 'text-indigo hover:text-cta',
-  // light — для тёмных фонов (footer на индиго): белая иконка
-  light: 'text-text-inverse hover:text-cta',
+  dark: 'text-indigo hover:opacity-80',
+  light: 'text-text-inverse hover:opacity-80',
 };
 
-const linkBase = `inline-flex items-center justify-center transition-colors ${variantClasses[variant]}`;
+const linkBase = `inline-flex items-center justify-center transition-opacity ${variantClasses[variant]}`;
 const iconClass = sizeClasses[size];
 
-const items = [
-  { href: site.social.telegram.channel, label: 'Telegram', svg: telegramSvg },
-  { href: site.social.max.url, label: 'MAX', svg: maxSvg },
+const channels = [
+  { href: site.social.telegram.channel, label: 'Telegram-канал', svg: telegramSvg },
+  { href: site.social.max.url, label: 'Макс', svg: maxSvg },
   { href: site.social.vk.url, label: 'VK', svg: vkSvg },
 ];
+
+const contacts = [
+  { href: site.social.telegram.contact, label: 'Написать в Telegram', svg: telegramSvg },
+  { href: site.social.max.url, label: 'Написать в Макс', svg: maxSvg },
+];
+
+const items = mode === 'contacts' ? contacts : channels;
 ---
 
 <ul class={`flex items-center gap-3 ${className}`}>
@@ -43,7 +58,7 @@ const items = [
         target="_blank"
         rel="noopener noreferrer"
         class={linkBase}
-        aria-label={`Открыть ${item.label} в новой вкладке`}
+        aria-label={`${item.label} (открыть в новой вкладке)`}
       >
         <span class={iconClass} set:html={item.svg} />
       </a>

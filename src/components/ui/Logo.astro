@@ -1,0 +1,59 @@
+---
+import logoFull from '../../assets/logo/logo-full.svg?raw';
+import logoCompact from '../../assets/logo/logo-compact.svg?raw';
+import logoMark from '../../assets/logo/logo-mark.svg?raw';
+
+interface Props {
+  variant?: 'full' | 'compact' | 'mark';
+  /** Высота лого в px. Ширина пропорциональна */
+  height?: number;
+  class?: string;
+  /** Для семантики - является ли лого ссылкой на главную */
+  asLink?: boolean;
+}
+
+const {
+  variant = 'compact',
+  height = 48,
+  class: className = '',
+  asLink = false,
+} = Astro.props;
+
+const svgMap = {
+  full: logoFull,
+  compact: logoCompact,
+  mark: logoMark,
+};
+
+const svg = svgMap[variant];
+---
+
+{asLink ? (
+  <a href="/" class={`logo-link ${className}`} aria-label="Доброе Начало — на главную" style={`--logo-height: ${height}px`}>
+    <span class="logo-svg" set:html={svg} />
+  </a>
+) : (
+  <span class={`logo-wrap ${className}`} style={`--logo-height: ${height}px`}>
+    <span class="logo-svg" set:html={svg} />
+  </span>
+)}
+
+<style>
+  .logo-link,
+  .logo-wrap {
+    display: inline-flex;
+    align-items: center;
+    line-height: 0;
+  }
+  .logo-link {
+    transition: opacity 0.2s var(--ease-smooth);
+  }
+  .logo-link:hover {
+    opacity: 0.85;
+  }
+  .logo-svg :global(svg) {
+    height: var(--logo-height);
+    width: auto;
+    display: block;
+  }
+</style>

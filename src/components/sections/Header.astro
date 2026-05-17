@@ -1,0 +1,64 @@
+---
+import Logo from '../ui/Logo.astro';
+import Button from '../ui/Button.astro';
+import SocialIcons from '../ui/SocialIcons.astro';
+import { site } from '../../data/site';
+
+const nav = [
+  { href: '#kindergarten', label: 'Сад' },
+  { href: '#school', label: 'Школа' },
+  { href: '#camp', label: 'Лагерь' },
+  { href: '#classes', label: 'Кружки' },
+  { href: '#team', label: 'Команда' },
+  { href: '#reviews', label: 'Отзывы' },
+  { href: '#contacts', label: 'Контакты' },
+];
+---
+
+<header class="sticky top-0 z-50 bg-bg/95 backdrop-blur border-b border-border">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+    <a href="/" class="flex-shrink-0" aria-label={site.name}>
+      <Logo variant="compact" height={40} />
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-6" aria-label="Главное меню">
+      {nav.map((item) => (
+        <a href={item.href} class="text-sm text-indigo hover:text-cta transition-colors">
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="hidden md:flex items-center gap-4">
+      <Button href={site.phone.href} variant="primary" size="sm">
+        {site.phone.display}
+      </Button>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-text-muted whitespace-nowrap">Написать:</span>
+        <SocialIcons mode="contacts" size="sm" variant="dark" />
+      </div>
+    </div>
+
+    <details class="lg:hidden relative">
+      <summary class="list-none cursor-pointer p-2 text-indigo" aria-label="Открыть меню">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </summary>
+      <div class="absolute right-0 top-full mt-2 w-64 bg-bg border border-border rounded-md shadow-card p-4 flex flex-col gap-3">
+        {nav.map((item) => (
+          <a href={item.href} class="text-sm text-indigo hover:text-cta">{item.label}</a>
+        ))}
+        <div class="border-t border-border pt-3 flex flex-col gap-3">
+          <Button href={site.phone.href} variant="primary" size="sm">{site.phone.display}</Button>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-text-muted">Написать:</span>
+            <SocialIcons mode="contacts" size="sm" variant="dark" />
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+</header>

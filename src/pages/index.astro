@@ -1,29 +1,23 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SocialIcons from '../components/ui/SocialIcons.astro';
+import Header from '../components/sections/Header.astro';
+import Hero from '../components/sections/Hero.astro';
+import Footer from '../components/sections/Footer.astro';
 import { site } from '../data/site';
 ---
 
-<BaseLayout>
-  <main class="min-h-screen flex items-center justify-center px-6">
-    <div class="text-center max-w-2xl">
-      <h1 class="text-hero text-indigo mb-4">{site.name}</h1>
-      <p class="text-xl text-text-muted mb-8">{site.tagline}. Сайт в разработке.</p>
-
-      <a
-        href={site.phone.href}
-        class="inline-block bg-cta hover:bg-cta-hover text-text-inverse font-semibold px-8 py-4 rounded-lg shadow-cta transition-colors"
-      >
-        {site.phone.display}
-      </a>
-
-      <div class="mt-10 flex justify-center">
-        <SocialIcons size="lg" variant="dark" />
-      </div>
-
-      <p class="mt-8 text-sm text-text-muted">
-        {site.address.locality}, {site.address.street} · {site.address.nearestStation}
-      </p>
-    </div>
+<BaseLayout
+  title={`${site.name} - частная школа-сад в Нахабино | 2,5-11 лет`}
+  description={`Частная школа-сад в сосновом лесу, 380 м от МЦД «Нахабино Ясное». Классы до 10 детей, программа Выготского-Эльконина-Давыдова. Рейтинг 4,7 на Яндекс.Картах.`}
+  noindex={true}
+>
+  <Header />
+  <main>
+    <Hero />
+    <!-- Здесь будут OfferCards, WhyUs, Philosophy, Kindergarten, School, Camp, Classes, Team, Reviews, SchoolLife, HowToEnroll, FAQ, Contacts -->
+    <section class="py-20 text-center text-text-muted">
+      <p>Остальные секции в разработке. Прокрутите вверх, чтобы посмотреть Hero.</p>
+    </section>
   </main>
+  <Footer />
 </BaseLayout>

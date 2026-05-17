@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import Button from '../ui/Button.astro';
+import { site } from '../../data/site';
+import heroImage from '../../assets/hero/hero-01-08-05-375.jpg';
+import telegramSvg from '../../icons/telegram.svg?raw';
+import maxSvg from '../../icons/max.svg?raw';
+---
+
+<section class="relative min-h-[600px] flex items-center overflow-hidden">
+  <Image
+    src={heroImage}
+    alt="Дети школы-сада Доброе Начало"
+    class="absolute inset-0 w-full h-full object-cover"
+    loading="eager"
+    widths={[640, 960, 1280, 1920]}
+    sizes="100vw"
+  />
+  <div class="absolute inset-0 bg-gradient-to-r from-indigo/80 via-indigo/50 to-transparent"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
+    <div class="max-w-2xl text-text-inverse">
+      <p class="text-sm uppercase tracking-wider mb-4 opacity-90">{site.tagline}</p>
+      <h1 class="text-hero font-display mb-6">{site.name}</h1>
+      <p class="text-xl mb-8 opacity-95">
+        Дети {site.ageRange.from}-{site.ageRange.to} лет в сосновом лесу. Классы до 10 человек, {site.address.nearestStation}.
+      </p>
+
+      <div class="flex flex-col gap-4">
+        <Button href={site.phone.href} variant="primary" size="lg" class="self-start">
+          Записаться на пробный день
+        </Button>
+
+        <div class="flex flex-wrap items-center gap-3 text-base">
+          <a href={site.phone.href} class="font-semibold hover:text-cta transition-colors">
+            {site.phone.display}
+          </a>
+          <span aria-hidden="true" class="opacity-50">|</span>
+          <span>Написать в</span>
+          <a
+            href={site.social.telegram.contact}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center hover:opacity-80 transition-opacity"
+            aria-label="Написать в Telegram"
+          >
+            <span class="w-6 h-6 inline-block" set:html={telegramSvg} />
+          </a>
+          <a
+            href={site.social.max.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center hover:opacity-80 transition-opacity"
+            aria-label="Написать в Макс"
+          >
+            <span class="w-6 h-6 inline-block" set:html={maxSvg} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -12,12 +12,14 @@
    ========================================================================= */
 @theme {
   /* --- Цвета бренда (raw) --- */
-  --color-indigo: #3D3F7A;
-  --color-indigo-dark: #2D2F5A;
-  --color-orange: #F5A35B;
-  --color-orange-dark: #E08840;
-  --color-blue-soft: #BFE3EC;
-  --color-cream: #FCE4CF;
+  --color-indigo: #464682;
+  --color-indigo-dark: #33335E;
+  --color-indigo-soft: #6E78B4;
+  --color-orange: #FF9664;
+  --color-orange-dark: #E07A4A;
+  --color-blue-soft: #A0EBFF;
+  --color-cream: #FFDCB4;
+  --color-ink: #2B2A29;
 
   /* --- Семантические алиасы (используем в компонентах) --- */
   --color-bg: #FFFFFF;
@@ -49,9 +51,9 @@
   --radius-xl: 32px;
 
   /* --- Тени --- */
-  --shadow-card: 0 4px 20px rgba(61, 63, 122, 0.08);
-  --shadow-card-hover: 0 8px 32px rgba(61, 63, 122, 0.12);
-  --shadow-cta: 0 6px 20px rgba(245, 163, 91, 0.35);
+  --shadow-card: 0 4px 20px rgba(70, 70, 130, 0.08);
+  --shadow-card-hover: 0 8px 32px rgba(70, 70, 130, 0.12);
+  --shadow-cta: 0 6px 20px rgba(255, 150, 100, 0.35);
 
   /* --- Анимации --- */
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);

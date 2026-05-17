@@ -1,0 +1,43 @@
+---
+import Logo from '../ui/Logo.astro';
+import SocialIcons from '../ui/SocialIcons.astro';
+import { site } from '../../data/site';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-indigo text-text-inverse mt-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-8 md:grid-cols-3">
+    <div>
+      <Logo variant="compact" height={48} class="mb-4" />
+      <p class="text-sm opacity-90">{site.description}</p>
+    </div>
+
+    <div>
+      <h3 class="text-base font-semibold mb-3">Контакты</h3>
+      <ul class="space-y-2 text-sm opacity-90">
+        <li>
+          <a href={site.phone.href} class="hover:text-cta transition-colors">
+            {site.phone.display}
+          </a>
+        </li>
+        <li>{site.address.locality}, {site.address.street}</li>
+        <li>{site.address.district}, {site.address.region}</li>
+        <li>{site.address.nearestStation}</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-base font-semibold mb-3">Мы в соцсетях</h3>
+      <SocialIcons mode="channels" size="md" variant="light" />
+    </div>
+  </div>
+
+  <div class="border-t border-text-inverse/15">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-xs opacity-75 space-y-1">
+      <p>{site.legal.fullName}</p>
+      <p>ИНН {site.legal.inn} &middot; ОГРНИП {site.legal.ogrnip}</p>
+      <p>&copy; {currentYear} {site.name}. Все права защищены.</p>
+    </div>
+  </div>
+</footer>
