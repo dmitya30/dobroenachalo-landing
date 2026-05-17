@@ -4,31 +4,54 @@ import SocialIcons from '../ui/SocialIcons.astro';
 import { site } from '../../data/site';
 
 const currentYear = new Date().getFullYear();
+
+const nav = [
+  { href: '#kindergarten', label: 'Сад' },
+  { href: '#school', label: 'Школа' },
+  { href: '#camp', label: 'Лагерь' },
+  { href: '#classes', label: 'Кружки' },
+  { href: '#team', label: 'Команда' },
+  { href: '#reviews', label: 'Отзывы' },
+  { href: '#contacts', label: 'Контакты' },
+];
 ---
 
-<footer class="bg-indigo text-text-inverse mt-16">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-8 md:grid-cols-3">
-    <div>
-      <Logo variant="compact" height={48} class="mb-4" />
+<footer class="bg-indigo text-text-inverse">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+    <div class="lg:col-span-1">
+      <Logo variant="mark" height={64} class="mb-4" />
       <p class="text-sm opacity-90">{site.description}</p>
     </div>
 
+    <nav aria-label="Навигация в подвале">
+      <h3 class="text-base font-semibold mb-3 font-sans">Разделы</h3>
+      <ul class="space-y-2 text-sm opacity-90">
+        {nav.map((item) => (
+          <li>
+            <a href={item.href} class="hover:text-cta transition-colors">
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
     <div>
-      <h3 class="text-base font-semibold mb-3">Контакты</h3>
+      <h3 class="text-base font-semibold mb-3 font-sans">Контакты</h3>
       <ul class="space-y-2 text-sm opacity-90">
         <li>
-          <a href={site.phone.href} class="hover:text-cta transition-colors">
+          <a href={site.phone.href} class="hover:text-cta transition-colors font-semibold">
             {site.phone.display}
           </a>
         </li>
         <li>{site.address.locality}, {site.address.street}</li>
         <li>{site.address.district}, {site.address.region}</li>
-        <li>{site.address.nearestStation}</li>
+        <li class="opacity-75">{site.address.nearestStation}</li>
       </ul>
     </div>
 
     <div>
-      <h3 class="text-base font-semibold mb-3">Мы в соцсетях</h3>
+      <h3 class="text-base font-semibold mb-3 font-sans">Мы в соцсетях</h3>
       <SocialIcons mode="channels" size="md" variant="light" />
     </div>
   </div>
