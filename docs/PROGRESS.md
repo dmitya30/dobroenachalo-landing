@@ -1,6 +1,6 @@
 # PROGRESS.md — Журнал прогресса разработки
 
-**Последнее обновление:** 2026-05-17 (вечер)
+**Последнее обновление:** 2026-05-17 (поздний вечер)
 **Назначение:** живой снимок состояния проекта. Обновляется после каждого подтверждённого шага. Источник истины «что готово / в работе / впереди».
 
 ---
@@ -35,24 +35,25 @@
   - school-life: 8 JSON
 - **Документация в репозитории**: docs/ (Blueprint, CONTEXT, Handoff, Dialog-1, texts, DESIGN, PROGRESS, DECISIONS)
 - **Sharp установлен**, локальный `pnpm build` проходит
-- **Секции 1, 2, 16 готовы по DESIGN.md:**
-  - Header.astro — CTA «Позвонить» + иконка телефона, контакты-режим SocialIcons, BASE_URL для лого-ссылки
-  - Hero.astro — H1 «Частная школа-сад в сосновом лесу под Москвой», 4 чипа (RatingBadge + 3 info), адаптивный градиент, CTA-блок с телефоном и мессенджерами
-  - Footer.astro — 4 колонки (лого-mark / навигация / контакты / соцсети), юр.данные в подвале
-  - index.astro — собирает Header + Hero + Footer, остальные секции = заглушка
-- **RatingBadge расширен:** prop `variant: 'default' | 'on-dark'` для тёмных фонов
-- **`astro-icon` + `@iconify-json/lucide` установлены** (интеграция подключена в astro.config.mjs)
+- **`astro-icon` + `@iconify-json/lucide` установлены** (интеграция в astro.config.mjs)
 - **Иконки в Header / Hero — переведены на `<Icon name="lucide:..." />`**: phone, menu, users, trees, train-front
 - **Звезда в RatingBadge — кастомный inline SVG с заливкой** (Lucide-звезда контурная, заливка через style не применилась)
+- **Кастомные SVG для OfferCards в `src/icons/offer/`**: offer-kindergarten (лошадка-качалка), offer-school (учитель + дети), offer-camp (бегущие дети), offer-classes (шахматы), metod (резерв — девушка с портфелем, не используется)
+- **Секции 1, 2, 3, 16 готовы по DESIGN.md:**
+  - Header.astro — CTA «Позвонить» + иконка телефона, контакты-режим SocialIcons, BASE_URL для лого-ссылки
+  - Hero.astro — H1 «Частная школа-сад в сосновом лесу под Москвой», 4 чипа (RatingBadge + 3 info), адаптивный градиент, CTA-блок с телефоном и мессенджерами
+  - OfferCards.astro — 4 кликабельные карточки (Сад / Школа / Лагерь / Кружки), якорные ссылки, кастомные SVG-иконки, фон секции голубой (`bg-soft`), hover-lift
+  - Footer.astro — 4 колонки (лого-mark / навигация / контакты / соцсети), юр.данные в подвале
+  - index.astro — собирает Header + Hero + OfferCards + Footer, остальные секции = заглушка
+- **RatingBadge расширен:** prop `variant: 'default' | 'on-dark'` для тёмных фонов
 
 ### 🔧 В работе
 
-- Подготовка к секции OfferCards (3 в Blueprint)
+- Подготовка к секции WhyUs (4 в Blueprint, 6 плиток с иконками Lucide)
 
 ### ⏭ Следующие шаги (по Handoff)
 
-1. Сборка 13 оставшихся секций по Blueprint:
-   - 3. OfferCards (4 карточки форматов с ценами)
+1. Сборка 12 оставшихся секций по Blueprint:
    - 4. WhyUs (6 плиток)
    - 5. Philosophy (founder story)
    - 6. Kindergarten (детальный блок)
@@ -70,6 +71,10 @@
 4. Yandex.Metrica + 14 целей (как только получим ID)
 5. Lighthouse-аудит, оптимизация до 95+/95+/100/100
 6. Переход на custom domain dobroenachalo.ru (CNAME, DNS, HTTPS, снять `base` в astro.config, снять `noindex`)
+
+### 🐛 Известные мелочи (не блокеры)
+
+- **OfferCards: «скачут» элементы внутри карточек** из-за разной длины заголовков/описаний. Решено оставить как есть (тексты действительно разные). Если потом захочется выровнять — см. DECISIONS «Выравнивание карточек».
 
 ### 🚧 Открытые блокеры
 
