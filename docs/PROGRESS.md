@@ -1,6 +1,6 @@
 # PROGRESS.md — Журнал прогресса разработки
 
-**Последнее обновление:** 2026-05-17
+**Последнее обновление:** 2026-05-17 (обновлено)
 **Назначение:** живой снимок состояния проекта. Обновляется после каждого подтверждённого шага. Источник истины «что готово / в работе / впереди».
 
 ---
@@ -35,22 +35,35 @@
   - school-life: 8 JSON
 - **Документация в репозитории**: docs/ (Blueprint, CONTEXT, Handoff, Dialog-1, texts, DESIGN, PROGRESS, DECISIONS)
 - **Sharp установлен**, локальный `pnpm build` проходит
-- **Секции (черновые, не по дизайн-контракту):**
-  - Header.astro
-  - Hero.astro
-  - Footer.astro
-  - index.astro (собирает Header + Hero + Footer)
+- **Секции 1, 2, 16 готовы по DESIGN.md:**
+  - Header.astro — CTA «Позвонить» + иконка, контакты-режим SocialIcons, BASE_URL для лого-ссылки
+  - Hero.astro — H1 «Частная школа-сад в сосновом лесу под Москвой», 4 чипа (RatingBadge + 3 info), адаптивный градиент, CTA-блок с телефоном и мессенджерами
+  - Footer.astro — 4 колонки (лого-mark / навигация / контакты / соцсети), юр.данные в подвале
+  - index.astro — собирает Header + Hero + Footer, остальные секции = заглушка
+- **RatingBadge расширен:** prop `variant: 'default' | 'on-dark'` для тёмных фонов
 
 ### 🔧 В работе
 
-- Согласование DESIGN.md как источника истины
-- Рефакторинг Header / Hero / Footer под утверждённый дизайн-контракт
+- Подготовка к сборке следующих секций по Blueprint
 
 ### ⏭ Следующие шаги (по Handoff)
 
-1. Рефакторинг Header/Hero/Footer по DESIGN.md (после утверждения)
-2. Сборка 13 оставшихся секций: OfferCards, WhyUs, Philosophy, Kindergarten, School, SummerCamp, AdditionalClasses, Team, Reviews, SchoolLife, HowToEnroll, FAQ, Contacts
-3. Два островка: ReviewSlider (client:visible), Lightbox (client:idle)
+1. Установить `astro-icon` + `@iconify-json/lucide` (для иконок в секциях Why Us, Offer Cards и др.)
+2. Сборка 13 оставшихся секций по Blueprint:
+   - 3. OfferCards (4 карточки форматов с ценами)
+   - 4. WhyUs (6 плиток)
+   - 5. Philosophy (founder story)
+   - 6. Kindergarten (детальный блок)
+   - 7. School (детальный блок)
+   - 8. SummerCamp (12 смен из коллекции)
+   - 9. AdditionalClasses (5 кружков из коллекции)
+   - 10. Team (4 ключевых + expandable из коллекции)
+   - 11. Reviews (+ island ReviewSlider, client:visible)
+   - 12. SchoolLife (+ island Lightbox, client:idle)
+   - 13. HowToEnroll (3 шага)
+   - 14. FAQ (из коллекции)
+   - 15. Contacts (карта + контакты)
+3. Два островка: ReviewSlider, Lightbox
 4. SEO: meta, OG, schema.org (EducationalOrganization + AggregateRating + FAQPage), sitemap, robots.txt
 5. Yandex.Metrica + 14 целей (как только получим ID)
 6. Lighthouse-аудит, оптимизация до 95+/95+/100/100
