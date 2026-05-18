@@ -1,0 +1,204 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import SectionHeading from '../ui/SectionHeading.astro';
+
+// Загружаем все фото папки на этапе сборки
+const photoModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/school-life/*.jpg',
+  { eager: true }
+);
+const photoMap: Record<string, ImageMetadata> = {};
+for (const path in photoModules) {
+  const filename = path.split('/').pop()!;
+  photoMap[filename] = photoModules[path].default;
+}
+
+const items = (await getCollection('schoolLife')).sort((a, b) => a.data.order - b.data.order);
+
+// Палитра для тегов (циклическая)
+const tagColors: Record<string, string> = {
+  events: 'bg-cta text-bg',
+  art: 'bg-[#FFCC00] text-indigo',
+  outdoor: 'bg-[#00C950] text-bg',
+  study: 'bg-indigo text-bg',
+  food: 'bg-warm text-indigo',
+  play: 'bg-soft text-indigo',
+  life: 'bg-indigo-soft text-bg',
+};
+const tagLabels: Record<string, string> = {
+  events: 'События',
+  art: 'Творчество',
+  outdoor: 'На воздухе',
+  study: 'Занятия',
+  food: 'Питание',
+  play: 'Активности',
+  life: 'Жизнь школы',
+};
+
+// Данные для лайтбокса (передаём JSON через data-атрибут)
+const lightboxItems = items
+  .map((item, idx) => {
+    const photo = photoMap[item.data.image];
+    if (!photo) return null;
+    return {
+      idx,
+      src: photo.src,
+      caption: item.data.caption,
+      tag: item.data.tag,
+    };
+  })
+  .filter(Boolean);
+---
+<section id="school-life" class="bg-bg py-16 md:py-20 lg:py-24">
+  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Жизнь школы"
+      title="Один день в «Добром Начале»"
+      lead="Праздники, занятия, прогулки, обеды, творчество — всё, чем живут дети."
+      class="mb-10 md:mb-12"
+    />
+
+    <!-- Masonry через CSS columns -->
+    <div class="columns-1 sm:columns-2 lg:columns-3 gap-4 md:gap-6 [&>*]:mb-4 md:[&>*]:mb-6" data-gallery>
+      {items.map((item, idx) => {
+        const photo = photoMap[item.data.image];
+        if (!photo) return null;
+        const tagColor = item.data.tag ? tagColors[item.data.tag] ?? 'bg-indigo text-bg' : '';
+        const tagLabel = item.data.tag ? tagLabels[item.data.tag] ?? item.data.tag : '';
+        return (
+          <button
+            type="button"
+            class="group relative block w-full overflow-hidden rounded-xl shadow-sm break-inside-avoid cursor-zoom-in"
+            data-gallery-item
+            data-idx={idx}
+            aria-label={`Открыть фото: ${item.data.caption}`}
+          >
+            <Image
+              src={photo}
+              alt={item.data.caption}
+              widths={[400, 600, 900]}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+              <span class="text-bg text-sm font-medium drop-shadow">{item.data.caption}</span>
+              {tagLabel && <span class={`shrink-0 px-2 py-0.5 rounded-full text-xs font-medium ${tagColor}`}>{tagLabel}</span>}
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  </div>
+
+  <!-- Lightbox overlay -->
+  <div
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-ink/95 p-4 md:p-8"
+    data-lightbox
+    role="dialog"
+    aria-modal="true"
+    aria-label="Просмотр фотографии"
+  >
+    <button
+      type="button"
+      class="absolute top-4 right-4 md:top-6 md:right-6 w-11 h-11 rounded-full bg-bg/10 hover:bg-bg/20 text-bg flex items-center justify-center transition-colors"
+      data-lightbox-close
+      aria-label="Закрыть"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+
+    <button
+      type="button"
+      class="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-11 h-11 md:w-14 md:h-14 rounded-full bg-bg/10 hover:bg-bg/20 text-bg flex items-center justify-center transition-colors"
+      data-lightbox-prev
+      aria-label="Предыдущее фото"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+
+    <button
+      type="button"
+      class="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 w-11 h-11 md:w-14 md:h-14 rounded-full bg-bg/10 hover:bg-bg/20 text-bg flex items-center justify-center transition-colors"
+      data-lightbox-next
+      aria-label="Следующее фото"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+
+    <figure class="max-w-5xl max-h-full flex flex-col items-center gap-4">
+      <img
+        data-lightbox-img
+        src=""
+        alt=""
+        class="max-w-full max-h-[calc(100vh-10rem)] object-contain rounded-lg"
+      />
+      <figcaption class="text-bg text-center text-sm md:text-base" data-lightbox-caption></figcaption>
+    </figure>
+  </div>
+
+  <script type="application/json" data-lightbox-data set:html={JSON.stringify(lightboxItems)} />
+</section>
+
+<script>
+  const root = document.getElementById('school-life');
+  if (root) {
+    const dataEl = root.querySelector<HTMLElement>('[data-lightbox-data]');
+    const lightbox = root.querySelector<HTMLElement>('[data-lightbox]');
+    const imgEl = root.querySelector<HTMLImageElement>('[data-lightbox-img]');
+    const captionEl = root.querySelector<HTMLElement>('[data-lightbox-caption]');
+    const closeBtn = root.querySelector<HTMLButtonElement>('[data-lightbox-close]');
+    const prevBtn = root.querySelector<HTMLButtonElement>('[data-lightbox-prev]');
+    const nextBtn = root.querySelector<HTMLButtonElement>('[data-lightbox-next]');
+
+    if (!dataEl || !lightbox || !imgEl || !captionEl || !closeBtn || !prevBtn || !nextBtn) {
+      throw new Error('SchoolLife: missing lightbox nodes');
+    }
+
+    type Item = { idx: number; src: string; caption: string; tag?: string };
+    const items: Item[] = JSON.parse(dataEl.textContent || '[]');
+    let currentIdx = 0;
+
+    const openAt = (idx: number) => {
+      currentIdx = (idx + items.length) % items.length;
+      const item = items[currentIdx];
+      imgEl.src = item.src;
+      imgEl.alt = item.caption;
+      captionEl.textContent = item.caption;
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    };
+    const close = () => {
+      lightbox.classList.add('hidden');
+      lightbox.classList.remove('flex');
+      document.body.style.overflow = '';
+    };
+
+    root.querySelectorAll<HTMLButtonElement>('[data-gallery-item]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.dataset.idx);
+        openAt(idx);
+      });
+    });
+
+    closeBtn.addEventListener('click', close);
+    prevBtn.addEventListener('click', () => openAt(currentIdx - 1));
+    nextBtn.addEventListener('click', () => openAt(currentIdx + 1));
+
+    // Закрытие по клику на фон
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) close();
+    });
+
+    // Клавиатура
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.classList.contains('hidden')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') openAt(currentIdx - 1);
+      if (e.key === 'ArrowRight') openAt(currentIdx + 1);
+    });
+  }
+</script>
