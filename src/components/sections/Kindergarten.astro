@@ -1,0 +1,172 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import SectionHeading from '../ui/SectionHeading.astro';
+import ExpandableBlock from '../ui/ExpandableBlock.astro';
+import Button from '../ui/Button.astro';
+import { site } from '../../data/site';
+import imgMain from '../../assets/kindergarten/kindergarten-02-08-05-ds-dn-1.jpg';
+import imgSecondary1 from '../../assets/kindergarten/kindergarten-01-08-05-xxxl-2026-05-15t144403-857.jpg';
+import imgSecondary2 from '../../assets/kindergarten/kindergarten-03-09-02-xxxl-84.jpg';
+
+interface Feature {
+  icon: string;
+  title: string;
+  text: string;
+}
+
+const features: Feature[] = [
+  {
+    icon: 'lucide:palette',
+    title: 'Развивающие занятия каждый день',
+    text: 'Математика, развитие речи, окружающий мир, творчество, музыка.',
+  },
+  {
+    icon: 'lucide:languages',
+    title: 'Английский язык с раннего возраста',
+    text: 'Носители методики, игровой формат.',
+  },
+  {
+    icon: 'lucide:apple',
+    title: 'Полноценное питание',
+    text: '5-разовое, меню от детского нутрициолога.',
+  },
+  {
+    icon: 'lucide:heart-handshake',
+    title: 'Психологический комфорт',
+    text: 'Комната эмоциональной разгрузки, индивидуальный подход.',
+  },
+];
+
+const schedule = [
+  'Утренний приём',
+  'Завтрак',
+  'Развивающие занятия',
+  'Прогулка',
+  'Обед',
+  'Тихий час',
+  'Полдник',
+  'Кружки',
+  'Ужин',
+  'Встреча с родителями',
+];
+---
+
+<section id="kindergarten" class="bg-bg py-20 lg:py-28">
+  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Детский сад"
+      title="Детский сад: от 2,5 до 7 лет"
+      lead="Развитие без сравнения и стресса"
+      class="mb-12 md:mb-16"
+    />
+
+    <!-- Лид + 4 фичи (слева) и главное фото (справа), равные высоты -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch mb-12 md:mb-16">
+      <div class="order-2 lg:order-1 flex flex-col gap-8">
+        <p class="text-lg leading-relaxed text-ink">
+          Малыши попадают в семейную атмосферу с постоянным составом педагогов. Никаких «новеньких воспитателей каждые полгода» — ребёнок растёт в кругу знакомых взрослых, которые помнят его привычки, страхи и победы.
+        </p>
+
+        <ul class="flex flex-col gap-5 list-none p-0 m-0">
+          {features.map((f) => (
+            <li class="flex gap-4 items-start">
+              <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-bg-warm text-cta shrink-0">
+                <Icon name={f.icon} class="w-5 h-5" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 class="text-base font-semibold text-indigo leading-snug mb-1">
+                  {f.title}
+                </h3>
+                <p class="text-sm text-text-muted leading-relaxed">
+                  {f.text}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="order-1 lg:order-2">
+        <Image
+          src={imgMain}
+          alt="Дети на занятии в детском саду «Доброе Начало»"
+          widths={[400, 600, 800, 1200]}
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          class="w-full h-full rounded-2xl shadow-[var(--shadow-card)] object-cover min-h-[300px] lg:min-h-[500px]"
+          loading="lazy"
+        />
+      </div>
+    </div>
+
+    <!-- Цены (на виду) -->
+    <div class="bg-bg-warm rounded-2xl p-8 md:p-10 mb-8 md:mb-10">
+      <h3 class="text-2xl font-semibold text-indigo mb-6">Стоимость</h3>
+      <dl class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-6">
+        <div>
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Половина дня</dt>
+          <dd class="text-2xl font-semibold text-indigo">38 000 ₽ <span class="text-base font-normal text-text-muted">/ мес</span></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Полный день</dt>
+          <dd class="text-2xl font-semibold text-indigo">49 900 ₽ <span class="text-base font-normal text-text-muted">/ мес</span></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Вступительный взнос</dt>
+          <dd class="text-2xl font-semibold text-indigo">18 000 ₽ <span class="text-base font-normal text-text-muted">/ год</span></dd>
+        </div>
+      </dl>
+      <p class="text-sm text-text-muted">
+        Скидки и условия питания уточняйте при звонке.
+      </p>
+    </div>
+
+    <!-- Expand: распорядок дня + доп. фото -->
+    <ExpandableBlock summary="Распорядок дня и атмосфера сада" defaultOpen={false}>
+      <div class="space-y-6">
+        <div>
+          <h4 class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-3">Распорядок дня</h4>
+          <ol class="flex flex-wrap gap-2 list-none p-0 m-0">
+            {schedule.map((step, i) => (
+              <li class="flex items-center gap-2">
+                <span class="inline-flex items-center px-4 py-2 rounded-full bg-bg-warm text-indigo text-sm font-medium">
+                  {step}
+                </span>
+                {i < schedule.length - 1 && (
+                  <Icon name="lucide:chevron-right" class="w-4 h-4 text-text-muted shrink-0" aria-hidden="true" />
+                )}
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+          <Image
+            src={imgSecondary1}
+            alt="Прогулка в сосновом бору"
+            widths={[400, 600, 800]}
+            sizes="(min-width: 640px) 50vw, 100vw"
+            class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+            loading="lazy"
+          />
+          <Image
+            src={imgSecondary2}
+            alt="Игровая зона детского сада"
+            widths={[400, 600, 800]}
+            sizes="(min-width: 640px) 50vw, 100vw"
+            class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </ExpandableBlock>
+
+    <!-- CTA -->
+    <div class="text-center mt-10 md:mt-12">
+      <Button href={site.phone.href} variant="primary" size="lg">
+        Записаться на пробный день в сад
+      </Button>
+    </div>
+
+  </div>
+</section>
