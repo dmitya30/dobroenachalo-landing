@@ -1,0 +1,153 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import SectionHeading from '../ui/SectionHeading.astro';
+import ExpandableBlock from '../ui/ExpandableBlock.astro';
+import Button from '../ui/Button.astro';
+import { site } from '../../data/site';
+import imgMain from '../../assets/school/school-01-08-03-photo-2026-02-25-18-58-56.jpg';
+import imgSecondary1 from '../../assets/school/school-02-08-04-473.jpg';
+import imgSecondary2 from '../../assets/school/school-03-08-05-490.jpg';
+
+interface Feature {
+  icon: string;
+  title: string;
+  text: string;
+}
+
+const features: Feature[] = [
+  {
+    icon: 'lucide:user-check',
+    title: 'Класс — до 10 детей',
+    text: 'Каждый ребёнок отвечает у доски на каждом уроке.',
+  },
+  {
+    icon: 'lucide:calculator',
+    title: 'Математика — флагман',
+    text: 'Логика, олимпиадные задачи, нестандартные подходы с 1 класса.',
+  },
+  {
+    icon: 'lucide:languages',
+    title: 'Английский с 1 класса',
+    text: 'Без перевода, через погружение.',
+  },
+  {
+    icon: 'lucide:home',
+    title: 'Группа продлённого дня',
+    text: 'Все уроки сделаны до прихода домой.',
+  },
+  {
+    icon: 'lucide:drama',
+    title: 'Жизнь, а не только учёба',
+    text: 'Театр, музеи, праздники, лыжи зимой.',
+  },
+  {
+    icon: 'lucide:coins',
+    title: 'Внутренняя валюта «Альтики»',
+    text: 'Дети учатся обращаться с деньгами через игровую экономику класса.',
+  },
+];
+---
+
+<section id="school" class="bg-bg-soft py-20 lg:py-28">
+  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Начальная школа"
+      title="Начальная школа: 1–4 классы"
+      lead="Программа развивающего обучения Выготского — Эльконина — Давыдова"
+      class="mb-12 md:mb-16"
+    />
+
+    <!-- Лид + главное фото -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12 md:mb-16">
+      <div class="order-2 lg:order-1">
+        <p class="text-lg leading-relaxed text-ink">
+          Мы не «натаскиваем на ВПР». Мы учим думать. Программа развивающего обучения формирует у ребёнка понятийное мышление: способность видеть суть задачи, связи между явлениями, искать решение там, где другие сдаются. Углублённая математика, английский с первого класса, чтение настоящих книг — а не выдержек из учебника.
+        </p>
+      </div>
+      <div class="order-1 lg:order-2">
+        <Image
+          src={imgMain}
+          alt="Класс начальной школы «Доброе Начало»"
+          widths={[400, 600, 800, 1200]}
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+          loading="lazy"
+        />
+      </div>
+    </div>
+
+    <!-- 6 фич сеткой 3×2 -->
+    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 list-none p-0 mb-12 md:mb-16">
+      {features.map((f) => (
+        <li class="flex flex-col gap-4 bg-bg rounded-2xl p-6 shadow-[var(--shadow-card)]">
+          <div class="flex items-center justify-center w-14 h-14 rounded-xl bg-bg-warm text-cta shrink-0">
+            <Icon name={f.icon} class="w-8 h-8" aria-hidden="true" />
+          </div>
+          <h3 class="text-lg font-semibold text-indigo leading-snug">
+            {f.title}
+          </h3>
+          <p class="text-base text-text-muted leading-relaxed">
+            {f.text}
+          </p>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Цены -->
+    <div class="bg-bg rounded-2xl p-8 md:p-10 mb-4 shadow-[var(--shadow-card)]">
+      <h3 class="text-2xl font-semibold text-indigo mb-6">Стоимость</h3>
+      <dl class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-6">
+        <div>
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Без питания</dt>
+          <dd class="text-2xl font-semibold text-indigo">48 000 ₽ <span class="text-base font-normal text-text-muted">/ мес</span></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">С питанием</dt>
+          <dd class="text-2xl font-semibold text-indigo">55 000 ₽ <span class="text-base font-normal text-text-muted">/ мес</span></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Продлёнка с домашней работой</dt>
+          <dd class="text-2xl font-semibold text-indigo">+20 000 ₽ <span class="text-base font-normal text-text-muted">/ мес</span></dd>
+        </div>
+      </dl>
+      <p class="text-sm text-text-muted">
+        Подробные условия и состав программы — уточняйте при звонке.
+      </p>
+    </div>
+
+    <!-- Бейдж под прайсом -->
+    <p class="text-sm text-text-muted text-center italic mb-8 md:mb-10">
+      Программа разработана на основе наследия Л.С. Выготского, Д.Б. Эльконина, В.В. Давыдова.
+    </p>
+
+    <!-- Expand: дополнительные фото -->
+    <ExpandableBlock summary="Атмосфера школы и учебный процесс" defaultOpen={false}>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+        <Image
+          src={imgSecondary1}
+          alt="Урок в начальной школе"
+          widths={[400, 600, 800]}
+          sizes="(min-width: 640px) 50vw, 100vw"
+          class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+          loading="lazy"
+        />
+        <Image
+          src={imgSecondary2}
+          alt="Школьная жизнь и мероприятия"
+          widths={[400, 600, 800]}
+          sizes="(min-width: 640px) 50vw, 100vw"
+          class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+          loading="lazy"
+        />
+      </div>
+    </ExpandableBlock>
+
+    <!-- CTA -->
+    <div class="text-center mt-10 md:mt-12">
+      <Button href={site.phone.href} variant="primary" size="lg">
+        Записаться на пробный день в школу
+      </Button>
+    </div>
+  </div>
+</section>
