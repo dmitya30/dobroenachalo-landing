@@ -1,0 +1,107 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import SectionHeading from '../ui/SectionHeading.astro';
+import ExpandableBlock from '../ui/ExpandableBlock.astro';
+
+import photo01 from '../../assets/team/team-01-belyakova-irina.jpg';
+import photo02 from '../../assets/team/team-02-galan-marina.jpg';
+import photo03 from '../../assets/team/team-03-zakharova-natalya.jpg';
+import photo04 from '../../assets/team/team-04-gogoleva-natalya.jpg';
+import photo05 from '../../assets/team/team-05-sokolskaya-olga.jpg';
+import photo06 from '../../assets/team/team-06-popova-yuliya.jpg';
+import photo07 from '../../assets/team/team-07-afonicheva-valeriya.jpg';
+import photo08 from '../../assets/team/team-08-efremova-tatyana.jpg';
+import photo09 from '../../assets/team/team-09-popova-svetlana.jpg';
+import photo10 from '../../assets/team/team-10-belyakova-marina.jpg';
+import photo11 from '../../assets/team/team-11-finyashina-nataliya.jpg';
+
+const photoMap: Record<number, ImageMetadata> = {
+  1: photo01, 2: photo02, 3: photo03, 4: photo04, 5: photo05,
+  6: photo06, 7: photo07, 8: photo08, 9: photo09, 10: photo10, 11: photo11,
+};
+
+const all = (await getCollection('team')).sort((a, b) => a.data.order - b.data.order);
+const featured = all.filter((m) => m.data.featured);
+const rest = all.filter((m) => !m.data.featured);
+
+/** Инициалы: первая буква первого слова + первая буква последнего слова */
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+}
+---
+<section id="team" class="bg-bg py-16 md:py-20 lg:py-24">
+  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Команда"
+      title="Педагоги, с которыми ваш ребёнок проведёт годы"
+      lead="Стабильный коллектив без текучки. Те же учителя ведут детей из сада в школу — ребёнок не теряет привычную среду."
+      class="mb-12 md:mb-16"
+    />
+
+    <!-- 4 ключевые карточки: фото слева, текст справа, 2×2 на десктопе -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
+      {featured.map((member) => {
+        const photo = photoMap[member.data.order];
+        return (
+          <article class="bg-bg rounded-2xl overflow-hidden shadow-sm flex flex-col sm:flex-row">
+            <div class="sm:w-2/5 shrink-0 bg-soft">
+              {photo ? (
+                <Image
+                  src={photo}
+                  alt={member.data.name}
+                  widths={[300, 500, 700]}
+                  sizes="(max-width: 640px) 100vw, 280px"
+                  class="w-full h-64 sm:h-full object-cover object-top"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="w-full h-64 sm:h-full flex items-center justify-center bg-indigo text-bg text-5xl font-semibold">
+                  {getInitials(member.data.name)}
+                </div>
+              )}
+            </div>
+            <div class="p-6 md:p-7 flex flex-col gap-2">
+              <h3 class="text-xl font-semibold text-indigo leading-snug">{member.data.name}</h3>
+              <p class="text-sm font-medium text-cta">{member.data.role}</p>
+              {member.data.bio && <p class="text-base text-text-muted leading-relaxed mt-2">{member.data.bio}</p>}
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <!-- Остальные 12 в expand -->
+    <ExpandableBlock summary={`Показать всю команду (${rest.length} человек)`}>
+      <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 list-none p-0 pt-2">
+        {rest.map((member) => {
+          const photo = photoMap[member.data.order];
+          return (
+            <li class="flex flex-col items-center text-center gap-3">
+              {photo ? (
+                <Image
+                  src={photo}
+                  alt={member.data.name}
+                  widths={[160, 240]}
+                  sizes="80px"
+                  class="w-20 h-20 rounded-full object-cover object-top"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="w-20 h-20 rounded-full flex items-center justify-center bg-indigo text-bg text-xl font-semibold">
+                  {getInitials(member.data.name)}
+                </div>
+              )}
+              <div class="flex flex-col gap-1">
+                <p class="text-sm font-semibold text-indigo leading-snug">{member.data.name}</p>
+                <p class="text-xs text-text-muted leading-snug">{member.data.role}</p>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </ExpandableBlock>
+  </div>
+</section>
