@@ -1,0 +1,174 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHeading from '../ui/SectionHeading.astro';
+
+const all = await getCollection('reviews');
+const featured = all.filter((r) => r.data.featured);
+const shortQuotes = all.filter((r) => r.data.short);
+
+const ratings = [
+  { value: '4,7', label: 'Яндекс Карты', color: 'bg-[#FFCC00] text-[#2B2A29]' },
+  { value: '5,0', label: '2ГИС', color: 'bg-[#00C950] text-bg' },
+  { value: '43+', label: 'отзывов', color: 'bg-indigo text-bg' },
+];
+
+const sourceLabel: Record<string, string> = {
+  yandex: 'Яндекс Карты',
+  '2gis': '2ГИС',
+  vk: 'ВКонтакте',
+  direct: 'Отзыв родителя',
+};
+
+const aggregateRating = {
+  '@context': 'https://schema.org',
+  '@type': 'EducationalOrganization',
+  name: 'Доброе Начало',
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.7',
+    reviewCount: '43',
+    bestRating: '5',
+    worstRating: '1',
+  },
+  review: featured.map((r) => ({
+    '@type': 'Review',
+    author: { '@type': 'Person', name: r.data.author },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: String(r.data.rating),
+      bestRating: '5',
+    },
+    reviewBody: r.data.text,
+  })),
+};
+---
+<section id="reviews" class="bg-warm py-16 md:py-20 lg:py-24">
+  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Отзывы"
+      title="Что говорят родители"
+      lead="Реальные отзывы с Яндекс Карт и 2ГИС. Без фильтрации, без накруток."
+      class="mb-10 md:mb-12"
+    />
+
+    <!-- Рейтинги -->
+    <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-10 md:mb-12">
+      {ratings.map((r) => (
+        <div class={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold shadow-sm ${r.color}`}>
+          <span class="text-lg">★</span>
+          <span class="text-lg">{r.value}</span>
+          <span class="text-sm font-medium opacity-90">{r.label}</span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Слайдер -->
+    <div class="reviews-embla relative" data-embla>
+      <div class="overflow-hidden" data-embla-viewport>
+        <div class="flex gap-6 md:gap-8" data-embla-container>
+          {featured.map((r) => (
+            <article class="embla-slide shrink-0 grow-0 basis-full md:basis-[calc(50%-1rem)] bg-bg rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-4">
+              <div class="flex items-center justify-between">
+                <div class="flex gap-1 text-cta text-lg" aria-label={`Рейтинг ${r.data.rating} из 5`}>
+                  {Array.from({ length: r.data.rating }).map(() => <span>★</span>)}
+                </div>
+                <span class="text-xs font-medium text-text-muted">{sourceLabel[r.data.source]}</span>
+              </div>
+              <p class="text-base text-ink leading-relaxed flex-1">«{r.data.text}»</p>
+              <div class="pt-2 border-t border-text-muted/20">
+                <p class="text-sm font-semibold text-indigo">{r.data.author}</p>
+                {r.data.role && <p class="text-xs text-text-muted mt-0.5">{r.data.role}</p>}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <!-- Кнопки -->
+      <button
+        type="button"
+        class="absolute top-1/2 -translate-y-1/2 -left-2 md:-left-5 w-10 h-10 md:w-12 md:h-12 rounded-full bg-bg shadow-md flex items-center justify-center text-indigo hover:bg-cta hover:text-bg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        aria-label="Предыдущий отзыв"
+        data-embla-prev
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <button
+        type="button"
+        class="absolute top-1/2 -translate-y-1/2 -right-2 md:-right-5 w-10 h-10 md:w-12 md:h-12 rounded-full bg-bg shadow-md flex items-center justify-center text-indigo hover:bg-cta hover:text-bg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        aria-label="Следующий отзыв"
+        data-embla-next
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+
+      <!-- Точки -->
+      <div class="flex justify-center gap-2 mt-6" data-embla-dots></div>
+    </div>
+
+    <!-- Короткие цитаты -->
+    {shortQuotes.length > 0 && (
+      <div class="mt-12 md:mt-16">
+        <h3 class="text-center text-sm font-semibold uppercase tracking-wider text-text-muted mb-6">Коротко о главном</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          {shortQuotes.map((r) => (
+            <div class="bg-bg rounded-xl p-5 shadow-sm">
+              <p class="text-sm text-ink leading-relaxed mb-3">«{r.data.text}»</p>
+              <p class="text-xs font-semibold text-indigo">— {r.data.author}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(aggregateRating)} />
+</section>
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+  import Autoplay from 'embla-carousel-autoplay';
+
+  const root = document.querySelector<HTMLElement>('[data-embla]');
+  if (root) {
+    const viewport = root.querySelector<HTMLElement>('[data-embla-viewport]')!;
+    const prevBtn = root.querySelector<HTMLButtonElement>('[data-embla-prev]')!;
+    const nextBtn = root.querySelector<HTMLButtonElement>('[data-embla-next]')!;
+    const dotsContainer = root.querySelector<HTMLElement>('[data-embla-dots]')!;
+
+    const embla = EmblaCarousel(
+      viewport,
+      { loop: true, align: 'start', slidesToScroll: 1 },
+      [Autoplay({ delay: 6000, stopOnInteraction: true, stopOnMouseEnter: true })]
+    );
+
+    prevBtn.addEventListener('click', () => embla.scrollPrev());
+    nextBtn.addEventListener('click', () => embla.scrollNext());
+
+    // Точки
+    const renderDots = () => {
+      dotsContainer.innerHTML = '';
+      embla.scrollSnapList().forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'w-2 h-2 rounded-full bg-indigo/30 transition-all';
+        dot.setAttribute('aria-label', `Перейти к отзыву ${idx + 1}`);
+        dot.addEventListener('click', () => embla.scrollTo(idx));
+        dotsContainer.appendChild(dot);
+      });
+    };
+    const updateDots = () => {
+      const selected = embla.selectedScrollSnap();
+      Array.from(dotsContainer.children).forEach((dot, idx) => {
+        dot.className = idx === selected
+          ? 'w-6 h-2 rounded-full bg-indigo transition-all'
+          : 'w-2 h-2 rounded-full bg-indigo/30 transition-all';
+      });
+    };
+
+    renderDots();
+    updateDots();
+    embla.on('select', updateDots);
+    embla.on('reInit', () => { renderDots(); updateDots(); });
+  }
+</script>
