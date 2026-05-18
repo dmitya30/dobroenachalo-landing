@@ -1,0 +1,120 @@
+---
+import { Icon } from 'astro-icon/components';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Button from '../ui/Button.astro';
+import SocialIcons from '../ui/SocialIcons.astro';
+import { site } from '../../data/site';
+
+const mapWidgetUrl = 'https://yandex.ru/map-widget/v1/org/50312189561/';
+---
+<section id="contacts" class="bg-warm py-16 md:py-20 lg:py-24">
+  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Контакты"
+      title="Как нас найти"
+      class="mb-12 md:mb-16"
+    />
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+      <!-- Левая колонка: контакты -->
+      <div class="flex flex-col gap-8">
+        <!-- Адрес -->
+        <div class="flex gap-4">
+          <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-bg text-cta shrink-0">
+            <Icon name="lucide:map-pin" class="w-6 h-6" aria-hidden="true" />
+          </div>
+          <div class="flex-1 pt-1">
+            <h3 class="text-base font-semibold text-indigo mb-1">Адрес</h3>
+            <p class="text-base text-indigo leading-relaxed">
+              {site.address.region}, {site.address.district},<br />
+              {site.address.locality}, {site.address.street}
+            </p>
+            <p class="text-sm text-text-muted mt-1">{site.address.nearestStation}</p>
+            <a
+              href={site.address.yandexMapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1 text-sm font-medium text-indigo hover:text-cta transition-colors mt-2"
+            >
+              Открыть на Яндекс.Картах
+              <Icon name="lucide:arrow-up-right" class="w-4 h-4" aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+
+        <!-- Телефон -->
+        <div class="flex gap-4">
+          <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-bg text-cta shrink-0">
+            <Icon name="lucide:phone" class="w-6 h-6" aria-hidden="true" />
+          </div>
+          <div class="flex-1 pt-1">
+            <h3 class="text-base font-semibold text-indigo mb-1">Телефон</h3>
+            <a
+              href={site.phone.href}
+              class="text-xl md:text-2xl font-semibold text-indigo hover:text-cta transition-colors whitespace-nowrap"
+            >
+              {site.phone.display}
+            </a>
+            <p class="text-sm text-text-muted mt-1">Звонок, Telegram и Макс — на этот номер</p>
+          </div>
+        </div>
+
+        <!-- Мессенджеры и соцсети -->
+        <div class="flex gap-4">
+          <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-bg text-cta shrink-0">
+            <Icon name="lucide:message-circle" class="w-6 h-6" aria-hidden="true" />
+          </div>
+          <div class="flex-1 pt-1">
+            <h3 class="text-base font-semibold text-indigo mb-3">Мессенджеры и соцсети</h3>
+            <SocialIcons mode="channels" size="md" />
+          </div>
+        </div>
+
+        <!-- Часы работы -->
+        <div class="flex gap-4">
+          <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-bg text-cta shrink-0">
+            <Icon name="lucide:clock" class="w-6 h-6" aria-hidden="true" />
+          </div>
+          <div class="flex-1 pt-1">
+            <h3 class="text-base font-semibold text-indigo mb-1">Часы работы</h3>
+            <p class="text-base text-indigo leading-relaxed">
+              Пн-Пт: 8:00-19:00<br />
+              Сб: кружки и секции по расписанию
+            </p>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="pt-2">
+          <Button href={site.phone.href} variant="primary" size="lg">
+            <Icon name="lucide:phone" class="w-5 h-5" aria-hidden="true" />
+            Позвонить и записаться
+          </Button>
+        </div>
+      </div>
+
+      <!-- Правая колонка: карта -->
+      <div class="flex flex-col gap-3">
+        <div class="aspect-[4/5] lg:aspect-auto lg:h-[600px] rounded-2xl overflow-hidden shadow-[var(--shadow-card)] bg-bg">
+          <iframe
+            src={mapWidgetUrl}
+            title="Яндекс.Карта со школой «Доброе Начало»"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            width="100%"
+            height="100%"
+            style="border: 0;"
+          ></iframe>
+        </div>
+        <a
+          href={site.address.yandexMapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-sm text-text-muted hover:text-indigo transition-colors text-center"
+        >
+          Карта не загрузилась? Открыть в новой вкладке →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
