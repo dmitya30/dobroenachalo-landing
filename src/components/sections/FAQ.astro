@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import SectionHeading from '../ui/SectionHeading.astro';
+import { site } from '../../data/site';
+import telegramSvg from '../../icons/telegram.svg?raw';
+import maxSvg from '../../icons/max.svg?raw';
+
+const faqItems = (await getCollection('faq')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+---
+<section id="faq" class="bg-bg py-16 md:py-20 lg:py-24">
+  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Частые вопросы"
+      title="Вопросы родителей"
+      lead="Собрали то, что спрашивают чаще всего. Если что-то осталось — позвоните, расскажем подробно."
+      class="mb-12 md:mb-16"
+    />
+
+    <ul class="max-w-3xl mx-auto list-none p-0 border-y border-border divide-y divide-border">
+      {faqItems.map((item) => (
+        <li>
+          <details class="group">
+            <summary class="flex items-center justify-between gap-6 cursor-pointer list-none py-5 md:py-6 text-lg md:text-xl font-semibold text-indigo hover:text-cta transition-colors">
+              <span>{item.data.question}</span>
+              <Icon
+                name="lucide:chevron-down"
+                class="w-5 h-5 shrink-0 text-cta transition-transform duration-200 group-open:rotate-180"
+                aria-hidden="true"
+              />
+            </summary>
+            <div class="pb-6 pr-9 text-base text-text-muted leading-relaxed">
+              {item.data.answer}
+            </div>
+          </details>
+        </li>
+      ))}
+    </ul>
+
+    <div class="mt-12 md:mt-14 flex flex-col items-center gap-4 text-center">
+      <p class="text-base md:text-lg text-text-muted">
+        Не нашли ответ? Позвоните —{' '}
+        <a
+          href={site.phone.href}
+          class="font-medium text-indigo hover:text-cta transition-colors whitespace-nowrap"
+        >
+          {site.phone.display}
+        </a>
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-base">
+        <span class="text-text-muted">или напишите в</span>
+        <a
+          href={site.social.telegram.contact}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 font-medium text-indigo hover:text-cta transition-colors"
+          aria-label="Написать в Telegram"
+        >
+          <span class="w-5 h-5 inline-block" set:html={telegramSvg} />
+          Telegram
+        </a>
+        <a
+          href={site.social.max.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 font-medium text-indigo hover:text-cta transition-colors"
+          aria-label="Написать в Макс"
+        >
+          <span class="w-5 h-5 inline-block" set:html={maxSvg} />
+          Макс
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  details > summary::-webkit-details-marker { display: none; }
+</style>
