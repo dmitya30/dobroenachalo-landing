@@ -1,0 +1,159 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import SectionHeading from '../ui/SectionHeading.astro';
+import ExpandableBlock from '../ui/ExpandableBlock.astro';
+import Button from '../ui/Button.astro';
+import { site } from '../../data/site';
+import imgMain from '../../assets/summer-camp/summer-camp-02-09-01-altik-kemp-deti.jpg';
+import imgExtra1 from '../../assets/summer-camp/summer-camp-01-08-06-8658.jpg';
+import imgExtra2 from '../../assets/summer-camp/summer-camp-03-09-02-216.jpg';
+
+// Получаем смены и сортируем
+const allSessions = await getCollection('campSessions');
+const sessions = allSessions.sort((a, b) => a.data.order - b.data.order);
+
+// Группируем по месяцам
+const byMonth = {
+  june: sessions.filter((s) => s.data.month === 'june'),
+  july: sessions.filter((s) => s.data.month === 'july'),
+  august: sessions.filter((s) => s.data.month === 'august'),
+};
+
+// Форматирование даты "2026-06-01" → "01 июня"
+const monthsRu: Record<number, string> = {
+  6: 'июня',
+  7: 'июля',
+  8: 'августа',
+};
+
+function formatRange(startISO: string, endISO: string): string {
+  const start = new Date(startISO);
+  const end = new Date(endISO);
+  const startDay = String(start.getDate()).padStart(2, '0');
+  const endDay = String(end.getDate()).padStart(2, '0');
+  const startMonth = start.getMonth() + 1;
+  const endMonth = end.getMonth() + 1;
+  if (startMonth === endMonth) {
+    return `${startDay}–${endDay} ${monthsRu[endMonth]}`;
+  }
+  return `${startDay} ${monthsRu[startMonth]} – ${endDay} ${monthsRu[endMonth]}`;
+}
+
+const monthBlocks = [
+  { key: 'june', emoji: '🌳', title: 'Июнь', sessions: byMonth.june, open: true },
+  { key: 'july', emoji: '☀️', title: 'Июль', sessions: byMonth.july, open: false },
+  { key: 'august', emoji: '🌻', title: 'Август', sessions: byMonth.august, open: false },
+];
+---
+
+<section id="camp" class="bg-bg-warm py-20 lg:py-28">
+  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Летний лагерь 2026"
+      title="Летний лагерь 2026: 12 тематических смен"
+      lead="Без телефонов и компьютеров. Настоящее счастливое детство"
+      class="mb-12 md:mb-16"
+    />
+
+    <!-- Лид + главное фото с бейджем -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12 md:mb-16">
+      <div class="order-2 lg:order-1">
+        <p class="text-lg leading-relaxed text-ink">
+          Каждая смена — это законченное приключение длиной в 5 дней. Дети живут в роли исследователей, детективов, космонавтов или богатырей. Спорт, творчество, наука, общение — всё на свежем воздухе, в кругу друзей и под присмотром педагогов, которых ребёнок знает.
+        </p>
+      </div>
+      <div class="order-1 lg:order-2 relative">
+        <Image
+          src={imgMain}
+          alt="Дети в летнем лагере «Доброе Начало»"
+          widths={[400, 600, 800, 1200]}
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+          loading="lazy"
+        />
+        <div class="absolute top-4 right-4 bg-cta text-indigo px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+          Раннее бронирование −5 000 ₽
+        </div>
+      </div>
+    </div>
+
+    <!-- Календарь смен по месяцам -->
+    <div class="space-y-4 mb-12 md:mb-16">
+      {monthBlocks.map((block) => (
+        <ExpandableBlock summary={`${block.emoji} ${block.title} — ${block.sessions.length} смен`} defaultOpen={block.open}>
+          <ul class="space-y-3 list-none p-0 m-0">
+            {block.sessions.map((s) => (
+              <li class="grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-2 sm:gap-6 items-start p-4 bg-bg rounded-xl">
+                <div class="text-sm font-semibold text-cta uppercase tracking-wider whitespace-nowrap">
+                  {formatRange(s.data.dateStart, s.data.dateEnd)}
+                </div>
+                <div>
+                  <h4 class="text-base font-semibold text-indigo mb-1">
+                    {s.data.title}
+                  </h4>
+                  <p class="text-sm text-text-muted leading-relaxed">
+                    {s.data.description}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </ExpandableBlock>
+      ))}
+    </div>
+
+    <!-- Доп. фото лагеря (атмосфера, не прячем) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-12 md:mb-16">
+      <Image
+        src={imgExtra1}
+        alt="Активности на свежем воздухе"
+        widths={[400, 600, 800]}
+        sizes="(min-width: 640px) 50vw, 100vw"
+        class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+        loading="lazy"
+      />
+      <Image
+        src={imgExtra2}
+        alt="Творческие занятия в лагере"
+        widths={[400, 600, 800]}
+        sizes="(min-width: 640px) 50vw, 100vw"
+        class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+        loading="lazy"
+      />
+    </div>
+
+    <!-- Прайс -->
+    <div class="bg-bg rounded-2xl p-8 md:p-10 mb-8 md:mb-10 shadow-[var(--shadow-card)]">
+      <h3 class="text-2xl font-semibold text-indigo mb-6">Стоимость смены</h3>
+      <dl class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-6">
+        <div>
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Стандартная цена</dt>
+          <dd class="text-2xl font-semibold text-indigo">24 000 ₽</dd>
+        </div>
+        <div class="relative">
+          <dt class="text-sm font-semibold uppercase tracking-wider text-cta mb-2">За 60 дней до начала</dt>
+          <dd class="text-2xl font-semibold text-indigo">19 000 ₽ <span class="text-sm font-normal text-cta">−5 000 ₽</span></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">За 30 дней до начала</dt>
+          <dd class="text-2xl font-semibold text-indigo">21 000 ₽ <span class="text-sm font-normal text-text-muted">−3 000 ₽</span></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Ночёвка чт-пт</dt>
+          <dd class="text-2xl font-semibold text-indigo">+5 000 ₽</dd>
+        </div>
+      </dl>
+      <p class="text-sm text-text-muted">
+        Цена указана за смену (5 дней). Все занятия, питание и материалы включены.
+      </p>
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center">
+      <Button href={site.phone.href} variant="primary" size="lg">
+        Забронировать смену
+      </Button>
+    </div>
+  </div>
+</section>
