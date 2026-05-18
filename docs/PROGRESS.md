@@ -33,33 +33,34 @@
   - classes: 5 JSON
   - reviews: 9 JSON (5 длинных + 4 коротких)
   - school-life: 8 JSON
+- **glob-паттерн коллекций исправлен:** `'**/*.json'` → `'[^_]*.json'` во всех 6 коллекциях. Исключает служебные папки/файлы, начинающиеся с `_` (`_examples/example.json` больше не попадает в выдачу `getCollection`).
 - **Документация в репозитории**: docs/ (Blueprint, CONTEXT, Handoff, Dialog-1, texts, DESIGN, PROGRESS, DECISIONS)
 - **Sharp установлен**, локальный `pnpm build` проходит
 - **`astro-icon` + `@iconify-json/lucide` установлены** (интеграция в astro.config.mjs)
 - **Иконки в Header / Hero — переведены на `<Icon name="lucide:..." />`**: phone, menu, users, trees, train-front
 - **Звезда в RatingBadge — кастомный inline SVG с заливкой** (Lucide-звезда контурная, заливка через style не применилась)
 - **Кастомные SVG для OfferCards в `src/icons/offer/`**: offer-kindergarten (лошадка-качалка), offer-school (учитель + дети), offer-camp (бегущие дети), offer-classes (шахматы), metod (резерв — девушка с портфелем, не используется)
-- **Секции 1, 2, 3, 4, 5, 6, 16 готовы по DESIGN.md:**
+- **Секции 1, 2, 3, 4, 5, 6, 7, 8, 9, 16 готовы по DESIGN.md:**
   - **Header.astro** — CTA «Позвонить» + иконка телефона, контакты-режим SocialIcons, BASE_URL для лого-ссылки
   - **Hero.astro** — H1 «Частная школа-сад в сосновом лесу под Москвой», 4 чипа (RatingBadge + 3 info), адаптивный градиент, CTA-блок с телефоном и мессенджерами
   - **OfferCards.astro** — 4 кликабельные карточки (Сад / Школа / Лагерь / Кружки), якорные ссылки, кастомные SVG-иконки, фон секции голубой (`bg-soft`), hover-lift
   - **WhyUs.astro** — 6 плиток (3×2 десктоп) с Lucide-иконками (trees, users, utensils-crossed, book-open, train-front, infinity), Card variant `soft` на белом фоне секции
   - **Philosophy.astro** — founder story (~180 слов) из texts.md §5, две колонки (текст + фото), кремовый фон (`bg-warm`), без CTA — блок доверия
   - **Kindergarten.astro** — детальный блок: лид + 4 фичи списком слева, главное фото справа (равные высоты), прайс на кремовом блоке (38 000 / 49 900 / 18 000 ₽), ExpandableBlock «Распорядок дня и атмосфера сада» (чипы расписания + 2 доп. фото), CTA-кнопка в конце
+  - **School.astro** — детальный блок: лид + главное фото (вверху), 6 фич сеткой 3×2 (карточки на белом, на голубом фоне секции), прайс с бейджем Выготского-Эльконина-Давыдова, ExpandableBlock с доп. фото, CTA. Lucide-иконки: user-check, calculator, languages, home, drama, coins.
+  - **SummerCamp.astro** — лагерь 2026: лид + главное фото с floating-бейджем «Раннее бронирование −5 000 ₽», календарь смен из коллекции `campSessions` в трёх ExpandableBlock по месяцам (июнь раскрыт, июль/август свёрнуты), 2 доп. фото атмосферы, прайс-сетка из 4 цен (24 000 / 19 000 / 21 000 / +5 000 ₽), CTA. Кремовый фон (`bg-warm`). Helper `formatRange` форматирует ISO-дату в «01–05 июня».
+  - **AdditionalClasses.astro** — 5 кружков из коллекции `classes`: верхний ряд (Шахматы / Столярка / Акробатика) — 3 равных карточки; нижний ряд (Логопед / Подготовка к школе) — 2 равных во всю ширину. Сетка через `lg:grid-cols-6` + `col-span-2`/`col-span-3`. Под карточками — 4 квадратных фото атмосферы. Иконки Lucide через маппинг JSON-имён (`chess`→`crown`, `hammer`, `speech`→`mic`, `activity`, `book-open`). Белый фон секции.
   - **Footer.astro** — 4 колонки (лого-mark / навигация / контакты / соцсети), юр.данные в подвале
-  - **index.astro** — собирает Header + Hero + OfferCards + WhyUs + Philosophy + Kindergarten + Footer, остальные секции = заглушка
+  - **index.astro** — собирает Header + Hero + OfferCards + WhyUs + Philosophy + Kindergarten + School + SummerCamp + AdditionalClasses + Footer, остальные секции = заглушка
 - **RatingBadge расширен:** prop `variant: 'default' | 'on-dark'` для тёмных фонов
 
 ### 🔧 В работе
 
-- Подготовка к секции School (7, детальный блок начальной школы)
+- Подготовка к секции Team (10, команда — 4 ключевых из коллекции + expandable со всеми 15)
 
 ### ⏭ Следующие шаги (по Handoff)
 
-1. Сборка 9 оставшихся секций по Blueprint:
-   - 7. School (детальный блок)
-   - 8. SummerCamp (12 смен из коллекции)
-   - 9. AdditionalClasses (5 кружков из коллекции)
+1. Сборка 6 оставшихся секций по Blueprint:
    - 10. Team (4 ключевых + expandable из коллекции)
    - 11. Reviews (+ island ReviewSlider, client:visible)
    - 12. SchoolLife (+ island Lightbox, client:idle)

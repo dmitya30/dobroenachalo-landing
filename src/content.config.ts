@@ -11,7 +11,7 @@ import { glob } from 'astro/loaders';
  */
 
 const campSessions = defineCollection({
-  loader: glob({ pattern: '**/*.json', base: './src/content/camp-sessions' }),
+  loader: glob({ pattern: '[^_]*.json', base: './src/content/camp-sessions' }),
   schema: z.object({
     order: z.number(),
     title: z.string(),
@@ -25,7 +25,7 @@ const campSessions = defineCollection({
 });
 
 const reviews = defineCollection({
-  loader: glob({ pattern: '**/*.json', base: './src/content/reviews' }),
+  loader: glob({ pattern: '[^_]*.json', base: './src/content/reviews' }),
   schema: z.object({
     author: z.string(),
     role: z.string().optional(), // "мама ученика 2 класса" — по возможности
@@ -41,7 +41,7 @@ const reviews = defineCollection({
 });
 
 const team = defineCollection({
-  loader: glob({ pattern: '**/*.json', base: './src/content/team' }),
+  loader: glob({ pattern: '[^_]*.json', base: './src/content/team' }),
   schema: z.object({
     order: z.number(),
     name: z.string(),
@@ -54,7 +54,7 @@ const team = defineCollection({
 });
 
 const faq = defineCollection({
-  loader: glob({ pattern: '**/*.json', base: './src/content/faq' }),
+  loader: glob({ pattern: '[^_]*.json', base: './src/content/faq' }),
   schema: z.object({
     order: z.number(),
     question: z.string(),
@@ -63,7 +63,7 @@ const faq = defineCollection({
 });
 
 const classes = defineCollection({
-  loader: glob({ pattern: '**/*.json', base: './src/content/classes' }),
+  loader: glob({ pattern: '[^_]*.json', base: './src/content/classes' }),
   schema: z.object({
     order: z.number(),
     title: z.string(),
@@ -81,7 +81,7 @@ const classes = defineCollection({
 });
 
 const schoolLife = defineCollection({
-  loader: glob({ pattern: '**/*.json', base: './src/content/school-life' }),
+  loader: glob({ pattern: '[^_]*.json', base: './src/content/school-life' }),
   schema: z.object({
     order: z.number(),
     image: z.string(),

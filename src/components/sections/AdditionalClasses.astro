@@ -1,0 +1,118 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import { getCollection } from 'astro:content';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Card from '../ui/Card.astro';
+import Button from '../ui/Button.astro';
+import { site } from '../../data/site';
+import imgExtra1 from '../../assets/additional-classes/additional-classes-01-08-01-613.jpg';
+import imgExtra2 from '../../assets/additional-classes/additional-classes-02-08-07-468.jpg';
+import imgExtra3 from '../../assets/additional-classes/additional-classes-03-08-09-xxxl-61.jpg';
+import imgExtra4 from '../../assets/additional-classes/additional-classes-04-08-12-xxxl-54.jpg';
+
+// Маппинг логических имён иконок из JSON на Lucide
+const iconMap: Record<string, string> = {
+  chess: 'lucide:crown',
+  hammer: 'lucide:hammer',
+  speech: 'lucide:mic',
+  activity: 'lucide:activity',
+  'book-open': 'lucide:book-open',
+};
+
+// Желаемый порядок отображения: верхний ряд — короткие (Шахматы/Столярка/Акробатика),
+// нижний — длинные (Логопед/Подготовка) на всю ширину по половине
+const displayOrder = ['Шахматы', 'Столярная мастерская', 'Акробатика', 'Логопед', 'Подготовка к школе'];
+
+const allClasses = await getCollection('classes');
+const classes = allClasses
+  .slice()
+  .sort((a, b) => displayOrder.indexOf(a.data.title) - displayOrder.indexOf(b.data.title));
+---
+
+<section id="classes" class="bg-bg py-20 lg:py-28">
+  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Кружки и секции"
+      title="Кружки и секции"
+      lead="Для воспитанников школы и приходящих детей"
+      class="mb-12 md:mb-16"
+    />
+
+    <!-- 5 карточек: 3 в верхнем ряду (col-span-2 из 6) + 2 в нижнем (col-span-3 из 6) -->
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 md:gap-8 list-none p-0 mb-12 md:mb-16">
+      {classes.map((c, i) => {
+        const span = i < 3 ? 'lg:col-span-2' : 'lg:col-span-3';
+        return (
+          <Card as="li" variant="soft" class={`flex flex-col gap-4 ${span}`}>
+            <div class="flex items-start gap-4">
+              <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-bg text-cta shrink-0">
+                <Icon name={iconMap[c.data.icon ?? ''] ?? 'lucide:sparkles'} class="w-6 h-6" aria-hidden="true" />
+              </div>
+              <div class="flex-1">
+                <h3 class="text-lg font-semibold text-indigo leading-snug">
+                  {c.data.title}
+                </h3>
+                <p class="text-sm text-text-muted mt-1">
+                  {c.data.ageRange}
+                </p>
+              </div>
+            </div>
+
+            {c.data.description && (
+              <p class="text-sm text-ink leading-relaxed">
+                {c.data.description}
+              </p>
+            )}
+
+            {c.data.trainer && (
+              <div class="text-sm">
+                <span class="font-semibold text-indigo">Педагог:</span>
+                <span class="text-text-muted"> {c.data.trainer}</span>
+              </div>
+            )}
+
+            <div class="text-sm">
+              <span class="font-semibold text-indigo">Расписание:</span>
+              <span class="text-text-muted"> {c.data.schedule}</span>
+            </div>
+
+            <dl class="grid grid-cols-1 gap-2 pt-4 mt-auto border-t border-white/40">
+              {c.data.pricing.trial && (
+                <div class="flex justify-between gap-2 text-sm">
+                  <dt class="text-text-muted">Пробное:</dt>
+                  <dd class="font-semibold text-cta">{c.data.pricing.trial}</dd>
+                </div>
+              )}
+              <div class="flex justify-between gap-2 text-sm">
+                <dt class="text-text-muted">Разовое:</dt>
+                <dd class="font-semibold text-indigo">{c.data.pricing.single}</dd>
+              </div>
+              {c.data.pricing.package && (
+                <div class="flex justify-between gap-2 text-sm">
+                  <dt class="text-text-muted">Абонемент:</dt>
+                  <dd class="font-semibold text-indigo text-right">{c.data.pricing.package}</dd>
+                </div>
+              )}
+            </dl>
+          </Card>
+        );
+      })}
+    </ul>
+
+    <!-- Атмосфера занятий (4 фото) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
+      <Image src={imgExtra1} alt="Занятие в студии" widths={[300, 500]} sizes="(min-width: 1024px) 25vw, 50vw" class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-square" loading="lazy" />
+      <Image src={imgExtra2} alt="Творческое занятие" widths={[300, 500]} sizes="(min-width: 1024px) 25vw, 50vw" class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-square" loading="lazy" />
+      <Image src={imgExtra3} alt="Спортивное занятие" widths={[300, 500]} sizes="(min-width: 1024px) 25vw, 50vw" class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-square" loading="lazy" />
+      <Image src={imgExtra4} alt="Работа в мастерской" widths={[300, 500]} sizes="(min-width: 1024px) 25vw, 50vw" class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-square" loading="lazy" />
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center">
+      <Button href={site.phone.href} variant="primary" size="lg">
+        Записаться на занятие
+      </Button>
+    </div>
+  </div>
+</section>
