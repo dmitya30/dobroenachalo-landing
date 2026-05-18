@@ -1,0 +1,101 @@
+---
+import { Icon } from 'astro-icon/components';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Button from '../ui/Button.astro';
+import { site } from '../../data/site';
+import telegramSvg from '../../icons/telegram.svg?raw';
+import maxSvg from '../../icons/max.svg?raw';
+
+interface Step {
+  num: string;
+  icon: string;
+  title: string;
+  text: string;
+  extra?: boolean;
+}
+
+const steps: Step[] = [
+  {
+    num: '01',
+    icon: 'lucide:phone',
+    title: 'Позвоните или напишите',
+    text: 'Расскажем о саде, школе и кружках, ответим на вопросы, подберём удобное время для встречи.',
+  },
+  {
+    num: '02',
+    icon: 'lucide:map-pin',
+    title: 'Приходите на бесплатную экскурсию',
+    text: 'Покажем здание и территорию, познакомим с педагогами, поможем понять, какой формат подойдёт ребёнку.',
+  },
+  {
+    num: '03',
+    icon: 'lucide:file-check-2',
+    title: 'Запишите ребёнка',
+    text: 'Пробный день в саду — 2 900 ₽, в школе — бесплатно, разовое занятие в кружке — от 1 000 ₽. Документы оформляем при заключении договора.',
+    extra: true,
+  },
+];
+---
+<section id="how-to-enroll" class="bg-soft py-16 md:py-20 lg:py-24">
+  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      eyebrow="Запись"
+      title="С чего начать"
+      lead="Не нужно собирать документы заранее или сдавать тесты. Достаточно одного звонка — дальше всё подскажем."
+      class="mb-12 md:mb-16"
+    />
+
+    <ol class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 list-none p-0 mb-10 md:mb-12">
+      {steps.map((step) => (
+        <li class="relative bg-bg rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <span class="text-5xl md:text-6xl font-bold text-soft leading-none select-none" aria-hidden="true">{step.num}</span>
+            <div class="flex items-center justify-center w-14 h-14 rounded-xl bg-soft text-cta shrink-0">
+              <Icon name={step.icon} class="w-7 h-7" aria-hidden="true" />
+            </div>
+          </div>
+          <h3 class="text-xl font-semibold text-indigo leading-snug">{step.title}</h3>
+          <p class="text-base text-text-muted leading-relaxed flex-1">{step.text}</p>
+          {step.extra && (
+            <p class="text-sm text-text-muted/80 pt-2 border-t border-text-muted/15">
+              Список документов — в разделе{' '}
+              <a href="#faq" class="text-indigo font-medium hover:text-cta transition-colors underline underline-offset-2">«Частые вопросы»</a>
+              {' '}ниже
+            </p>
+          )}
+        </li>
+      ))}
+    </ol>
+
+    <!-- CTA -->
+    <div class="flex flex-col items-center gap-5">
+      <Button href={site.phone.href} variant="primary" size="lg">
+        <Icon name="lucide:phone" class="w-5 h-5" aria-hidden="true" />
+        Записаться на бесплатную экскурсию
+      </Button>
+      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-base">
+        <span class="text-text-muted">или напишите в</span>
+        <a
+          href={site.social.telegram.contact}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 font-medium text-indigo hover:text-cta transition-colors"
+          aria-label="Написать в Telegram"
+        >
+          <span class="w-5 h-5 inline-block" set:html={telegramSvg} />
+          Telegram
+        </a>
+        <a
+          href={site.social.max.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 font-medium text-indigo hover:text-cta transition-colors"
+          aria-label="Написать в Макс"
+        >
+          <span class="w-5 h-5 inline-block" set:html={maxSvg} />
+          Макс
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
