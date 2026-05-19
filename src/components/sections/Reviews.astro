@@ -81,7 +81,7 @@ const sourceLabel: Record<string, string> = {
       </button>
 
       <!-- Точки -->
-      <div class="flex justify-center gap-2 mt-6" data-embla-dots></div>
+      <div class="flex justify-center gap-1 mt-6" data-embla-dots></div>
     </div>
 
     <!-- Короткие цитаты -->
@@ -127,18 +127,26 @@ const sourceLabel: Record<string, string> = {
       embla.scrollSnapList().forEach((_, idx) => {
         const dot = document.createElement('button');
         dot.type = 'button';
-        dot.className = 'w-2 h-2 rounded-full bg-indigo/30 transition-all';
+        // Внешний button: 24x24 hit-area (WCAG 2.5.8), прозрачный.
+        // Внутренний span — видимая точка 8x8.
+        dot.className = 'embla-dot inline-flex items-center justify-center w-6 h-6 bg-transparent';
         dot.setAttribute('aria-label', `Перейти к отзыву ${idx + 1}`);
+        const inner = document.createElement('span');
+        inner.className = 'block w-2 h-2 rounded-full bg-indigo/30 transition-all';
+        dot.appendChild(inner);
         dot.addEventListener('click', () => embla.scrollTo(idx));
         dotsContainer.appendChild(dot);
       });
     };
+
     const updateDots = () => {
       const selected = embla.selectedScrollSnap();
       Array.from(dotsContainer.children).forEach((dot, idx) => {
-        dot.className = idx === selected
-          ? 'w-6 h-2 rounded-full bg-indigo transition-all'
-          : 'w-2 h-2 rounded-full bg-indigo/30 transition-all';
+        const inner = dot.firstElementChild as HTMLElement | null;
+        if (!inner) return;
+        inner.className = idx === selected
+          ? 'block w-6 h-2 rounded-full bg-indigo transition-all'
+          : 'block w-2 h-2 rounded-full bg-indigo/30 transition-all';
       });
     };
 
