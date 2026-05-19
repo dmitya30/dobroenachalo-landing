@@ -102,57 +102,74 @@ const sourceLabel: Record<string, string> = {
 </section>
 
 <script>
-  import EmblaCarousel from 'embla-carousel';
-  import Autoplay from 'embla-carousel-autoplay';
-
   const root = document.querySelector<HTMLElement>('[data-embla]');
   if (root) {
-    const viewport = root.querySelector<HTMLElement>('[data-embla-viewport]')!;
-    const prevBtn = root.querySelector<HTMLButtonElement>('[data-embla-prev]')!;
-    const nextBtn = root.querySelector<HTMLButtonElement>('[data-embla-next]')!;
-    const dotsContainer = root.querySelector<HTMLElement>('[data-embla-dots]')!;
+    const init = async () => {
+      const [{ default: EmblaCarousel }, { default: Autoplay }] = await Promise.all([
+        import('embla-carousel'),
+        import('embla-carousel-autoplay'),
+      ]);
 
-    const embla = EmblaCarousel(
-      viewport,
-      { loop: true, align: 'start', slidesToScroll: 1 },
-      [Autoplay({ delay: 6000, stopOnInteraction: true, stopOnMouseEnter: true })]
-    );
+      const viewport = root.querySelector<HTMLElement>('[data-embla-viewport]')!;
+      const prevBtn = root.querySelector<HTMLButtonElement>('[data-embla-prev]')!;
+      const nextBtn = root.querySelector<HTMLButtonElement>('[data-embla-next]')!;
+      const dotsContainer = root.querySelector<HTMLElement>('[data-embla-dots]')!;
 
-    prevBtn.addEventListener('click', () => embla.scrollPrev());
-    nextBtn.addEventListener('click', () => embla.scrollNext());
+      const embla = EmblaCarousel(
+        viewport,
+        { loop: true, align: 'start', slidesToScroll: 1 },
+        [Autoplay({ delay: 6000, stopOnInteraction: true, stopOnMouseEnter: true })]
+      );
 
-    // Точки
-    const renderDots = () => {
-      dotsContainer.innerHTML = '';
-      embla.scrollSnapList().forEach((_, idx) => {
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        // Внешний button: 24x24 hit-area (WCAG 2.5.8), прозрачный.
-        // Внутренний span — видимая точка 8x8.
-        dot.className = 'embla-dot inline-flex items-center justify-center w-6 h-6 bg-transparent';
-        dot.setAttribute('aria-label', `Перейти к отзыву ${idx + 1}`);
-        const inner = document.createElement('span');
-        inner.className = 'block w-2 h-2 rounded-full bg-indigo/30 transition-all';
-        dot.appendChild(inner);
-        dot.addEventListener('click', () => embla.scrollTo(idx));
-        dotsContainer.appendChild(dot);
-      });
+      prevBtn.addEventListener('click', () => embla.scrollPrev());
+      nextBtn.addEventListener('click', () => embla.scrollNext());
+
+      const renderDots = () => {
+        dotsContainer.innerHTML = '';
+        embla.scrollSnapList().forEach((_, idx) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'embla-dot inline-flex items-center justify-center w-6 h-6 bg-transparent';
+          dot.setAttribute('aria-label', `Перейти к отзыву ${idx + 1}`);
+          const inner = document.createElement('span');
+          inner.className = 'block w-2 h-2 rounded-full bg-indigo/30 transition-all';
+          dot.appendChild(inner);
+          dot.addEventListener('click', () => embla.scrollTo(idx));
+          dotsContainer.appendChild(dot);
+        });
+      };
+
+      const updateDots = () => {
+        const selected = embla.selectedScrollSnap();
+        Array.from(dotsContainer.children).forEach((dot, idx) => {
+          const inner = dot.firstElementChild as HTMLElement | null;
+          if (!inner) return;
+          inner.className = idx === selected
+            ? 'block w-6 h-2 rounded-full bg-indigo transition-all'
+            : 'block w-2 h-2 rounded-full bg-indigo/30 transition-all';
+        });
+      };
+
+      renderDots();
+      updateDots();
+      embla.on('select', updateDots);
+      embla.on('reInit', () => { renderDots(); updateDots(); });
     };
 
-    const updateDots = () => {
-      const selected = embla.selectedScrollSnap();
-      Array.from(dotsContainer.children).forEach((dot, idx) => {
-        const inner = dot.firstElementChild as HTMLElement | null;
-        if (!inner) return;
-        inner.className = idx === selected
-          ? 'block w-6 h-2 rounded-full bg-indigo transition-all'
-          : 'block w-2 h-2 rounded-full bg-indigo/30 transition-all';
-      });
-    };
-
-    renderDots();
-    updateDots();
-    embla.on('select', updateDots);
-    embla.on('reInit', () => { renderDots(); updateDots(); });
+    // Ленивая инициализация: грузим Embla только когда секция близко к viewport.
+    // rootMargin 200px → старт за пол-экрана до появления, чтобы слайдер был готов.
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          init();
+        }
+      }, { rootMargin: '200px' });
+      io.observe(root);
+    } else {
+      // Старые браузеры — грузим сразу.
+      init();
+    }
   }
 </script>
+
