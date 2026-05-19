@@ -24,10 +24,10 @@ const nav = [
     </div>
 
     <nav aria-label="Навигация в подвале">
-      <h3 class="text-base font-semibold mb-3 font-sans">Разделы</h3>
-      <ul class="space-y-2 text-sm opacity-90">
+      <h3 class="text-sm font-bold mb-4 font-sans uppercase tracking-wider">Разделы</h3>
+      <ul class="columns-2 gap-x-4 text-sm opacity-90 list-none p-0 m-0">
         {nav.map((item) => (
-          <li>
+          <li class="mb-2 break-inside-avoid">
             <a href={item.href} class="hover:text-cta transition-colors">
               {item.label}
             </a>
@@ -37,7 +37,7 @@ const nav = [
     </nav>
 
     <div>
-      <h3 class="text-base font-semibold mb-3 font-sans">Контакты</h3>
+      <h3 class="text-sm font-bold mb-4 font-sans uppercase tracking-wider">Контакты</h3>
       <ul class="space-y-2 text-sm opacity-90">
         <li>
           <a href={site.phone.href} class="hover:text-cta transition-colors font-semibold">
@@ -51,7 +51,7 @@ const nav = [
     </div>
 
     <div>
-      <h3 class="text-base font-semibold mb-3 font-sans">Мы в соцсетях</h3>
+      <h3 class="text-sm font-bold mb-4 font-sans uppercase tracking-wider">Мы в соцсетях</h3>
       <SocialIcons mode="channels" size="md" variant="light" />
     </div>
   </div>

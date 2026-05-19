@@ -103,6 +103,12 @@ h1, h2, h3, h4 {
   letter-spacing: -0.01em;
 }
 
+/* Tailwind font-sans utility должен побеждать глобальное правило для заголовков
+   (нужно для футера и других мест, где h3 используется как label) */
+h1.font-sans, h2.font-sans, h3.font-sans, h4.font-sans {
+  font-family: var(--font-sans);
+}
+
 /* Доступный фокус */
 :focus-visible {
   outline: 2px solid var(--color-cta);
