@@ -99,9 +99,7 @@ const icbmPosition = `${site.address.geo.latitude}, ${site.address.geo.longitude
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
-    <!-- Performance: prefetch Яндекс.Карт (iframe в секции Contacts) -->
-    <link rel="dns-prefetch" href="https://yandex.ru" />
-    <link rel="preconnect" href="https://yandex.ru" crossorigin />
+    <!-- Яндекс.Карты (iframe в секции Contacts) грузятся при прокрутке — без preconnect/dns-prefetch -->
 
     <!-- Schema.org JSON-LD -->
     <SchemaOrg />
