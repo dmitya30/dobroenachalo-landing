@@ -111,7 +111,13 @@ export const site = {
   ],
 
   // --- Основание организации ---
-  foundingDate: '2025', // год ребрендинга «Альт» → «Доброе Начало»
+  foundingDate: '2024-04-11', // дата регистрации ИП Беляковой И.Ю. (проверено на checko.ru)
+
+  // --- Лицензия (для schema.org hasCredential) ---
+  license: {
+    issuedBy: 'Министерство образования Московской области',
+    issueDate: '2025-10-13',
+  },
 } as const;
 
 export type Site = typeof site;
