@@ -32,7 +32,7 @@ function getInitials(name: string): string {
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 ---
-<section id="team" class="bg-soft py-16 md:py-20 lg:py-24">
+<section id="team" class="bg-bg-soft py-16 md:py-20 lg:py-24">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading
       eyebrow="Команда"
@@ -47,7 +47,7 @@ function getInitials(name: string): string {
         const photo = photoMap[member.data.order];
         return (
           <article class="bg-bg rounded-2xl overflow-hidden shadow-sm flex flex-col sm:flex-row">
-            <div class="sm:w-2/5 shrink-0 bg-soft aspect-[4/5] sm:aspect-auto">
+            <div class="sm:w-2/5 shrink-0 bg-bg-soft aspect-[4/5] sm:aspect-auto">
               {photo ? (
                 <Image
                   src={photo}
