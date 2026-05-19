@@ -7,13 +7,34 @@ interface Props {
   description?: string;
   /** Запретить индексацию (на время разработки). По умолчанию true. */
   noindex?: boolean;
+  /** Кастомное OG-изображение для конкретной страницы (опционально). Путь от корня сайта. */
+  image?: string;
 }
 
 const {
-  title = `${site.name} — ${site.tagline}`,
+  title = `${site.name} - ${site.tagline}`,
   description = site.description,
   noindex = true,
+  image = site.seo.ogImage,
 } = Astro.props;
+
+// Нормализуем BASE_URL: гарантируем trailing slash.
+// На стейджинге Astro отдаёт '/dobroenachalo-landing' (без слэша),
+// после переключения на custom domain — '/'. Обе ситуации должны работать.
+const baseURL = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+
+// Полный URL canonical и OG: Astro.site + текущий pathname
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImageURL = new URL(
+  `${baseURL}${image.replace(/^\//, '')}`,
+  Astro.site
+).toString();
+
+const keywordsString = site.seo.keywords.join(', ');
+const geoPosition = `${site.address.geo.latitude};${site.address.geo.longitude}`;
+const icbmPosition = `${site.address.geo.latitude}, ${site.address.geo.longitude}`;
 ---
 
 <!doctype html>
@@ -21,10 +42,59 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Primary Meta -->
     <title>{title}</title>
     <meta name="description" content={description} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <meta name="keywords" content={keywordsString} />
+    <meta name="author" content={site.legal.fullName} />
+    <meta name="theme-color" content={site.seo.themeColor} />
+    {noindex
+      ? <meta name="robots" content="noindex, nofollow" />
+      : <meta name="robots" content="index, follow, max-image-preview:large" />
+    }
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Geo -->
+    <meta name="geo.region" content="RU-MOS" />
+    <meta name="geo.placename" content={`${site.address.locality}, ${site.address.district}`} />
+    {site.address.geo.latitude !== null && site.address.geo.longitude !== null && (
+      <>
+        <meta name="geo.position" content={geoPosition} />
+        <meta name="ICBM" content={icbmPosition} />
+      </>
+    )}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:locale" content={site.seo.locale} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content={String(site.seo.ogImageWidth)} />
+    <meta property="og:image:height" content={String(site.seo.ogImageHeight)} />
+    <meta property="og:image:alt" content={`${site.name} - ${site.tagline}`} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href={`${baseURL}favicon.svg`} />
+    <link rel="apple-touch-icon" sizes="180x180" href={`${baseURL}apple-touch-icon.png`} />
+
+    <!-- iOS web app -->
+    <meta name="apple-mobile-web-app-title" content={site.name} />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <!-- Performance: prefetch Яндекс.Карт (iframe в секции Contacts) -->
+    <link rel="dns-prefetch" href="https://yandex.ru" />
+    <link rel="preconnect" href="https://yandex.ru" crossorigin />
   </head>
   <body class="min-h-screen bg-bg text-text">
     <slot />
