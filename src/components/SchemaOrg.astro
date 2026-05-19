@@ -1,0 +1,133 @@
+---
+import { getCollection } from 'astro:content';
+import { site } from '../data/site';
+
+// Базовый URL организации (canonical корня сайта)
+const orgId = `${Astro.site}#organization`;
+
+// Нормализуем BASE_URL (как в BaseLayout)
+const baseURL = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+
+const logoURL = new URL(`${baseURL}favicon.svg`, Astro.site).toString();
+const imageURL = new URL(`${baseURL}${site.seo.ogImage.replace(/^\//, '')}`, Astro.site).toString();
+
+// Длинные отзывы — для EducationalOrganization.review
+const allReviews = await getCollection('reviews');
+const featuredReviews = allReviews.filter((r) => r.data.featured);
+
+// FAQ — для FAQPage
+const faqItems = (await getCollection('faq')).sort((a, b) => a.data.order - b.data.order);
+
+// Расшифровка дней для schema.org openingHoursSpecification
+const dayMap: Record<string, string> = {
+  Monday: 'https://schema.org/Monday',
+  Tuesday: 'https://schema.org/Tuesday',
+  Wednesday: 'https://schema.org/Wednesday',
+  Thursday: 'https://schema.org/Thursday',
+  Friday: 'https://schema.org/Friday',
+  Saturday: 'https://schema.org/Saturday',
+  Sunday: 'https://schema.org/Sunday',
+};
+
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'EducationalOrganization',
+  '@id': orgId,
+  name: site.name,
+  alternateName: ['Альтик Садик в Нахабино', 'Альтскул Нахабино'],
+  description: site.description,
+  url: Astro.site?.toString(),
+  logo: logoURL,
+  image: imageURL,
+  telephone: site.phone.display,
+  foundingDate: site.foundingDate,
+  founder: {
+    '@type': 'Person',
+    name: 'Белякова Ирина Юрьевна',
+    jobTitle: 'Директор школы',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    addressLocality: site.address.locality,
+    addressRegion: site.address.region,
+    addressCountry: site.address.country,
+  },
+  ...(site.address.geo.latitude !== null && site.address.geo.longitude !== null
+    ? {
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: site.address.geo.latitude,
+          longitude: site.address.geo.longitude,
+        },
+      }
+    : {}),
+  areaServed: [
+    { '@type': 'Place', name: 'Нахабино' },
+    { '@type': 'Place', name: 'Истра' },
+    { '@type': 'Place', name: 'Красногорск' },
+    { '@type': 'Place', name: 'Дедовск' },
+    { '@type': 'Place', name: 'Павловы Озёра' },
+  ],
+  sameAs: [
+    site.social.telegram.channel,
+    site.social.vk.url,
+    site.social.max.url,
+  ],
+  openingHoursSpecification: site.openingHours.map((slot) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: slot.days.map((d) => dayMap[d]),
+    opens: slot.opens,
+    closes: slot.closes,
+  })),
+  hasCredential: {
+    '@type': 'EducationalOccupationalCredential',
+    credentialCategory: 'license',
+    recognizedBy: {
+      '@type': 'GovernmentOrganization',
+      name: site.license.issuedBy,
+    },
+    dateCreated: site.license.issueDate,
+  },
+  priceRange: '38000-55000 RUB/month',
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: String(site.rating.value),
+    reviewCount: String(site.rating.count),
+    bestRating: String(site.rating.bestRating),
+    worstRating: '1',
+  },
+  review: featuredReviews.map((r) => ({
+    '@type': 'Review',
+    author: { '@type': 'Person', name: r.data.author },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: String(r.data.rating),
+      bestRating: '5',
+      worstRating: '1',
+    },
+    reviewBody: r.data.text,
+    ...(r.data.date ? { datePublished: r.data.date } : {}),
+  })),
+};
+
+const faqPage = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  '@id': `${Astro.site}#faq`,
+  about: { '@id': orgId },
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.data.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.data.answer,
+    },
+  })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(organization)} />
+<script type="application/ld+json" set:html={JSON.stringify(faqPage)} />

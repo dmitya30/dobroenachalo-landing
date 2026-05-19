@@ -19,28 +19,6 @@ const sourceLabel: Record<string, string> = {
   direct: 'Отзыв родителя',
 };
 
-const aggregateRating = {
-  '@context': 'https://schema.org',
-  '@type': 'EducationalOrganization',
-  name: 'Доброе Начало',
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.7',
-    reviewCount: '43',
-    bestRating: '5',
-    worstRating: '1',
-  },
-  review: featured.map((r) => ({
-    '@type': 'Review',
-    author: { '@type': 'Person', name: r.data.author },
-    reviewRating: {
-      '@type': 'Rating',
-      ratingValue: String(r.data.rating),
-      bestRating: '5',
-    },
-    reviewBody: r.data.text,
-  })),
-};
 ---
 <section id="reviews" class="bg-warm py-16 md:py-20 lg:py-24">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -121,8 +99,6 @@ const aggregateRating = {
       </div>
     )}
   </div>
-
-  <script type="application/ld+json" set:html={JSON.stringify(aggregateRating)} />
 </section>
 
 <script>

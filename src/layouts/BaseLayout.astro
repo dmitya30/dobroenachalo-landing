@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { site } from '../data/site';
+import SchemaOrg from '../components/SchemaOrg.astro';
 
 interface Props {
   title?: string;
@@ -95,6 +96,9 @@ const icbmPosition = `${site.address.geo.latitude}, ${site.address.geo.longitude
     <!-- Performance: prefetch Яндекс.Карт (iframe в секции Contacts) -->
     <link rel="dns-prefetch" href="https://yandex.ru" />
     <link rel="preconnect" href="https://yandex.ru" crossorigin />
+
+    <!-- Schema.org JSON-LD -->
+    <SchemaOrg />
   </head>
   <body class="min-h-screen bg-bg text-text">
     <slot />
