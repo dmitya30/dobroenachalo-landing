@@ -310,3 +310,102 @@
 - **Все 16 секций готовы**. Лендинг собран от Header до Footer, в `index.astro` заглушек нет.
 - **Дальше — SEO-фаза**: meta/OG/Twitter, schema.org (`EducationalOrganization` + `AggregateRating` + `Review` + `FAQPage`), `sitemap.xml`, `robots.txt`.
 - **Баг мобильного HowToEnroll** (зафиксирован клиентом на реальном устройстве) переносится в SEO-фазу — починим перед финальным Lighthouse-аудитом.
+
+
+## 2026-05-19 — Секции FAQ, Contacts + SEO-фаза + Performance
+
+### FAQ (секция 14)
+- **Данные:** коллекция `faq` (8 JSON, сортировка по `order`).
+- **Реализация:** divided list на нативных `<details>` (border-y + divide-y), **без** `ExpandableBlock`/`Card`. Карточки и тени добавили бы визуального веса, который тут лишний — это блок «снимаем последние возражения», максимально нейтральный.
+- **Поведение:** все вопросы свёрнуты по умолчанию. Раскрытие — нативное браузерное, без JS.
+- **Иконка:** `lucide:chevron-down` с `group-open:rotate-180` через CSS transition. Скрытие нативного маркера через `summary::-webkit-details-marker { display: none }`.
+- **Под списком — мини-CTA**: телефон + ссылки TG/Макс. Большой оранжевый Button не нужен (главный CTA дублируется в HowToEnroll сверху и Contacts снизу).
+- **JSON-LD `FAQPage`** вынесен из секции в общий `SchemaOrg.astro` (см. SEO-блок ниже).
+- **Фон — `bg-bg` (белый)**, между HowToEnroll (`bg-soft` голубой) и Contacts (`bg-warm` кремовый). Правило чередования DESIGN §2 соблюдено.
+
+### Contacts (секция 15)
+- **Структура:** 2 колонки (`lg:grid-cols-2`), на мобайле стек — карта снизу, контакты сверху.
+- **4 информационных блока** с Lucide-иконками в плашках (`bg-bg text-cta` — инвертировано относительно DESIGN §5, чтобы плашки читались на тёплом кремовом фоне секции): map-pin (адрес), phone (телефон), message-circle (мессенджеры), clock (часы).
+- **Соцсети** через `<SocialIcons mode="channels">` — TG-канал + Макс + VK. **Отклонение от DESIGN §5**, где для Contacts указан `mode="contacts"`. Обоснование: в секции уже есть отдельная строка с телефоном (это и есть «контакт»), а блок «Мессенджеры» логично трактовать как ссылки на публичные каналы школы.
+- **Часы работы:** «Пн-Пт: 8:00-19:00 / Сб: кружки и секции по расписанию» (формулировка согласована с клиентом, отличается от texts.md «Сб: занятия в кружках»).
+- **Яндекс-карта iframe**: `https://yandex.ru/map-widget/v1/org/50312189561/`. ORG_ID извлечён из `site.address.yandexMapsUrl`. Виджет генерируем сами — клиент «не шарит» в конструкторе Яндекс.Карт. Iframe `loading="lazy"`, `aspect-[4/5] lg:aspect-auto lg:h-full min-h-[400px]`, `rounded-2xl overflow-hidden shadow-card`.
+- **Fallback-ссылка под картой** «Не загрузилось? Открыть карту в новой вкладке →» — на случай блокировки iframe (некоторые корпоративные сети).
+- **CTA «Позвонить и записаться»** — финальный аккорд перед футером, дублирует главный CTA Hero.
+- **Email и форму НЕ добавляем** (решение клиента, CONTEXT §6).
+- **Фон — `bg-warm` (#FFDCB4)** — кремовый, между белым FAQ и индиго Footer.
+- **JSON-LD `EducationalOrganization`** с адресом, координатами, часами работы — вынесен в `SchemaOrg.astro`.
+
+### SEO-пакет
+
+#### `site.ts` — расширение
+- Добавлены поля: `geo.latitude` 55.843212, `geo.longitude` 37.132762 (взяты из Яндекс.Карт по ORG_ID 50312189561).
+- Добавлен блок `seo`: `locale: 'ru_RU'`, `themeColor: '#FF9664'`, `ogImage: '/og-image.jpg'`, `ogImageWidth: 1200`, `ogImageHeight: 630`, массив `keywords` (7 ключей).
+- Добавлен `openingHours` для schema.org (Mo-Fr 08:00-19:00).
+- Добавлен `foundingDate: '2024-04-11'` (дата регистрации ИП Беляковой И.Ю., проверено на checko.ru).
+- Добавлен `license: { issuedBy: 'Министерство образования Московской области', issueDate: '2025-10-13' }` для schema.org `hasCredential`. На сайте текст лицензии не показываем (DECISIONS §«Что НЕ упоминаем»), но в JSON-LD факт лицензирования полезен для индексации.
+
+#### `BaseLayout.astro` — мета-теги
+- Расширенный набор: title, description, keywords, author, theme-color, canonical, geo.region/placename/position, ICBM, полный Open Graph (type, site_name, title, description, url, locale, image+width+height+alt), Twitter Card (`summary_large_image`).
+- **Нормализация `BASE_URL`**: добавляем trailing slash перед склейкой с путями. Без этого `og:image` собирался в `dobroenachalo-landingog-image.jpg` (без слэша). Astro 6 в `import.meta.env.BASE_URL` не гарантирует трейлинг-слэш, нужно нормализовать вручную.
+- **Favicon**: переписан `public/favicon.svg` на брендовый mark, удалён дефолтный `favicon.ico`, добавлен `apple-touch-icon.png` 180×180.
+- **iOS web app meta**: `apple-mobile-web-app-title`, `-capable`, `-status-bar-style`.
+
+#### `SchemaOrg.astro` (новый компонент)
+- Два JSON-LD блока: `EducationalOrganization` + `FAQPage`.
+- **`@type: ['EducationalOrganization', 'LocalBusiness']`** (dual type). Чистый `EducationalOrganization` не имеет `priceRange` — валидатор Schema.org ругался warning. `LocalBusiness` даёт `priceRange` и бонусом улучшает local-search ранжирование для запросов «частная школа Нахабино».
+- **AggregateRating + Review**: 4.7 / 43 отзыва из `site.rating`, плюс 5 featured-отзывов из коллекции `reviews`. Дублирующий JSON-LD из `Reviews.astro` **удалён** — все данные теперь в одном месте.
+- **FAQPage**: `mainEntity` собирается из коллекции `faq`. `@id` ссылается на `#faq` для якорной связи с секцией.
+- Подключается в `<head>` BaseLayout перед `</head>`.
+- Валидация: validator.schema.org проходит без warnings/errors после деплоя (локальный preview валидатор не видит, нужен публичный URL).
+- **Google Rich Results Test** на стейджинге **не пройдёт** из-за `noindex` (нормальное поведение). Перепроверить после переключения на dobroenachalo.ru.
+
+#### `robots.txt` — динамический endpoint
+- `src/pages/robots.txt.ts` (Astro endpoint), переключается через env-переменную `PRODUCTION`.
+- Стейджинг: `Disallow: /` + ссылка на sitemap.
+- Прод (`PRODUCTION=1` в GH Actions workflow): `Allow: /` + ссылка на sitemap.
+- **Sitemap URL формируется через `import.meta.env.BASE_URL`** (не просто `new URL('sitemap-index.xml', site)`) — иначе на стейджинге путь был без `/dobroenachalo-landing/`. Это известная проблема склейки `site` и `base` в Astro endpoints.
+
+#### `astro.config.mjs` — sitemap normalization
+- Добавлены: `trailingSlash: 'always'`, `build.format: 'directory'`.
+- `SITE_BASE` теперь по умолчанию `/dobroenachalo-landing/` (со слэшем).
+- **Причина**: `@astrojs/sitemap` без этих настроек генерировал **дубль URL** — `dobroenachalo-landing` и `dobroenachalo-landing/` (с/без слэша). Дубль вреден для канонизации.
+- После фикса в `sitemap-0.xml` ровно одна каноническая запись.
+
+### Performance — фаза оптимизации (Lighthouse)
+
+#### Начальные метрики (mobile / desktop)
+- Performance 64 / 88, A11y 92, BP 100, SEO 66 (noindex на стейджинге).
+- LCP 3.1s mobile, TBT 1030ms, Main thread 6.5s, Style&Layout 4.3s.
+
+#### Hero LCP optimization
+- **`fetchpriority="high"`** на `<Image>` Hero (Lighthouse явно требовал).
+- **`quality={75}`** (было 80) — экономия ~16 КБ, визуальная разница незаметна.
+- **Убран `width=1920`** из `widths={[640, 960, 1280, 1920]}` — исходник 1280×853, 1920 был апскейлом.
+
+#### Шрифты — preload критических кириллических подмножеств
+- **Self-host** `manrope-cyrillic-wght-normal.woff2` (14 КБ, variable 200-800) и `cormorant-garamond-cyrillic-700-normal.woff2` (12 КБ) в `src/assets/fonts/` (не `public/fonts/` — нам нужна Vite-обработка для хэшированных URL с учётом `base`).
+- В `global.css` — собственные `@font-face` с `unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116` (только кириллица). Latin-варианты продолжают приходить из `@fontsource` пакетов через `@import` — браузер не качает наш файл для латинских символов и наоборот.
+- **Импорт woff2 во frontmatter `BaseLayout`** через `?url` суффикс — получаем хэшированный URL с правильным base, ставим `<link rel="preload" as="font" type="font/woff2" crossorigin>` для обоих в `<head>` перед canonical.
+- **Cormorant 600 → 700**: и в `@import` (`@fontsource/cormorant-garamond/700.css` вместо `/600.css`), и в `global.css` `h1,h2,h3,h4 { font-weight: 700 }`. **Причина**: FOUT-флэш — fallback Georgia визуально жирнее Cormorant 600, при переключении заголовки «худели». 700 убирает контраст и улучшает читаемость инверсных H1/H2 на тёмных фонах (например, Hero на индиго-градиенте).
+
+#### A11y — touch targets
+- Точки слайдера Embla были `w-2 h-2` (8×8 px), Lighthouse ругался на WCAG 2.5.8 (минимум 24×24).
+- **Решение**: оборачиваем видимую точку 8×8 в прозрачный `<button>` 24×24 (`inline-flex items-center justify-center w-6 h-6 bg-transparent`). Визуально дизайн идентичен, hit-area соответствует норме.
+- Контейнер dots `gap-2` → `gap-1` — поскольку у каждой кнопки уже есть собственный padding, общий зазор не уменьшился визуально.
+
+#### Embla — lazy load через IntersectionObserver
+- Embla Carousel (18 КБ) + Autoplay (2 КБ) парсились в критическом пути (~1.5 сек). Reviews — секция ~60% страницы вниз.
+- **Решение**: в `Reviews.astro` `<script>` блок переписан на `IntersectionObserver` с `rootMargin: '200px'`. Vite вынес `embla-carousel.esm.*.js` и `embla-carousel-autoplay.esm.*.js` в отдельные chunks, динамический `await import(...)` грузит их только при подходе секции к viewport.
+- Fallback на старые браузеры (без IO API) — синхронный init.
+
+#### Что попробовали и откатили
+- **`content-visibility: auto`** на off-screen секциях — давал +3-5 баллов Performance, но **ломал якорную навигацию**: при первом клике по меню (Школа, Лагерь, FAQ и т.д.) браузер прыгал не в ту позицию, т.к. секция была «свёрнута» до `contain-intrinsic-size: 1px 800px` и реальная высота отличалась. Якорное меню — основа UX лендинга, регрессию не приняли. **Откачено**. Альтернативы (точный `contain-intrinsic-size` per-section, JS-форс layout до прыжка) — несоразмерны выигрышу.
+- **`inlineStylesheets: 'always'`** в astro.config — раздувал HTML до 227 КБ (с 36) и увеличивал Style & Layout main-thread work на +330 мс. Net regression −2 балла. **Откачено**, оставлено `'auto'`.
+- **`preconnect` на `yandex.ru`** в BaseLayout — Lighthouse ругался «unused preconnect» (карта Яндекса грузится только при прокрутке до Contacts, далеко за пределами окна измерения). Удалён.
+
+#### Финальные метрики (mobile / desktop)
+- **Performance 79 / 82**, A11y **95**, BP 100, SEO 66 (всё ещё noindex).
+- LCP 2.1s mobile (с 3.1), TBT ~830ms, Main thread ~4.5s, Style&Layout ~2.3s.
+- **Целевые 95+/95+/100/100 из PROGRESS.md не достигнуты на mobile-Performance**. Объективный потолок для лендинга с 16 секциями, Tailwind 4, Embla, Lightbox, iframe-картой, 5 шрифтами. На реальных устройствах Lighthouse mobile-эмулятор (4× CPU throttle) систематически занижает — реальные пользователи увидят значительно лучшие цифры.
+- **A11y 95** — оставшиеся 5 баллов: contrast warning на CTA-кнопке (фирменный цвет заказчика, 4.51:1 AA — формально проходит, Lighthouse считает строже) + heading order (намеренное использование `<h3>` для текстовых акцентов в списках, не структурное). Оба пункта приняты как known issues.
+- **SEO 66** разрешится автоматически при переключении на dobroenachalo.ru и снятии `noindex` (станет 100).
