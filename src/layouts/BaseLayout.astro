@@ -2,6 +2,8 @@
 import '../styles/global.css';
 import { site } from '../data/site';
 import SchemaOrg from '../components/SchemaOrg.astro';
+import manropeCyrillic from '../assets/fonts/manrope-cyrillic-wght-normal.woff2?url';
+import cormorantCyrillic from '../assets/fonts/cormorant-garamond-cyrillic-700-normal.woff2?url';
 
 interface Props {
   title?: string;
@@ -54,6 +56,10 @@ const icbmPosition = `${site.address.geo.latitude}, ${site.address.geo.longitude
       ? <meta name="robots" content="noindex, nofollow" />
       : <meta name="robots" content="index, follow, max-image-preview:large" />
     }
+    <!-- Preload critical cyrillic fonts (устраняет FOUT на H1) -->
+    <link rel="preload" href={manropeCyrillic} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={cormorantCyrillic} as="font" type="font/woff2" crossorigin />
+
     <link rel="canonical" href={canonicalURL} />
 
     <!-- Geo -->
