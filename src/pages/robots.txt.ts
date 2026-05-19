@@ -12,7 +12,12 @@ import type { APIRoute } from 'astro';
  */
 export const GET: APIRoute = ({ site }) => {
   const isProd = process.env.PRODUCTION === '1';
-  const sitemapURL = new URL('sitemap-index.xml', site).toString();
+  // site = https://dmitya30.github.io (без base), base = /dobroenachalo-landing/
+  // На проде base = '/' → склейка даёт правильный URL в обоих случаях.
+  const sitemapURL = new URL(
+    `${import.meta.env.BASE_URL}sitemap-index.xml`,
+    site
+  ).toString();
 
   const body = isProd
     ? `User-agent: *
