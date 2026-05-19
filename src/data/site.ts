@@ -30,8 +30,8 @@ export const site = {
     nearestStation: 'МЦД «Нахабино Ясное», 380 м',
     // Геокоординаты: уточнить по Яндекс.Картам, подставим перед релизом
     geo: {
-      latitude: null as number | null,
-      longitude: null as number | null,
+      latitude: 55.843212 as number | null,
+      longitude: 37.132762 as number | null,
     },
     // Ссылка на Яндекс.Карты — для блока «Контакты» и социального пруфа
     yandexMapsUrl:
@@ -82,6 +82,36 @@ export const site = {
     from: 2.5,
     to: 11,
   },
+
+  // --- SEO / Open Graph ---
+  seo: {
+    locale: 'ru_RU',
+    themeColor: '#FF9664',
+    ogImage: '/og-image.jpg', // 1200x630, public/og-image.jpg
+    ogImageWidth: 1200,
+    ogImageHeight: 630,
+    keywords: [
+      'частная школа Нахабино',
+      'детский сад деревня Чёрная',
+      'частная школа-сад Истра',
+      'школа Павловы Озёра',
+      'программа Эльконина Давыдова',
+      'летний лагерь Подмосковье 2026',
+      'Доброе Начало Нахабино',
+    ],
+  },
+
+  // --- Часы работы (для schema.org openingHoursSpecification) ---
+  openingHours: [
+    {
+      days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '08:00',
+      closes: '19:00',
+    },
+  ],
+
+  // --- Основание организации ---
+  foundingDate: '2025', // год ребрендинга «Альт» → «Доброе Начало»
 } as const;
 
 export type Site = typeof site;
