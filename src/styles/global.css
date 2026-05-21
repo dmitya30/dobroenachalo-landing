@@ -27,30 +27,33 @@
 }
 
 /* =========================================================================
-   Design tokens (Tailwind 4 @theme)
-   ВАЖНО: точные HEX бренда ждём от клиента (см. CONTEXT.md §13).
-   Текущие значения — рабочие, из Blueprint v0.1.
+   Design tokens (Tailwind 4 @theme) — Premium v2.0
+   Палитра: ivory + smoky beige + indigo-soft.
+   Decorative-цвета #A0EBFF и #FFDCB4 — только в SVG-иконках OfferCards
+   (зашиты HEX-ом инлайн), как Tailwind-утилиты больше не существуют.
    ========================================================================= */
 @theme {
   /* --- Цвета бренда (raw) --- */
   --color-indigo: #464682;
   --color-indigo-dark: #33335E;
-  --color-indigo-soft: #6E78B4;
+  --color-indigo-muted: #6E78B4;
   --color-orange: #FF9664;
   --color-orange-dark: #E07A4A;
-  --color-blue-soft: #A0EBFF;
-  --color-cream: #FFDCB4;
   --color-ink: #2B2A29;
 
-  /* --- Семантические алиасы (используем в компонентах) --- */
-  --color-bg: #FFFFFF;
-  --color-bg-soft: var(--color-blue-soft);
-  --color-bg-warm: var(--color-cream);
-  --color-text: var(--color-indigo);
-  --color-text-muted: #5A5C8A;
+  /* --- Семантические алиасы фонов --- */
+  --color-bg: #FAF8F4;
+  --color-bg-soft: #F1ECE3;
+  --color-bg-warm: #FFFFFF;
+  --color-bg-mute: #E8E3D9;
+  --color-indigo-soft: #DDE0EE;
+
+  /* --- Семантические алиасы текста и UI --- */
+  --color-text: var(--color-ink);
+  --color-text-muted: #6B6B6B;
   --color-text-inverse: #FFFFFF;
   --color-cta: var(--color-orange);
-  --color-cta-hover: var(--color-orange-dark);
+  --color-cta-dark: var(--color-orange-dark);
   --color-border: #E5E7EB;
 
   /* --- Типографика --- */
