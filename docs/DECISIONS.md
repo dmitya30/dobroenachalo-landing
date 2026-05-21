@@ -244,6 +244,11 @@
 | School | indigo-soft (главный холодный акцент) |
 | Hero / Footer | indigo / indigo-dark |
 
+- 2026-05-21: финальная корректировка ритма фонов.
+  SchoolLife → bg-bg-warm (было bg-bg, дубль с Reviews).
+  Contacts → bg-bg-soft (было bg-bg, дубль с FAQ).
+  Финальная таблица 16 секций зафиксирована в DESIGN.md §2.2 и PROGRESS.md.
+
 Дублей подряд нет.
 
 ### Технические решения

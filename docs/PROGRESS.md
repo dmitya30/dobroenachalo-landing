@@ -61,7 +61,7 @@ Header, Hero, OfferCards, WhyUs, Philosophy, Kindergarten, School, SummerCamp, A
 
 #### Диалог №4 (Фаза 1 — палитра v2.0 в коде, 2026-05-21)
 
-5 коммитов, миграция всех 16 секций на palette v2.0:
+6 коммитов, миграция всех 16 секций на palette v2.0:
 
 - `style(palette): tokens + UI base — premium v2.0` — `global.css` (`@theme` переписан целиком), `Button.astro` (`cta-hover` → `cta-dark`), `RatingBadge.astro` (`hover:bg-cream` → `hover:bg-bg-mute`), `SchoolLife.astro` (тег `life`: `bg-indigo-soft` → `bg-indigo-muted`).
 - `style(palette): OfferCards + Philosophy + Kindergarten — premium v2.0` — OfferCards на ivory с белыми карточками, Philosophy → beige, Kindergarten остаётся ivory (ритм Philosophy/Kindergarten/School = beige/ivory/indigo-soft).
@@ -76,6 +76,10 @@ Header, Hero, OfferCards, WhyUs, Philosophy, Kindergarten, School, SummerCamp, A
 - `--color-cta-hover` → `--color-cta-dark` (синхрон с DESIGN.md).
 
 **Финальный ритм фонов (16 секций):** Header ivory → Hero indigo → OfferCards ivory → WhyUs white → Philosophy beige → Kindergarten ivory → School indigo-soft → SummerCamp beige → AdditionalClasses white → Team beige → Reviews ivory → SchoolLife ivory → HowToEnroll beige → FAQ ivory → Contacts ivory → Footer indigo-dark. Дублей подряд нет.
+
+- 2026-05-21: fix(palette) — SchoolLife bg-bg → bg-bg-warm, Contacts bg-bg → bg-bg-soft.
+  Устранены дубли фонов Reviews↔SchoolLife и FAQ↔Contacts.
+  Фаза 1 закрыта полностью.
 
 #### Финальные метрики Lighthouse (стейджинг, конец Диалога №3)
 
