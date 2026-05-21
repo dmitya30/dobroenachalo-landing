@@ -12,8 +12,7 @@ interface Offer {
   title: string;
   ageOrMeta: string;
   description: string;
-  price: string;
-  priceNote?: string;
+  cta: string;
 }
 
 const offers: Offer[] = [
@@ -21,36 +20,33 @@ const offers: Offer[] = [
     href: '#kindergarten',
     icon: iconKindergarten,
     title: 'Детский сад',
-    ageOrMeta: 'Дети 2,5–7 лет',
-    description:
-      'Развитие через игру, ранний английский, питание от детского нутрициолога',
-    price: 'от 38 000 ₽ / мес',
+    ageOrMeta: 'Дети 2–7 лет',
+    description: 'Тёплая среда, мягкая адаптация, авторская программа',
+    cta: 'Подробнее',
   },
   {
     href: '#school',
     icon: iconSchool,
     title: 'Начальная школа',
     ageOrMeta: '1–4 классы',
-    description:
-      'Программа Выготского — Эльконина — Давыдова, классы до 10 детей',
-    price: 'от 48 000 ₽ / мес',
+    description: 'Небольшие классы, углублённый английский, индивидуальный темп',
+    cta: 'Подробнее',
   },
   {
-    href: '#camp',
+    href: '#summer',
     icon: iconCamp,
-    title: 'Летний лагерь 2026',
-    ageOrMeta: '12 тематических смен · июнь — август',
-    description: 'Без телефонов и компьютеров. Настоящее счастливое детство',
-    price: 'от 19 000 ₽ / смена',
-    priceNote: 'при раннем бронировании',
+    title: 'Доброе лето',
+    ageOrMeta: 'Летние смены, 6–11 лет',
+    description: 'Каникулы с пользой, насыщенный ритм дня, безопасное пространство',
+    cta: 'Смены и даты',
   },
   {
     href: '#classes',
     icon: iconClasses,
     title: 'Кружки и секции',
-    ageOrMeta: 'Шахматы, столярка, логопед, акробатика, подготовка к школе',
-    description: 'Для своих и приходящих детей',
-    price: 'пробное - бесплатно',
+    ageOrMeta: 'Для воспитанников сада, школы и приходящих детей',
+    description: 'Музыка, творчество, спорт, шахматы, столярка, логопед, психолог',
+    cta: 'Расписание',
   },
 ];
 ---
@@ -58,8 +54,7 @@ const offers: Offer[] = [
 <section id="offers" class="py-16 md:py-20 lg:py-24 bg-bg">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading
-      eyebrow="Форматы"
-      title="Выберите формат для вашего ребёнка"
+      title="Выберите направление для вашего ребёнка"
       class="mb-12 md:mb-16"
     />
 
@@ -87,14 +82,8 @@ const offers: Offer[] = [
               <p class="text-base text-text mb-6 flex-grow">
                 {offer.description}
               </p>
-              <p class="text-xl font-semibold text-indigo">
-                {offer.price}
-              </p>
-              {offer.priceNote && (
-                <p class="mt-1 text-sm text-text-muted">{offer.priceNote}</p>
-              )}
-              <span class="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-cta group-hover:gap-2 transition-all">
-                Подробнее
+              <span class="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-cta group-hover:gap-2 transition-all">
+                {offer.cta}
                 <span aria-hidden="true">→</span>
               </span>
             </div>
