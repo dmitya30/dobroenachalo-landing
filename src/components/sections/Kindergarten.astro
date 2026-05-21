@@ -5,36 +5,57 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import ExpandableBlock from '../ui/ExpandableBlock.astro';
 import Button from '../ui/Button.astro';
 import { site } from '../../data/site';
+import telegramSvg from '../../icons/telegram.svg?raw';
+import maxSvg from '../../icons/max.svg?raw';
+import vkSvg from '../../icons/vk.svg?raw';
 import imgMain from '../../assets/kindergarten/kindergarten-02-08-05-ds-dn-1.jpg';
 import imgSecondary1 from '../../assets/kindergarten/kindergarten-01-08-05-xxxl-2026-05-15t144403-857.jpg';
 import imgSecondary2 from '../../assets/kindergarten/kindergarten-03-09-02-xxxl-84.jpg';
 
-interface Feature {
+interface Chip {
+  icon: string;
+  label: string;
+}
+
+const chips: Chip[] = [
+  { icon: 'lucide:users', label: 'Маленькие группы — большое внимание' },
+  { icon: 'lucide:heart-handshake', label: 'Опытные педагоги с сердцем' },
+  { icon: 'lucide:book-open', label: 'Авторская образовательная программа для детского сада' },
+  { icon: 'lucide:sparkles', label: 'Мягкая адаптация с уважением к ребёнку' },
+  { icon: 'lucide:salad', label: 'Сбалансированное питание с заботой' },
+];
+
+interface Advantage {
   icon: string;
   title: string;
+  subtitle: string;
   text: string;
 }
 
-const features: Feature[] = [
+const advantages: Advantage[] = [
   {
-    icon: 'lucide:palette',
-    title: 'Развивающие занятия каждый день',
-    text: 'Математика, развитие речи, окружающий мир, творчество, музыка.',
+    icon: 'lucide:users-round',
+    title: 'Малочисленные группы (камерность)',
+    subtitle: 'Не просто группа, а уютное пространство, где каждый ребёнок на виду.',
+    text: 'В наших группах всего 8–12 детей — это позволяет создать атмосферу доверия и безопасности, как в большой семье. Педагоги успевают уделить внимание каждому: заметить настроение, поддержать интерес, мягко направить.',
   },
   {
-    icon: 'lucide:languages',
-    title: 'Английский язык с раннего возраста',
-    text: 'Носители методики, игровой формат.',
-  },
-  {
-    icon: 'lucide:apple',
-    title: 'Полноценное питание',
-    text: '5-разовое, меню от детского нутрициолога.',
+    icon: 'lucide:salad',
+    title: 'Здоровое и вкусное питание',
+    subtitle: 'Забота начинается с тарелки.',
+    text: 'Рацион разработан профессиональным нутрициологом. Мы учитываем возрастные особенности и потребности растущего организма, чтобы дети получали все необходимые витамины и микроэлементы. Мы используем только свежие, проверенные продукты от надёжных поставщиков. Каждый приём пищи сбалансирован по белкам, жирам и углеводам, давая ребёнку силы для учёбы, игр и новых открытий.',
   },
   {
     icon: 'lucide:heart-handshake',
-    title: 'Психологический комфорт',
-    text: 'Комната эмоциональной разгрузки, индивидуальный подход.',
+    title: 'Педагоги, которые любят своё дело',
+    subtitle: 'Не просто воспитатели — наставники с большим сердцем.',
+    text: 'Наши педагоги — это специалисты с опытом, прошедшие отбор не только по квалификации, но и по ценностям: эмпатия, терпение, уважение к личности ребёнка. Они не «ведут группу», а сопровождают: наблюдают, вдохновляют, создают ситуации успеха. И да — они умеют слушать и детей, и родителей.',
+  },
+  {
+    icon: 'lucide:shield-check',
+    title: 'Территория безопасности',
+    subtitle: 'Закрытое охраняемое пространство в живописном экологически чистом месте.',
+    text: 'Наш детский сад расположен на закрытой охраняемой территории в живописном экологически чистом месте, где царят тишина и спокойствие. Здесь чистый воздух, безопасное пространство для прогулок и атмосфера, в которой ребёнок растёт защищённым.',
   },
 ];
 
@@ -50,38 +71,56 @@ const schedule = [
   'Ужин',
   'Встреча с родителями',
 ];
+
+interface FaqItem {
+  q: string;
+  a: string;
+}
+
+const faq: FaqItem[] = [
+  {
+    q: 'Как я могу ближе познакомиться с вашим детским садом?',
+    a: 'Вы можете записаться на экскурсию или привести ребёнка на пробный день. Позвоните или оставьте заявку на сайте — мы будем рады ответить на все ваши вопросы.',
+  },
+  {
+    q: 'С какого возраста вы принимаете детей?',
+    a: 'Мы принимаем малышей от 2 до 7 лет. Для каждого возраста — своя программа адаптации и развития.',
+  },
+  {
+    q: 'Как проходит день?',
+    a: 'Баланс активности и отдыха: утренняя гимнастика, занятия по возрасту, прогулка, творчество, свободная игра, тихий час и вкусные перекусы. Подробное расписание даём при поступлении.',
+  },
+  {
+    q: 'Есть ли прогулки по расписанию и где гуляют дети?',
+    a: 'Прогулки проходят дважды в день. У нас закрытая, безопасная, охраняемая территория в живописном экологически чистом месте, где царит тишина и спокойствие.',
+  },
+  {
+    q: 'Как я буду узнавать о делах ребёнка?',
+    a: 'Ежедневные короткие отчёты в чате, фото- и видео-моменты (с вашего согласия) и личные встречи с воспитателем по запросу.',
+  },
+];
 ---
 
 <section id="kindergarten" class="bg-bg py-20 lg:py-28">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading
-      eyebrow="Детский сад"
-      title="Детский сад: от 2,5 до 7 лет"
-      lead="Развитие без сравнения и стресса"
+      title="Детский сад"
+      lead="Территория счастливого детства"
       class="mb-12 md:mb-16"
     />
 
-    <!-- Лид + 4 фичи (слева) и главное фото (справа), равные высоты -->
+    <!-- Лид + 5 чипов (слева) и главное фото (справа) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch mb-12 md:mb-16">
-      <div class="order-2 lg:order-1 flex flex-col gap-8">
+      <div class="order-2 lg:order-1 flex flex-col gap-6">
         <p class="text-lg leading-relaxed text-ink">
-          Малыши попадают в семейную атмосферу с постоянным составом педагогов. Никаких «новеньких воспитателей каждые полгода» — ребёнок растёт в кругу знакомых взрослых, которые помнят его привычки, страхи и победы.
+          Вам важно, чтобы ребёнок рос в среде, где его окружают забота и безопасность — и где ему одновременно спокойно, уютно и по-настоящему интересно? Приглашаем вас на тёплую экскурсию — покажем наш уютный мир изнутри: как играют дети, как общаются педагоги.
         </p>
 
-        <ul class="flex flex-col gap-5 list-none p-0 m-0">
-          {features.map((f) => (
-            <li class="flex gap-4 items-start">
-              <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-bg-warm text-cta shrink-0">
-                <Icon name={f.icon} class="w-5 h-5" aria-hidden="true" />
-              </div>
-              <div>
-                <h3 class="text-base font-semibold text-indigo leading-snug mb-1">
-                  {f.title}
-                </h3>
-                <p class="text-sm text-text-muted leading-relaxed">
-                  {f.text}
-                </p>
-              </div>
+        <ul class="flex flex-wrap gap-2 md:gap-2.5 list-none p-0 m-0">
+          {chips.map((chip) => (
+            <li class="inline-flex items-center gap-1.5 bg-bg-soft rounded-full px-3 py-1.5 text-sm text-indigo">
+              <Icon name={chip.icon} class="w-4 h-4 shrink-0 text-cta" aria-hidden="true" />
+              <span>{chip.label}</span>
             </li>
           ))}
         </ul>
@@ -99,33 +138,54 @@ const schedule = [
       </div>
     </div>
 
-    <!-- Цены (на виду) -->
-    <div class="bg-bg-warm rounded-2xl p-8 md:p-10 mb-8 md:mb-10">
+    <!-- 4 развёрнутые карточки преимуществ -->
+    <ul class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 list-none p-0 mb-12 md:mb-16">
+      {advantages.map((adv) => (
+        <li class="bg-bg-warm rounded-2xl p-6 md:p-8 shadow-[var(--shadow-card)] flex flex-col gap-3">
+          <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-bg-soft text-cta shrink-0">
+            <Icon name={adv.icon} class="w-6 h-6" aria-hidden="true" />
+          </div>
+          <h3 class="text-xl font-semibold text-indigo leading-snug">
+            {adv.title}
+          </h3>
+          <p class="text-base text-indigo font-medium leading-snug">
+            {adv.subtitle}
+          </p>
+          <p class="text-base text-text-muted leading-relaxed">
+            {adv.text}
+          </p>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Цены -->
+    <div class="bg-bg-warm rounded-2xl p-8 md:p-10 mb-6 md:mb-8 shadow-[var(--shadow-card)]">
       <h3 class="text-2xl font-semibold text-indigo mb-6">Стоимость</h3>
-      <dl class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-6">
+      <dl class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+        <div>
+          <dt class="text-sm font-semibold uppercase tracking-wider text-cta mb-2">Пробный день</dt>
+          <dd class="text-2xl font-semibold text-indigo">2 900 ₽ <span class="text-sm font-normal text-text-muted block mt-1">8:00–13:00</span></dd>
+        </div>
         <div>
           <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Половина дня</dt>
-          <dd class="text-2xl font-semibold text-indigo">38 000 ₽ <span class="text-base font-normal text-text-muted">/ мес</span></dd>
+          <dd class="text-2xl font-semibold text-indigo">38 000 ₽ <span class="text-base font-normal text-text-muted">/ мес</span><span class="text-sm font-normal text-text-muted block mt-1">8:00–13:00 или 15:00–19:00</span></dd>
         </div>
         <div>
           <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Полный день</dt>
-          <dd class="text-2xl font-semibold text-indigo">49 900 ₽ <span class="text-base font-normal text-text-muted">/ мес</span></dd>
-        </div>
-        <div>
-          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Вступительный взнос</dt>
-          <dd class="text-2xl font-semibold text-indigo">18 000 ₽ <span class="text-base font-normal text-text-muted">/ год</span></dd>
+          <dd class="text-2xl font-semibold text-indigo">49 900 ₽ <span class="text-base font-normal text-text-muted">/ мес</span><span class="text-sm font-normal text-text-muted block mt-1">8:00–19:00</span></dd>
         </div>
       </dl>
-      <p class="text-sm text-text-muted">
-        Скидки и условия питания уточняйте при звонке.
-      </p>
     </div>
 
-    <!-- Expand: распорядок дня + доп. фото -->
-    <ExpandableBlock summary="Распорядок дня и атмосфера сада" defaultOpen={false}>
-      <div class="space-y-6">
-        <div>
-          <h4 class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-3">Распорядок дня</h4>
+    <!-- Программа -->
+    <p class="text-center text-lg italic text-indigo mb-10 md:mb-12">
+      Работаем по программе развивающего обучения Л.&nbsp;С.&nbsp;Выготского.
+    </p>
+
+    <!-- Expand: Расписание дня -->
+    <div class="space-y-3 mb-10 md:mb-12">
+      <ExpandableBlock summary="Распорядок дня и атмосфера сада" defaultOpen={false}>
+        <div class="space-y-6">
           <ol class="flex flex-wrap gap-2 list-none p-0 m-0">
             {schedule.map((step, i) => (
               <li class="flex items-center gap-2">
@@ -138,34 +198,89 @@ const schedule = [
               </li>
             ))}
           </ol>
+          <p class="text-sm text-text-muted italic">
+            Подробное расписание для младшей, средней и старшей групп предоставляется при поступлении.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+            <Image
+              src={imgSecondary1}
+              alt="Прогулка детей детского сада"
+              widths={[400, 600, 800]}
+              sizes="(min-width: 640px) 50vw, 100vw"
+              class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+              loading="lazy"
+            />
+            <Image
+              src={imgSecondary2}
+              alt="Игровая зона детского сада"
+              widths={[400, 600, 800]}
+              sizes="(min-width: 640px) 50vw, 100vw"
+              class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+              loading="lazy"
+            />
+          </div>
         </div>
+      </ExpandableBlock>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
-          <Image
-            src={imgSecondary1}
-            alt="Прогулка в сосновом бору"
-            widths={[400, 600, 800]}
-            sizes="(min-width: 640px) 50vw, 100vw"
-            class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
-            loading="lazy"
-          />
-          <Image
-            src={imgSecondary2}
-            alt="Игровая зона детского сада"
-            widths={[400, 600, 800]}
-            sizes="(min-width: 640px) 50vw, 100vw"
-            class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
-            loading="lazy"
-          />
-        </div>
-      </div>
-    </ExpandableBlock>
+      <ExpandableBlock summary="Меню и принципы питания" defaultOpen={false}>
+        <p class="text-base text-text leading-relaxed">
+          Меню составляется детским нутрициологом с учётом возрастных потребностей. Подробное меню недели предоставляется при поступлении.
+        </p>
+      </ExpandableBlock>
 
-    <!-- CTA -->
-    <div class="text-center mt-10 md:mt-12">
+      <ExpandableBlock summary="Частые вопросы родителей" defaultOpen={false}>
+        <ul class="space-y-4 list-none p-0 m-0">
+          {faq.map((item) => (
+            <li>
+              <p class="font-semibold text-indigo mb-1">{item.q}</p>
+              <p class="text-base text-text-muted leading-relaxed">{item.a}</p>
+            </li>
+          ))}
+        </ul>
+      </ExpandableBlock>
+    </div>
+
+    <!-- CTA с тремя каналами -->
+    <div class="flex flex-col items-center gap-4 text-center">
       <Button href={site.phone.href} variant="primary" size="lg">
-        Записаться на пробный день
+        Записаться на пробный день в сад — 2 900 ₽
       </Button>
+      <p class="text-base text-text-muted">
+        или позвоните:{' '}
+        <a href={site.phone.href} class="font-semibold text-indigo hover:text-cta transition-colors whitespace-nowrap">
+          {site.phone.display}
+        </a>
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-base text-text-muted">
+        <span>или напишите:</span>
+        <a
+          href={site.social.telegram.contact}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="Написать в Telegram"
+        >
+          <span class="w-6 h-6 inline-block" set:html={telegramSvg} />
+        </a>
+        <a
+          href={site.social.max.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="Написать в Макс"
+        >
+          <span class="w-6 h-6 inline-block" set:html={maxSvg} />
+        </a>
+        <a
+          href={site.social.vk.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="ВКонтакте"
+        >
+          <span class="w-6 h-6 inline-block" set:html={vkSvg} />
+        </a>
+      </div>
     </div>
 
   </div>
