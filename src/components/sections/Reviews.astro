@@ -20,7 +20,7 @@ const sourceLabel: Record<string, string> = {
 };
 
 ---
-<section id="reviews" class="bg-bg-warm py-16 md:py-20 lg:py-24">
+<section id="reviews" class="bg-bg py-16 md:py-20 lg:py-24">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading
       eyebrow="Отзывы"
@@ -45,7 +45,7 @@ const sourceLabel: Record<string, string> = {
       <div class="overflow-hidden" data-embla-viewport>
         <div class="flex gap-6 md:gap-8" data-embla-container>
           {featured.map((r) => (
-            <article class="embla-slide shrink-0 grow-0 basis-full md:basis-[calc(50%-1rem)] bg-bg rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-4">
+            <article class="embla-slide shrink-0 grow-0 basis-full md:basis-[calc(50%-1rem)] bg-bg-warm rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-4">
               <div class="flex items-center justify-between">
                 <div class="flex gap-1 text-cta text-lg" aria-label={`Рейтинг ${r.data.rating} из 5`}>
                   {Array.from({ length: r.data.rating }).map(() => <span>★</span>)}
@@ -65,7 +65,7 @@ const sourceLabel: Record<string, string> = {
       <!-- Кнопки -->
       <button
         type="button"
-        class="absolute top-1/2 -translate-y-1/2 -left-2 md:-left-5 w-10 h-10 md:w-12 md:h-12 rounded-full bg-bg shadow-md flex items-center justify-center text-indigo hover:bg-cta hover:text-bg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        class="absolute top-1/2 -translate-y-1/2 -left-2 md:-left-5 w-10 h-10 md:w-12 md:h-12 rounded-full bg-bg-warm shadow-md flex items-center justify-center text-indigo hover:bg-cta hover:text-bg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
         aria-label="Предыдущий отзыв"
         data-embla-prev
       >
@@ -73,7 +73,7 @@ const sourceLabel: Record<string, string> = {
       </button>
       <button
         type="button"
-        class="absolute top-1/2 -translate-y-1/2 -right-2 md:-right-5 w-10 h-10 md:w-12 md:h-12 rounded-full bg-bg shadow-md flex items-center justify-center text-indigo hover:bg-cta hover:text-bg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        class="absolute top-1/2 -translate-y-1/2 -right-2 md:-right-5 w-10 h-10 md:w-12 md:h-12 rounded-full bg-bg-warm shadow-md flex items-center justify-center text-indigo hover:bg-cta hover:text-bg transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
         aria-label="Следующий отзыв"
         data-embla-next
       >
@@ -90,7 +90,7 @@ const sourceLabel: Record<string, string> = {
         <h3 class="text-center text-sm font-semibold uppercase tracking-wider text-text-muted mb-6">Коротко о главном</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {shortQuotes.map((r) => (
-            <div class="bg-bg rounded-xl p-5 shadow-sm">
+            <div class="bg-bg-warm rounded-xl p-5 shadow-sm">
               <p class="text-sm text-ink leading-relaxed mb-3">«{r.data.text}»</p>
               <p class="text-xs font-semibold text-indigo">— {r.data.author}</p>
             </div>
