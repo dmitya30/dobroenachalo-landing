@@ -1,131 +1,139 @@
-# Astro Project Blueprint v0.1
-## Передаточный артефакт для диалога фронтенд-разработки
+# Blueprint.md — Архитектурная карта проекта «Доброе Начало»
 
-**Проект:** Лендинг частной школы-сада «Доброе Начало»
-**Домен:** dobroenachalo.ru
-**Дата:** 2026-05-14
-**Автор:** оркестрация в этом диалоге, передача в новый диалог разработки
+**Версия:** 2.0
+**Дата:** 2026-05-20
+**Назначение:** снимок текущей архитектуры реализованного лендинга. Используется новым диалогом разработки для быстрого входа в проект без чтения кода. Все формулировки — в настоящем времени, описывают то, что **уже существует** в репо.
+
+> **История версий:** v0.1 (2026-05-14) — план разработки до старта. Реализация прошла в Диалогах №1–3, после чего в Диалоге №4 (фидбэк заказчицы) запущена волна рефакторинга v2.0. Этот документ — снимок состояния на старте волны v2.0 (документация уже переписана, код в процессе).
 
 ---
 
 ## 1. Стек и версии
 
-**Astro 5.x** (последняя стабильная) - выбран ради нулевого client-side JS по умолчанию, отличного DX, нативной интеграции с Tailwind и `astro:assets`. Режим **`output: 'static'`** - подтверждено, серверной логики нет.
+- **Astro 6.3.3** в режиме `output: 'static'`, нулевой client-side JS по умолчанию.
+- **Tailwind CSS 4** через `@tailwindcss/vite`, конфигурация через CSS-директивы `@theme` в `src/styles/global.css` (CSS-first, без `tailwind.config.js`).
+- **TypeScript** в режиме `strict: true`, для типизации контент-коллекций и пропсов компонентов.
+- **Node.js 22 LTS** (зафиксировано в `.nvmrc`), для локальной разработки и CI.
+- **pnpm 11** + `pnpm-workspace.yaml` (моно-каталог из одного пакета).
 
-**Tailwind CSS 4.x** - через официальный плагин `@tailwindcss/vite` (новый способ интеграции в Tailwind 4, без `tailwind.config.js`, конфиг через CSS-директивы `@theme`).
+**Подключённые пакеты:**
+- `@astrojs/sitemap` — генерация `sitemap.xml`
+- `astro-icon` + `@iconify-json/lucide` — иконки
+- `sharp` — оптимизация изображений (встроен в Astro 6)
+- `embla-carousel` — слайдер для секции Reviews
+- `@fontsource-variable/manrope` + `@fontsource/cormorant-garamond` (700) — self-hosted шрифты, локально лежат в `src/assets/fonts/`
 
-**TypeScript** - `strict: true`, для типизации контент-коллекций и пропсов компонентов.
-
-**Node.js 20.x LTS** - для локальной разработки и CI.
-
-**Менеджер пакетов** - `pnpm` (быстрее, экономит место, стабильнее в CI).
-
-**Дополнительные пакеты:**
-- `@astrojs/sitemap` - генерация sitemap.xml
-- `astro-icon` или `lucide-astro` - иконки (выбор в диалоге разработки, склоняюсь к `astro-icon` для гибкости с кастомными SVG)
-- `@astrojs/check` + `typescript` - типпроверка в CI
-- `sharp` - оптимизация изображений (встроен в Astro 5)
-
-**Что НЕ используем:**
-- React/Vue/Svelte интеграции - не нужны, всё на `.astro` компонентах
-- CMS (Decap, Sanity, Strapi) - подтверждено, без CMS на старте
+**Не используется:**
+- React/Vue/Svelte интеграции (всё на `.astro`)
+- CMS (Decap, Sanity, Strapi)
 - Серверные интеграции (`@astrojs/node`, `@astrojs/vercel`)
-- Формы обратной связи
+- Формы обратной связи (вся конверсия идёт через `tel:` и мессенджеры)
 
 ---
 
-## 2. Структура каталогов
+## 2. Структура каталогов (фактическое состояние репо)
 
 ```
-dobroenachalo/
+dobroenachalo-landing/
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml              # CI/CD → gh-pages
-├── public/
-│   ├── favicon.svg
-│   ├── favicon-32.png
-│   ├── apple-touch-icon.png
-│   ├── og-image.jpg                # 1200×630 для соцсетей
-│   ├── robots.txt
-│   └── CNAME                       # dobroenachalo.ru
-├── raw-assets/                     # ИСХОДНИКИ, не в build (gitignored или в .astroignore)
-│   ├── flyers/                     # 5 листовок
-│   ├── reviews/                    # 11 отзывов (txt/md)
-│   ├── telegram-photos/            # выгрузка из TG
-│   ├── yandex-photos/              # выгрузка из Я.Карт
-│   └── team-photos/                # портреты команды
-├── src/
-│   ├── assets/                     # обрабатываются astro:assets
-│   │   ├── hero/
-│   │   ├── kindergarten/
-│   │   ├── school/
-│   │   ├── camp/
-│   │   ├── team/
-│   │   ├── school-life/
-│   │   └── logo/
-│   ├── components/
-│   │   ├── ui/                     # переиспользуемые
-│   │   │   ├── Button.astro
-│   │   │   ├── ExpandableBlock.astro
-│   │   │   ├── Card.astro
-│   │   │   ├── SectionHeading.astro
-│   │   │   ├── RatingBadge.astro
-│   │   │   └── SocialIcons.astro
-│   │   ├── sections/               # 16 секций лендинга
-│   │   │   ├── Header.astro
-│   │   │   ├── Hero.astro
-│   │   │   ├── OfferCards.astro
-│   │   │   ├── WhyUs.astro
-│   │   │   ├── Philosophy.astro
-│   │   │   ├── Kindergarten.astro
-│   │   │   ├── School.astro
-│   │   │   ├── SummerCamp.astro
-│   │   │   ├── AdditionalClasses.astro
-│   │   │   ├── Team.astro
-│   │   │   ├── Reviews.astro
-│   │   │   ├── SchoolLife.astro
-│   │   │   ├── HowToEnroll.astro
-│   │   │   ├── FAQ.astro
-│   │   │   ├── Contacts.astro
-│   │   │   └── Footer.astro
-│   │   └── islands/                # client-side JS, только при необходимости
-│   │       ├── ReviewSlider.astro  # client:visible
-│   │       └── Lightbox.astro      # client:idle
-│   ├── content/                    # контент-коллекции (типизация через Zod)
-│   │   ├── config.ts
-│   │   ├── camp-sessions/          # 12 смен лагеря
-│   │   ├── reviews/                # отзывы
-│   │   ├── team/                   # команда
-│   │   ├── faq/                    # вопросы
-│   │   ├── classes/                # кружки
-│   │   └── school-life/            # события школы для галереи
-│   ├── data/
-│   │   └── site.ts                 # глобальные константы (телефон, адрес, соцссылки)
-│   ├── icons/                      # кастомные SVG (Telegram, MAX, VK)
-│   │   ├── telegram.svg
-│   │   ├── max.svg
-│   │   └── vk.svg
-│   ├── layouts/
-│   │   └── BaseLayout.astro        # <html>, <head>, SEO, аналитика
-│   ├── pages/
-│   │   ├── index.astro             # главная (и единственная) страница
-│   │   └── 404.astro               # на случай битых ссылок
-│   ├── styles/
-│   │   └── global.css              # @import "tailwindcss"; + @theme {…}
-│   └── env.d.ts
+│       └── deploy.yml              # CI/CD → GitHub Pages
+├── .vscode/                        # extensions.json, launch.json
+├── .nvmrc                          # 22
+├── .gitignore
+├── README.md
 ├── astro.config.mjs
 ├── package.json
 ├── pnpm-lock.yaml
+├── pnpm-workspace.yaml
 ├── tsconfig.json
-├── .gitignore
-├── .nvmrc                          # 20
-└── README.md
+├── docs/                           # вся документация проекта (см. §13)
+│   ├── Blueprint.md                # этот файл
+│   ├── CONTEXT.md
+│   ├── DESIGN.md
+│   ├── PROGRESS.md
+│   ├── DECISIONS.md
+│   ├── DECISIONS-archive-v1.md
+│   ├── texts.md                    # тексты v2.0 (130 КБ)
+│   ├── texts-v1.1.md               # архив предыдущей версии текстов
+│   ├── Dialog-1.md                 # исторический артефакт (диалог 1)
+│   └── Handoff.md                  # исторический артефакт передачи
+├── public/
+│   ├── apple-touch-icon.png
+│   ├── favicon.svg
+│   └── og-image.jpg                # 1200×630
+└── src/
+    ├── assets/                     # обрабатывается astro:assets
+    │   ├── additional-classes/     # 4 фото
+    │   ├── fonts/                  # cormorant 700 + manrope variable (woff2)
+    │   ├── hero/                   # 1 фото (pending новое от клиента)
+    │   ├── kindergarten/           # 3 фото
+    │   ├── logo/                   # logo-compact.svg, logo-full.svg, logo-mark.svg
+    │   ├── philosophy/             # 1 фото
+    │   ├── school/                 # 3 фото
+    │   ├── school-life/            # 8 фото
+    │   ├── summer-camp/            # 3 фото
+    │   └── team/                   # team-01..13.jpg (нужно дополнить до ~16)
+    ├── components/
+    │   ├── SchemaOrg.astro         # глобальный JSON-LD, подключается в BaseLayout
+    │   ├── islands/                # пустая (резерв; client-side JS встроен в секции)
+    │   ├── sections/               # 16 секций лендинга
+    │   │   ├── Header.astro
+    │   │   ├── Hero.astro
+    │   │   ├── OfferCards.astro
+    │   │   ├── WhyUs.astro
+    │   │   ├── Philosophy.astro
+    │   │   ├── Kindergarten.astro
+    │   │   ├── School.astro
+    │   │   ├── SummerCamp.astro
+    │   │   ├── AdditionalClasses.astro
+    │   │   ├── Team.astro
+    │   │   ├── Reviews.astro       # Embla внутри + <script>
+    │   │   ├── SchoolLife.astro    # vanilla lightbox внутри + <script>
+    │   │   ├── HowToEnroll.astro
+    │   │   ├── FAQ.astro
+    │   │   ├── Contacts.astro
+    │   │   └── Footer.astro
+    │   └── ui/                     # 7 переиспользуемых UI
+    │       ├── Button.astro
+    │       ├── Card.astro
+    │       ├── ExpandableBlock.astro
+    │       ├── Logo.astro
+    │       ├── RatingBadge.astro
+    │       ├── SectionHeading.astro
+    │       └── SocialIcons.astro
+    ├── content/                    # 6 контент-коллекций (см. §4)
+    │   ├── camp-sessions/          # 12 .json + _examples/
+    │   ├── classes/                # 5 .json + _examples/ (v2.0 → +2 = 7)
+    │   ├── faq/                    # 8 .json + _examples/ (v2.0 → +2 = 10)
+    │   ├── reviews/                # 9 .json + _examples/
+    │   ├── school-life/            # подписи к фото
+    │   └── team/                   # 11 .json (v2.0 → дополнить до ~16)
+    ├── content.config.ts           # типизация коллекций через Zod (Astro 5+ путь)
+    ├── data/
+    │   └── site.ts                 # глобальные константы (телефон, юр.данные, координаты, SEO)
+    ├── env.d.ts
+    ├── icons/                      # кастомные SVG
+    │   ├── max.svg
+    │   ├── telegram.svg
+    │   ├── vk.svg
+    │   └── offer/                  # декоративные SVG для OfferCards (см. §7)
+    ├── layouts/
+    │   └── BaseLayout.astro        # <html>, <head>, SEO, SchemaOrg
+    ├── pages/
+    │   ├── index.astro             # главная и единственная страница
+    │   └── robots.txt.ts           # динамический endpoint (PRODUCTION env)
+    └── styles/
+        └── global.css              # @import "tailwindcss" + @theme {…}
 ```
 
 **Принципы организации:**
-- `raw-assets/` отделена от `src/assets/`: первая - исходники любого размера, вторая - обработанные через `astro:assets`. В прод билд попадает только то, что импортировано в компоненты.
-- Секции лежат в `components/sections/`, а не в `pages/`, потому что лендинг одностраничный. Главная страница `index.astro` - просто сборка из этих компонентов.
-- `content/` - для всего повторяющегося структурированного контента (12 смен лагеря, отзывы и т.д.). Это даст редактирование через `.md`/`.json` без правки кода.
+- Секции лежат в `components/sections/`, а не в `pages/` — лендинг одностраничный, `index.astro` просто собирает их.
+- `SchemaOrg.astro` — на верхнем уровне `components/`, потому что это глобальный head-блок, не UI и не секция.
+- `Logo.astro` — отдельный UI-компонент (variants: `compact` / `mark` / `full`), используется в Header и Footer.
+- `src/components/islands/` оставлена пустой как резерв. По факту client-side JS реализован inline `<script>`-ами внутри `Reviews.astro` (Embla) и `SchoolLife.astro` (lightbox). Нативный браузерный JS, без `client:*` директив.
+- `src/content.config.ts` лежит на уровне `src/` (правильный путь для Astro 5+), не внутри `content/`.
+- 6 содержательных коллекций (camp-sessions, classes, faq, reviews, school-life, team) дают редактирование через `.json` без правки кода.
 
 ---
 
@@ -133,502 +141,342 @@ dobroenachalo/
 
 | # | Секция | Компонент | Использует UI | Контент-источник |
 |---|---|---|---|---|
-| 1 | Header | `Header.astro` | Button, SocialIcons | `site.ts` |
-| 2 | Hero | `Hero.astro` | Button, RatingBadge | `site.ts` + asset |
-| 3 | Offer cards | `OfferCards.astro` | Card | inline в секции |
-| 4 | Why Us | `WhyUs.astro` | - | inline (6 плиток) |
+| 1 | Header | `Header.astro` | Logo, Button, SocialIcons (contacts) | `site.ts` |
+| 2 | Hero | `Hero.astro` | Button, RatingBadge, SocialIcons (contacts) | `site.ts` + asset |
+| 3 | Offer Cards | `OfferCards.astro` | Card | inline в секции |
+| 4 | Why Us | `WhyUs.astro` | — | inline (6 плиток, Lucide-иконки) |
 | 5 | Philosophy | `Philosophy.astro` | SectionHeading | inline + asset |
-| 6 | Kindergarten | `Kindergarten.astro` | ExpandableBlock, Button | inline |
-| 7 | School | `School.astro` | ExpandableBlock, Button | inline |
-| 8 | Summer Camp | `SummerCamp.astro` | ExpandableBlock, Button | `content/camp-sessions/` |
+| 6 | Kindergarten | `Kindergarten.astro` | ExpandableBlock, Button, SocialIcons | inline |
+| 7 | School | `School.astro` | ExpandableBlock, Button, SocialIcons | inline |
+| 8 | Summer Camp (id `#camp`) | `SummerCamp.astro` | ExpandableBlock, Button, SocialIcons | `content/camp-sessions/` |
 | 9 | Additional Classes | `AdditionalClasses.astro` | Card, ExpandableBlock | `content/classes/` |
 | 10 | Team | `Team.astro` | Card, ExpandableBlock | `content/team/` |
-| 11 | Reviews | `Reviews.astro` | ReviewSlider (island), RatingBadge | `content/reviews/` |
-| 12 | School Life | `SchoolLife.astro` | Lightbox (island) | `content/school-life/` |
-| 13 | How To Enroll | `HowToEnroll.astro` | Button | inline (3 шага) |
+| 11 | Reviews | `Reviews.astro` | RatingBadge, inline Embla `<script>` | `content/reviews/` |
+| 12 | School Life | `SchoolLife.astro` | inline lightbox `<script>` | `content/school-life/` |
+| 13 | How To Enroll | `HowToEnroll.astro` | Button, SocialIcons | inline (4 шага) |
 | 14 | FAQ | `FAQ.astro` | ExpandableBlock | `content/faq/` |
-| 15 | Contacts | `Contacts.astro` | Button, SocialIcons | `site.ts` + iframe |
-| 16 | Footer | `Footer.astro` | SocialIcons | `site.ts` |
+| 15 | Contacts | `Contacts.astro` | Button, SocialIcons (contacts) | `site.ts` + iframe Я.Карт |
+| 16 | Footer | `Footer.astro` | Logo, SocialIcons (channels) | `site.ts` |
 
-**UI-компоненты (переиспользуемые):**
+> Секция Summer Camp переименована из «Лагерь» в «Доброе лето» (v2.0), но HTML id `#camp` и якоря сохранены для обратной совместимости ссылок.
 
-- **`Button.astro`** - props: `variant` (primary/secondary/ghost), `size` (sm/md/lg), `href`, `icon`, `label`. Primary = оранжевый на индиго, secondary = индиго на белом.
-- **`ExpandableBlock.astro`** - нативный `<details>/<summary>` (без JS!). Принимает slot для контента, props: `summary`, `defaultOpen`.
-- **`Card.astro`** - базовая обёртка с тенью, радиусом, паддингами. Slots для заголовка, тела, футера.
-- **`SectionHeading.astro`** - единый стиль H2 + подзаголовок + опциональный лид.
-- **`RatingBadge.astro`** - отображает «4,7 ★ Яндекс.Карты», кликабельный → ведёт в секцию reviews или на внешнюю ссылку.
-- **`SocialIcons.astro`** - ряд из Telegram + MAX + VK + Phone. Принимает props `size`, `theme` (light/dark).
+**UI-компоненты (`src/components/ui/`):**
 
-**Islands (client-side JS) - минимум:**
-- **`ReviewSlider.astro`** с `client:visible` - горизонтальный слайдер. Можно нативно через CSS scroll-snap + минимальный JS для стрелок. ~2 KB.
-- **`Lightbox.astro`** с `client:idle` - для галереи School Life. Можно взять минималистичный пакет (`yet-another-react-lightbox` не подходит из-за React; рассмотреть `glightbox` или собственное решение ~3 KB).
+- **`Button.astro`** — props: `variant` (primary/secondary/ghost), `size` (sm/md/lg), `href`, `icon`, `label`. Primary = оранжевый `#FF9664` + индиго-текст `#464682` (контраст AA). Mobile-scale: на <640px `lg` уменьшается до `text-base`.
+- **`Card.astro`** — базовая обёртка с тенью, радиусом, паддингами. Slots для заголовка/тела/футера.
+- **`ExpandableBlock.astro`** — нативный `<details>/<summary>`, ноль JS. Props: `summary`, `defaultOpen`.
+- **`Logo.astro`** — props: `variant` (`compact` / `mark` / `full`). Высота: 40px в Header, 48px в Footer, до 120px в Hero. Светлая версия для индиго-фона Footer pending от клиента.
+- **`RatingBadge.astro`** — двойной рейтинг (v2.0): `4,7 ★ Яндекс.Карты` + `5,0 ★ 2ГИС`, суммарно `43+ отзывов`. Кликабельные ссылки на оба источника.
+- **`SectionHeading.astro`** — `[eyebrow]` → `<h2>` → `[lead]`. По умолчанию центр, в детальных секциях — слева.
+- **`SocialIcons.astro`** — два режима:
+  - `contacts` (Header, Hero, CTA-блоки секций, Contacts) — TG-менеджер + Макс + **VK** (3 иконки, VK добавлен в v2.0)
+  - `channels` (Footer) — TG-канал + Макс + VK
+  - Брендовые цвета: TG `#229ED9`, Макс `#0077FF`, VK `#0077FF`. Плоские, без градиентов.
 
-Всё остальное - нативный HTML/CSS. Аккордеоны = `<details>`, навигация = якорные ссылки + `scroll-behavior: smooth`.
+**Глобальные компоненты (`src/components/`):**
+
+- **`SchemaOrg.astro`** — JSON-LD блок (EducationalOrganization + LocalBusiness + AggregateRating + 5×Review + FAQPage), подключается в `BaseLayout.astro`.
+
+**Client-side JS (фактически):**
+
+Папка `src/components/islands/` пуста. Весь интерактив реализован inline `<script>`-ами внутри двух секций:
+- `Reviews.astro` — Embla Carousel, lazy-init через IntersectionObserver, ~2 КБ.
+- `SchoolLife.astro` — vanilla lightbox, ~3 КБ.
+
+Аккордеоны = `<details>`, навигация = якорные ссылки + `scroll-behavior: smooth`. Никаких `client:*` директив на странице.
 
 ---
 
 ## 4. Контент-модель (Astro Content Collections)
 
-Файл `src/content/config.ts` - типизация через Zod:
+Конфигурация в `src/content.config.ts` (путь для Astro 5+). Каждая коллекция типизирована через Zod, записи — отдельные `.json` файлы.
 
-```typescript
-import { defineCollection, z } from 'astro:content';
+| Коллекция | Кол-во (v2.0) | Назначение |
+|---|---|---|
+| `camp-sessions` | 12 | 12 летних смен 2026 (порядок, даты, тема, описание) |
+| `classes` | 5 → 7 | Кружки и секции (после v2.0 +Хореография, +Психолог) |
+| `faq` | 8 → 10 | Вопросы для FAQ-секции (после v2.0 +После 4 класса, +Школа летом) |
+| `reviews` | 9 | Отзывы (5 featured для слайдера + 4 short для chips) |
+| `school-life` | (подписи) | Подписи к фото для масonry-галереи |
+| `team` | 11 → ~16 | Команда (после v2.0 +Комкова, +Паломанова, +Ревенко и др.) |
 
-const campSessions = defineCollection({
-  type: 'data', // JSON/YAML
-  schema: z.object({
-    order: z.number(),
-    title: z.string(),
-    dateStart: z.string(), // "2026-06-01"
-    dateEnd: z.string(),
-    month: z.enum(['june', 'july', 'august']),
-    description: z.string(),
-    highlights: z.array(z.string()).optional(),
-    image: z.string().optional(),
-  }),
-});
+В каждой коллекции есть служебная подпапка `_examples/` с шаблоном записи (для удобства добавления новых файлов через GitHub UI).
 
-const reviews = defineCollection({
-  type: 'data',
-  schema: z.object({
-    author: z.string(),
-    role: z.string(), // "мама ученика 2 класса"
-    text: z.string(),
-    rating: z.number().min(1).max(5).default(5),
-    source: z.enum(['yandex', '2gis', 'vk', 'direct']),
-    featured: z.boolean().default(false), // в основной слайдер
-    short: z.boolean().default(false),    // короткая для "облака"
-    date: z.string().optional(),
-  }),
-});
+**Ключевые поля схемы:**
+- `reviews`: `author`, `role`, `text`, `rating`, `source` (`yandex`/`2gis`/`vk`/`direct`), `featured: boolean` (≈5 в основной слайдер), `short: boolean` (для облака коротких цитат)
+- `team`: `order`, `name`, `role`, `bio`, `photo`, `featured: boolean` (5 ключевых карточек в Team-сетке 3+2)
+- `classes`: `order`, `title`, `icon`, `ageRange`, `trainer`, `schedule`, `pricing` (объект с `trial`/`single`/`package`)
+- `camp-sessions`: `order`, `title`, `dateStart`, `dateEnd`, `month` (`june`/`july`/`august`), `description`, `highlights`
 
-const team = defineCollection({
-  type: 'data',
-  schema: z.object({
-    order: z.number(),
-    name: z.string(),
-    role: z.string(),
-    bio: z.string().optional(),
-    photo: z.string().optional(),
-    featured: z.boolean().default(false), // в 4 ключевых
-  }),
-});
-
-const faq = defineCollection({
-  type: 'data',
-  schema: z.object({
-    order: z.number(),
-    question: z.string(),
-    answer: z.string(),
-  }),
-});
-
-const classes = defineCollection({
-  type: 'data',
-  schema: z.object({
-    order: z.number(),
-    title: z.string(),
-    icon: z.string(),
-    ageRange: z.string(),
-    trainer: z.string().optional(),
-    schedule: z.string(),
-    pricing: z.object({
-      trial: z.string().optional(),
-      single: z.string(),
-      package: z.string().optional(),
-    }),
-    description: z.string().optional(),
-  }),
-});
-
-export const collections = { campSessions, reviews, team, faq, classes };
-```
-
-Каждая запись - отдельный `.json` файл в подпапке. Пример `src/content/camp-sessions/01-energiya-sporta.json`:
-
-```json
-{
-  "order": 1,
-  "title": "Энергия спорта",
-  "dateStart": "2026-06-01",
-  "dateEnd": "2026-06-05",
-  "month": "june",
-  "description": "Спортивные игры, походы, командные приключения"
-}
-```
-
-**Преимущество:** клиент или ты сможете править контент через GitHub-интерфейс без знания Astro - просто текстовый редактор. Это закрывает «зачем CMS» на 80%.
+**Преимущество:** клиент или Дмитрий могут править контент через GitHub-интерфейс без знания Astro — обычный текстовый редактор по `.json`.
 
 ---
 
-## 5. Дизайн-токены (Tailwind 4 через `@theme`)
+## 5. Дизайн-токены
 
-`src/styles/global.css`:
+Полное описание — в `DESIGN.md` v2.0 (раздел 1). Здесь — короткая выжимка для быстрой ориентации:
+
+**Палитра v2.0 Premium** (CSS custom properties в `src/styles/global.css`, блок `@theme`):
 
 ```css
-@import "tailwindcss";
+/* Фоны */
+--color-bg:          #FAF8F4;   /* ivory — основной */
+--color-bg-soft:     #F1ECE3;   /* smoky beige */
+--color-bg-warm:     #FFFFFF;   /* белый акцент */
+--color-bg-mute:     #E8E3D9;   /* приглушённый беж */
+--color-indigo-soft: #DDE0EE;   /* мягкий индиго (School) */
 
-@theme {
-  /* Цвета бренда */
-  --color-indigo: #3D3F7A;
-  --color-indigo-dark: #2D2F5A;
-  --color-orange: #F5A35B;
-  --color-orange-dark: #E08840;
-  --color-blue-soft: #BFE3EC;
-  --color-cream: #FCE4CF;
-  --color-white: #FFFFFF;
-
-  /* Семантические алиасы */
-  --color-bg: var(--color-white);
-  --color-bg-soft: var(--color-blue-soft);
-  --color-bg-warm: var(--color-cream);
-  --color-text: var(--color-indigo);
-  --color-text-muted: #5A5C8A;
-  --color-cta: var(--color-orange);
-  --color-cta-hover: var(--color-orange-dark);
-
-  /* Типографика */
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-body: "Manrope", -apple-system, system-ui, sans-serif;
-
-  --font-size-hero: clamp(2.5rem, 5vw, 4.5rem);
-  --font-size-h2: clamp(2rem, 4vw, 3rem);
-  --font-size-h3: clamp(1.5rem, 3vw, 2rem);
-
-  /* Радиусы */
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-full: 9999px;
-
-  /* Тени */
-  --shadow-card: 0 4px 20px rgba(61, 63, 122, 0.08);
-  --shadow-card-hover: 0 8px 32px rgba(61, 63, 122, 0.12);
-
-  /* Брейкпоинты (по умолчанию Tailwind, оставляем) */
-  /* sm: 640, md: 768, lg: 1024, xl: 1280, 2xl: 1536 */
-
-  /* Анимации */
-  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Глобальные стили */
-html { scroll-behavior: smooth; }
-body { font-family: var(--font-body); color: var(--color-text); }
-h1, h2, h3 { font-family: var(--font-display); }
+/* Акценты и текст */
+--color-cta:          #FF9664;
+--color-cta-dark:     #E07A4A;
+--color-indigo:       #464682;
+--color-indigo-dark:  #33335E;
+--color-indigo-muted: #6E78B4;
+--color-ink:          #2B2A29;
+--color-text-muted:   #6B6B6B;
+--color-border:       #E5E7EB;
 ```
 
-**Загрузка шрифтов:** через `<link>` в `BaseLayout.astro`, fontsource или `unplugin-fonts`. Решение в диалоге разработки. Приоритет - self-hosted через `@fontsource/manrope` и `@fontsource/cormorant-garamond` (избегаем зависимости от Google Fonts).
+**Tailwind 4 naming (КРИТИЧНО):** утилита = `<prefix>-<full-token-name>`. `--color-bg-soft` → `bg-bg-soft`, **не** `bg-soft`.
 
-**Точные HEX:** жду брендбук от клиента. Пока используем согласованную палитру из CONTEXT.md v1.1.
+**Шрифты:** Manrope Variable (body) + Cormorant Garamond 700 (display, не 600 — финальное решение Диалога №3 для устранения FOUT). Self-hosted, кириллические сабсеты лежат в `src/assets/fonts/`.
+
+**Декоративная палитра (только OfferCards SVG):** `#A0EBFF` и `#FFDCB4`. Эти цвета **не** используются как фоны секций (в v1.x использовались — это устаревший подход).
 
 ---
 
 ## 6. Ассеты и оптимизация изображений
 
-**Стратегия:**
+**Стратегия:** все фото проекта импортируются через `astro:assets`:
 
-1. Все фото проекта импортируются через `astro:assets`:
-   ```astro
-   ---
-   import { Image } from 'astro:assets';
-   import heroImage from '../assets/hero/main.jpg';
-   ---
-   <Image src={heroImage} alt="..." widths={[400, 800, 1200, 1600]}
-          sizes="(max-width: 768px) 100vw, 1200px"
-          format="avif" fallbackFormat="webp" loading="lazy" />
-   ```
+```astro
+---
+import { Image } from 'astro:assets';
+import heroImage from '../assets/hero/hero-01-08-05-375.jpg';
+---
+<Image src={heroImage} alt="..." widths={[400, 800, 1200, 1600]}
+       sizes="(max-width: 768px) 100vw, 1200px"
+       format="avif" fallbackFormat="webp"
+       loading="eager" fetchpriority="high" />
+```
 
-2. **Форматы:** AVIF (приоритет) → WebP (fallback) → JPG (только если нужно).
+- **Форматы:** AVIF (приоритет) → WebP (fallback) → JPG (только если нужно).
+- **Responsive widths:** `[400, 800, 1200, 1600]`, для Hero убран вариант 1920 (по итогам Lighthouse-оптимизации).
+- **Loading:** Hero — `eager` + `fetchpriority="high"`. Остальные — `lazy`.
+- **Quality:** Hero — `75` (по итогам оптимизации).
+- **Именование:** `kebab-case` со смысловым префиксом секции (`kindergarten-01-…`, `team-04-gogoleva-natalya.jpg`).
+- **Воркфлоу:** лучшие исходники → ресайз до ≤2400px по длинной стороне → `src/assets/<section>/` → импорт в компоненте.
 
-3. **Размеры:** генерируем responsive srcset на 4 ширины (400, 800, 1200, 1600).
-
-4. **Loading:**
-   - Hero-изображение: `loading="eager"` + `fetchpriority="high"`
-   - Остальные: `loading="lazy"`
-
-5. **Именование:** `kebab-case`, осмысленные имена (`children-on-math-lesson.jpg`, не `IMG_1234.jpg`).
-
-6. **Воркфлоу:** raw-assets → ручной отбор 30-50 лучших → ресайз до разумных исходных размеров (макс 2400px по длинной стороне) → размещение в `src/assets/` → импорт в компоненты.
-
-**Где брать фото:**
-- Telegram-канал @dobroenachalonahabino - 632 фото (приоритет)
-- Яндекс.Карты галерея - 61 фото
-- Сайт dobroenachalo.ru (`wp-content/uploads/`)
-- VK (запросить экспорт у клиента, требует авторизации)
+Фактический объём: ~25 фото распределены по 8 подпапкам секций. Pending от клиента: новый Hero, портрет директора (Philosophy), портреты для расширения Team, ~8–12 фото для School Life (wfolio katyamiseleva + Я.Диск), кадры Doброго лета.
 
 ---
 
 ## 7. Иконки
 
-**Стратегия:** комбинируем два источника.
+**Lucide через `astro-icon`** — для контурных утилитарных иконок (UI, чипы, шаги enrollment, WhyUs-плитки). Цвет через `currentColor`, размеры через Tailwind.
 
-**`astro-icon` + lucide** для стандартных иконок:
-- Телефон, маркер на карте, часы, чек-марк, стрелки, плюс/минус для аккордеона
-- Тематические эмодзи в `WhyUs.astro` заменяем на lucide (Trees, Users, Apple, Book, Train, Repeat)
+Используемые Lucide-иконки (минимум):
+- WhyUs (6 плиток): `eye`, `infinity`, `heart-handshake`, `salad`, `home`, `sprout`
+- HowToEnroll (шаги): `phone`, `users`, `clipboard-list`, `door-open`, `file-text`
+- Общие UI: `menu`, `star`
 
-**Кастомные SVG** для мессенджеров в `src/icons/`:
-- `telegram.svg` - официальная иконка Telegram
-- `max.svg` - официальная иконка MAX (взять с max.ru/brand или vk.com)
-- `vk.svg` - официальная иконка VK
+**Кастомные SVG (`src/icons/`):**
+- `telegram.svg`, `max.svg`, `vk.svg` — брендовые иконки соцсетей (плоские, без градиентов)
+- `src/icons/offer/` — декоративные SVG-иконки для OfferCards (4 карточки направлений: сад/школа/лето/кружки), используют decorative-палитру `#A0EBFF` / `#FFDCB4`
 
-Все кастомные SVG - однотонные, цвет через `currentColor`, чтобы менять через Tailwind-классы.
+Иконка телефона в кастомных SVG **отсутствует** — телефон идёт через Lucide `phone`.
+
+Эмодзи в `texts.md` — заменяются на Lucide-иконки при сборке секций.
 
 ---
 
 ## 8. SEO и Schema.org
 
-**`BaseLayout.astro`** содержит в `<head>`:
+**`BaseLayout.astro`** генерирует в `<head>`:
+- Базовые meta: charset, viewport, title, description, canonical, lang `ru`
+- Open Graph: type, url, title, description, image (1200×630), locale `ru_RU`
+- Twitter Card: `summary_large_image` (используется для превью в VK/TG)
+- Geo-meta: координаты школы из `site.ts`
+- iOS web-app meta
+- Нормализация `BASE_URL` для корректных абсолютных ссылок (стейджинг на `dmitya30.github.io/dobroenachalo-landing/`, прод на `dobroenachalo.ru`)
 
-```html
-<!-- Базовые мета -->
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Доброе Начало - частная школа-сад в Нахабино | 2,5–11 лет</title>
-<meta name="description" content="Частная школа-сад в сосновом лесу, 380 м от МЦД «Нахабино Ясное». Классы до 10 детей, программа Выготского - Эльконина - Давыдова. Рейтинг 4,7 на Яндекс.Картах." />
-<link rel="canonical" href="https://dobroenachalo.ru/" />
+**Описания и тексты meta — без запретных слов v2.0** («сосновый лес», «380 м от МЦД», «Выготский — Эльконин — Давыдов», «Альт*»).
 
-<!-- Open Graph -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://dobroenachalo.ru/" />
-<meta property="og:title" content="Доброе Начало - частная школа-сад в Нахабино" />
-<meta property="og:description" content="..." />
-<meta property="og:image" content="https://dobroenachalo.ru/og-image.jpg" />
-<meta property="og:locale" content="ru_RU" />
+**`SchemaOrg.astro`** (4.3 КБ, JSON-LD блок):
+- `EducationalOrganization` + `LocalBusiness` с адресом, телефоном, координатами, `sameAs` (TG-канал, VK)
+- `AggregateRating` 4.7 на 43+ отзыва
+- 5 × `Review` (отдельные отзывы из коллекции `reviews`)
+- `FAQPage` с 8 → 10 вопросами (после v2.0)
+- Прошёл validator.schema.org
 
-<!-- Twitter (для VK/TG превью) -->
-<meta name="twitter:card" content="summary_large_image" />
-```
-
-**Schema.org JSON-LD** (один большой блок в `BaseLayout`):
-
-```json
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "EducationalOrganization",
-      "@id": "https://dobroenachalo.ru/#school",
-      "name": "Доброе Начало",
-      "description": "Частная школа-сад для детей 2,5–11 лет",
-      "url": "https://dobroenachalo.ru/",
-      "telephone": "+79858543655",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "ул. Пограничная, 12",
-        "addressLocality": "деревня Чёрная",
-        "addressRegion": "Московская область",
-        "addressCountry": "RU"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "...",  // уточнить по Я.Картам
-        "longitude": "..."
-      },
-      "sameAs": [
-        "https://t.me/dobroenachalonahabino",
-        "https://vk.ru/dobroenachalo.nahabino"
-      ],
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.7",
-        "reviewCount": "43",
-        "bestRating": "5"
-      }
-    }
-  ]
-}
-```
-
-**Дополнительно:**
-- `Review` элементы для каждого отзыва в слайдере (опционально, через `itemprop` атрибуты)
-- `FAQPage` schema для секции FAQ
-- `sitemap.xml` - генерируется автоматически через `@astrojs/sitemap`
-- `robots.txt` - разрешаем всё, ссылка на sitemap
+**`sitemap.xml`** — через `@astrojs/sitemap`, без дублей URL.
+**`robots.txt`** — динамический endpoint `src/pages/robots.txt.ts`, в продакшене (`PRODUCTION=1`) разрешает индексацию, на стейджинге блокирует.
 
 ---
 
 ## 9. Аналитика (Yandex.Metrica)
 
-Подключение в `BaseLayout.astro`, ID счётчика - запросить у клиента.
+**Статус:** не подключена. ID счётчика ждём от клиента (блокер). Подключение планируется в Диалоге №5 (Post-refactor).
 
-**Цели для отслеживания:**
-1. `phone_click` - клик по любой ссылке `tel:+79858543655`
-2. `telegram_click` - клик по иконке Telegram
-3. `max_click` - клик по иконке MAX
-4. `vk_click` - клик по иконке VK
-5. `cta_hero` - клик по главному CTA в Hero
-6. `cta_trial_day` - клики по CTA «Записаться на пробный день»
-7. `cta_camp` - клик «Забронировать смену»
-8. `expand_pricing_kindergarten` - раскрытие подробного прайса сада
-9. `expand_pricing_school` - школы
-10. `expand_camp_month` - раскрытие месяца в календаре лагеря
-11. `expand_team` - раскрытие полной команды
-12. `external_reviews_click` - клик «Все отзывы на Яндекс.Картах»
-13. `scroll_to_section` - скролл до Reviews / Contacts (через Intersection Observer)
-14. `scroll_50` / `scroll_75` / `scroll_100` - глубина скролла страницы
+**14 целей (полный список — в `DECISIONS.md` v2.0):**
+1. `phone_click` — клик по `tel:+79858543655`
+2. `telegram_click` — клик по иконке Telegram
+3. `max_click` — клик по иконке Макс
+4. `vk_click` — клик по иконке VK
+5. `cta_hero` — клик по главному CTA в Hero
+6. `cta_trial_day` — все CTA «Записаться на пробный день»
+7. `cta_summer` — клик «Забронировать смену»
+8. `expand_pricing_kindergarten` / `expand_pricing_school` — раскрытие прайсов
+9. `expand_summer_month` — раскрытие месяца в календаре лета
+10. `expand_team` — раскрытие полного состава команды
+11. `external_reviews_click` — клик на Я.Карты/2ГИС
+12. `scroll_to_reviews` / `scroll_to_contacts` — Intersection Observer
+13. `scroll_50` / `scroll_75` / `scroll_100` — глубина
+14. `time_on_page_60s` — время на странице
 
-Включить Карту скроллинга, Вебвизор, Цели в интерфейсе Метрики после деплоя.
+Включение Карты скроллинга, Вебвизора, Целей — в интерфейсе Метрики после установки счётчика. Сниппет Метрики клиент пришлёт **целиком готовым** (Яндекс может не принять кастомно собранный код).
 
 ---
 
 ## 10. CI/CD и деплой
 
-**`.github/workflows/deploy.yml`:**
+**`.github/workflows/deploy.yml`** (1 КБ):
+- Триггеры: `push` в `main`, ручной `workflow_dispatch`
+- Шаги: checkout → pnpm setup → Node 22 → `pnpm install --frozen-lockfile` → `pnpm run check` (astro check + tsc) → `pnpm run build` → `actions/upload-pages-artifact` → `actions/deploy-pages`
+- Permissions: `contents:read`, `pages:write`, `id-token:write`
+- Environment: `github-pages`
 
-```yaml
-name: Deploy to GitHub Pages
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+**`astro.config.mjs`** (813 байт):
+- `site` зависит от env (стейджинг vs прод)
+- `output: 'static'`
+- Интеграции: `sitemap`
+- Image: Sharp service
+- `inlineStylesheets: 'auto'`
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+**Стейджинг (текущий):** `https://dmitya30.github.io/dobroenachalo-landing/`, `noindex={true}` в `index.astro`, `PRODUCTION` env не выставлен.
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with: { version: 9 }
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run check    # astro check + tsc
-      - run: pnpm run build
-      - uses: actions/upload-pages-artifact@v3
-        with: { path: ./dist }
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
-```
-
-**Домен:**
-- Файл `public/CNAME` с содержимым `dobroenachalo.ru`
-- В DNS у регистратора: `A` записи на IP GitHub Pages (185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153) + `AAAA` для IPv6
-- В настройках репозитория: Settings → Pages → Custom domain → `dobroenachalo.ru` → Enforce HTTPS
-- HTTPS сертификат - автоматический Let's Encrypt от GitHub
-
-**`astro.config.mjs`:**
-
-```javascript
-import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
-
-export default defineConfig({
-  site: 'https://dobroenachalo.ru',
-  output: 'static',
-  integrations: [sitemap()],
-  build: { inlineStylesheets: 'auto' },
-  image: { service: { entrypoint: 'astro/assets/services/sharp' } },
-});
-```
+**Прод (плановый, Диалог №5):**
+- `public/CNAME` = `dobroenachalo.ru`
+- DNS: A-записи apex на IP GitHub Pages + CNAME `www → dmitya30.github.io`
+- HTTPS — автоматический Let's Encrypt от GitHub
+- GH Actions env: `SITE_URL=https://dobroenachalo.ru`, `SITE_BASE=/`, `PRODUCTION=1`
+- Снять `noindex={true}` в `index.astro`
 
 ---
 
-## 11. Бюджет производительности
+## 11. Производительность (фактическое состояние)
 
-**Целевые метрики (Lighthouse mobile):**
-- Performance: ≥ 95
-- Accessibility: ≥ 95
-- Best Practices: 100
-- SEO: 100
+**Lighthouse, стейджинг (конец Диалога №3):**
 
-**Core Web Vitals:**
-- LCP (Largest Contentful Paint): < 2.0s
-- CLS (Cumulative Layout Shift): < 0.05
-- INP (Interaction to Next Paint): < 200ms
-- TTFB: < 600ms (GH Pages CDN)
+| | Mobile | Desktop |
+|---|---|---|
+| Performance | **79** | **82** |
+| Accessibility | **95** | **95** |
+| Best Practices | **100** | **100** |
+| SEO | 66¹ | 66¹ |
+| LCP | 2.1 с | 0.9 с |
+| TBT | 830 мс | 360 мс |
+| CLS | 0 | 0 |
 
-**Ограничения по размеру (на одну страницу, gzip):**
-- HTML: < 30 KB
-- CSS: < 25 KB
-- JS: < 30 KB (только islands)
-- Изображения первого экрана: < 200 KB
+¹ Стейджинг с `noindex`. После переключения на `dobroenachalo.ru` ожидается **100**.
 
-**Стратегия достижения:**
-- Минимум JS - два island'а на всю страницу
-- Critical CSS инлайнится автоматически Astro
-- Изображения через `astro:assets` с AVIF
-- Шрифты с `font-display: swap` + preload hero-шрифта
-- Никаких сторонних виджетов (только Я.Карты iframe - lazy)
-- Никаких рекламных скриптов
+**Потолок 79/82 принят.** Дальнейшая оптимизация ломала UX или давала отрицательный эффект (см. PROGRESS.md §«Известные мелочи»). Причины потолка: 16 секций + Embla + Lightbox + iframe Я.Карт.
+
+**Что уже сделано для производительности:**
+- Hero: `fetchpriority="high"`, quality 75, удалён вариант 1920
+- Preload критических кириллических woff2 (Manrope + Cormorant 700)
+- Cormorant 600 → 700 (устранил FOUT-флэш)
+- Embla lazy-init через IntersectionObserver
+- Critical CSS инлайнится Astro автоматически
+- AVIF + WebP fallback на всех изображениях
+
+**После рефакторной волны v2.0** метрики будут перемеряны. Новая палитра/тексты/компоненты не должны существенно повлиять на Performance.
 
 ---
 
 ## 12. Доступность (a11y)
 
-**Минимум - WCAG 2.1 AA:**
-- Контраст текста: ≥ 4.5:1 (для обычного), ≥ 3:1 (для крупного). Проверить пары «индиго на креме», «белый на оранжевом».
-- Все `<img>` имеют осмысленные `alt`, декоративные - `alt=""`
-- Семантические теги: `<header>`, `<main>`, `<section>`, `<nav>`, `<footer>`
-- Каждая секция - `<section aria-labelledby="...">` с заголовком
-- Аккордеоны на нативном `<details>/<summary>` (доступны из коробки)
-- Кнопки - `<button>` или `<a>` (не `<div onclick>`)
+**Достигнуто WCAG 2.1 AA, Lighthouse Accessibility = 95/95.**
+
+- Контраст: 13:1 ink на ivory (AAA), 7:1 indigo на beige (AAA), 4.51:1 CTA (AA — согласовано)
+- Семантические теги: `<header>`, `<main>`, `<section aria-labelledby>`, `<nav>`, `<footer>`
+- Аккордеоны на нативных `<details>/<summary>`
+- Кнопки — `<button>` или `<a>` (не `<div onclick>`)
 - Видимые фокус-стили (`:focus-visible`)
-- `prefers-reduced-motion` - убираем анимации при включённой настройке
+- `prefers-reduced-motion` — анимации отключаются
 - Skip-link «Перейти к содержимому» в самом верху
-- Lang атрибут: `<html lang="ru">`
-- Минимальный размер тач-таргета: 44×44px на мобиле
+- `<html lang="ru">`
+- Минимальный размер тач-таргета 44×44px на мобильных (включая 24×24 hit-area для точек слайдера)
+- Все `<img>` с осмысленным `alt`, декоративные — `alt=""`
+
+**Принятые мелочи:** heading order (намеренное использование `<h3>` для акцентов вне иерархии), CTA contrast 4.51:1 (формально AA).
 
 ---
 
-## 13. Чек-лист передачи в диалог разработки
+## 13. Onboarding для нового диалога
 
-На старте нового диалога фронтенд-разработки нужно передать:
+**Что передаёт оркестратор в новый диалог:**
 
-**Документы:**
-1. ✅ CONTEXT.md v1.1 (у пользователя на диске)
-2. ✅ Texts v0.1 (16 секций, у пользователя на диске)
-3. ✅ Этот Blueprint v0.1
-4. ⏳ Листовки 1-5 (исходники WebP/JPG)
-5. ⏳ 11 отзывов в исходниках с Яндекс.Карт
-6. ⏳ Папка raw-assets с отобранными фото из Telegram/Я.Карт/сайта
+1. **Первое сообщение** — правила работы LLM в проекте (отдельный документ, не в репо, передаётся каждый раз).
+2. **Второе сообщение** — конкретная задача сессии.
+3. **Доступ к репо** — `https://github.com/dmitya30/dobroenachalo-landing` (читать через raw.githubusercontent.com или GitHub API).
 
-**От клиента (запрошено / ждём):**
-1. ⏳ SVG логотипа в исходнике
-2. ⏳ Точные HEX бренд-цветов (брендбук)
-3. ⏳ Deeplink MAX или username для `https://max.ru/<username>`
-4. ⏳ ИНН/ОГРН для футера и schema.org
-5. ⏳ Геокоординаты школы (можно снять с Я.Карт самим)
-6. ⏳ ID Яндекс.Метрики
-7. ⏳ Фото команды (13 портретов)
-8. ⏳ Согласие на использование обезличенных цитат отзывов
-9. ⏳ Подтверждение цены пробного дня - 2 900 ₽
+**Источники истины (порядок приоритета):**
 
-**Стартовый промпт для нового диалога** (черновик):
+1. **Последние сообщения клиента** в текущем диалоге
+2. **Клиентские docx** (`SAJT.docx`, `SAJT_Detskiy_sad.docx`, `SAJT_Lager.docx`) — если приложены
+3. **Внутренние документы** в `docs/`:
+   - `CONTEXT.md` v2.0 — бизнес-факты, цены, команда, контакты
+   - `DESIGN.md` v2.0 — палитра, типографика, компоненты, сетки
+   - `Blueprint.md` v2.0 — этот файл, архитектурная карта
+   - `PROGRESS.md` v2.0 — что готово, что в работе, что впереди
+   - `DECISIONS.md` v2.0 — журнал решений, запреты, регламент
+   - `texts.md` v2.0 — финальные тексты 16 секций
+   - `src/data/site.ts` — глобальные константы
+4. **Текущий сайт** `dobroenachalo.ru` — для сверки фактов
+5. **Код проекта** — последний резерв, читать только при необходимости
 
-> Стартуем фронтенд-разработку лендинга «Доброе Начало» (dobroenachalo.ru). Передаю три документа: CONTEXT.md v1.1, Texts v0.1, Astro Project Blueprint v0.1. Стек: Astro 5 static + Tailwind 4 + TypeScript, деплой на GitHub Pages. Задача этого диалога: пошагово развернуть проект по Blueprint - инициализация → дизайн-токены → UI-компоненты → секции → контент-коллекции → SEO → CI/CD. Начни с инициализации репозитория и базовой структуры; обсудим каждый шаг перед переходом к следующему.
+**Историческое (не для текущей работы):**
+- `docs/DECISIONS-archive-v1.md` — старые решения, переписаны в v2.0
+- `docs/texts-v1.1.md` — архив текстов
+- `docs/Dialog-1.md` — артефакт первого диалога
+- `docs/Handoff.md` — точка передачи между диалогами планирования и разработки
+
+**Регламент коммитов:**
+- Каждая секция / документ — отдельный коммит. Формат: `content(<section>): …`, `style(<scope>): …`, `docs(<file>): …`, `feat(<scope>): …`
+- `PROGRESS.md` и `DECISIONS.md` обновляются раз в 3–4 секции или на смене фазы
+- **Tailwind 4 цветовые утилиты:** `<prefix>-<полное-имя-токена>`. `--color-bg-soft` → `bg-bg-soft`, **не** `bg-soft`
+- **Запрещённые слова (v2.0):** «лагерь» (→ «лето»/«смены»), «формат», «кислород», «шумный двор», «бор/сосны», «МЦД», «380 м», «Альтики», «АльтСкул», «Альткэмп», триада «Выготский — Эльконин — Давыдов», «готовку на территории», «без телефонов и компьютеров» (мягче)
+- **Фактчекинг:** на стороне клиента. Используем точные клиентские формулировки даже при стилистических разногласиях.
 
 ---
 
 ## 14. Открытые блокеры и риски
 
-**Блокеры (мешают релизу):**
-- Логотип SVG - без него не финализировать Header/Footer
-- Бренд-цвета - текущие согласованы, но финальный брендбук может сдвинуть
-- Deeplink MAX - без него иконка ведёт на `https://max.ru/` (заглушка)
+Полный актуальный список — в `PROGRESS.md` v2.0 §«🚧 Открытые блокеры». Здесь — выжимка по категориям.
 
-**Не-блокеры (можно релизить и без них):**
-- ИНН/ОГРН - можно опубликовать, добавить позже
-- Полный набор фото команды - для отсутствующих используем плейсхолдер с инициалами
-- ID Метрики - добавляется в час по запросу
+**Тексты от клиента (pending):**
+- Расписания дня (сад × 3 группы, школа)
+- Меню детского сада
+- Уточнение по программе SMART CLASS / Ясюкова Л.А.
+- Подтверждение состава кружков (Рондо, Лыжи, Вокал, Акробатика)
+- Статус образовательной лицензии
 
-**Риски:**
-- **Контекст-окно нового диалога**. Blueprint + CONTEXT + Texts уже ~25-30K токенов. При активной разработке (компоненты, отладка) есть риск сжатия. Решение: разбить разработку на 2 диалога - (1) каркас + UI-компоненты + дизайн-токены, (2) секции + контент + SEO + деплой.
-- **GitHub Pages limits**: 1 GB репозиторий, 100 GB трафика/мес, 10 билдов/час. С запасом для нашей задачи.
-- **Astro 5 - Tailwind 4 интеграция**. Tailwind 4 относительно свежий (стабильный релиз начала 2025), редкие edge-case баги в Astro-интеграции возможны. Решение: при проблемах откат на Tailwind 3.x.
-- **Кириллические шрифты**. Manrope и Cormorant Garamond имеют кириллицу, но размер сабсета может быть большим. Решение: использовать `unicode-range` и подключать только кириллицу + латиницу.
+**Фото от клиента (pending):**
+- Hero, Philosophy (портрет директора), Kindergarten, School (главное + 3 атмосферных, wfolio/katyamiseleva), Summer, портреты для расширения Team, School Life (8–12 шт.)
+- Светлая версия логотипа для индиго-фона Footer
+
+**Юридическое:**
+- Согласие родителей на использование фото детей в School Life
+- Согласие педагогов: `team-12.jpg`, `team-13.jpg`
+
+**Техническое от клиента:**
+- ID Яндекс.Метрики и готовый сниппет счётчика
+
+**Не-блокеры (можно релизить без):**
+- Полный набор фото команды — для отсутствующих плейсхолдер с инициалами
+- Точное содержание FAQ-вопроса о лицензии — формулировка-заглушка
+
+**Открытые риски:**
+- **Перерасход контекста LLM при больших сессиях.** Решение: декомпозиция задач (документация → палитра → контент по секциям, отдельными диалогами при необходимости), регулярное обновление `PROGRESS.md` после каждых 3–4 коммитов.
+- **Pending-контент тормозит финальный QA.** Решение: реализуем секции с плейсхолдерами и помечаем их в `PROGRESS.md`, заменяем по мере прихода материалов от клиента.
