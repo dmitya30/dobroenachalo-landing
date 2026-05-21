@@ -1,7 +1,7 @@
 # PROGRESS.md — Журнал прогресса разработки
 
-**Версия:** 2.0
-**Последнее обновление:** 2026-05-20
+**Версия:** 2.1
+**Последнее обновление:** 2026-05-21
 **Назначение:** живой снимок состояния проекта. Обновляется раз в 3–4 секции или на смене фазы. Источник истины «что готово / в работе / впереди».
 
 ---
@@ -59,6 +59,24 @@ Header, Hero, OfferCards, WhyUs, Philosophy, Kindergarten, School, SummerCamp, A
 - `docs/CONTEXT.md` v2.0 — рефакторинг: убрана секция «География» (380м/МЦД), убран бренд «Альт*», обновлены цены/команда/палитра, расширен список запретов
 - `docs/DESIGN.md` v2.0 — новая палитра Premium (ivory + smoky beige + indigo-soft), правило Tailwind 4 naming, `SocialIcons mode="contacts"` с VK, сетка Team 3+2, decorative-палитра для OfferCards
 
+#### Диалог №4 (Фаза 1 — палитра v2.0 в коде, 2026-05-21)
+
+5 коммитов, миграция всех 16 секций на palette v2.0:
+
+- `style(palette): tokens + UI base — premium v2.0` — `global.css` (`@theme` переписан целиком), `Button.astro` (`cta-hover` → `cta-dark`), `RatingBadge.astro` (`hover:bg-cream` → `hover:bg-bg-mute`), `SchoolLife.astro` (тег `life`: `bg-indigo-soft` → `bg-indigo-muted`).
+- `style(palette): OfferCards + Philosophy + Kindergarten — premium v2.0` — OfferCards на ivory с белыми карточками, Philosophy → beige, Kindergarten остаётся ivory (ритм Philosophy/Kindergarten/School = beige/ivory/indigo-soft).
+- `style(palette): WhyUs + School + SummerCamp — premium v2.0` — WhyUs → white (разрывает дубль ivory с OfferCards), School → indigo-soft (главный «холодный» акцент), SummerCamp → beige.
+- `style(palette): AdditionalClasses + Reviews — premium v2.0` — AdditionalClasses → white, Reviews → ivory с белыми карточками. Team и HowToEnroll корректны автоматически после смены значений токенов.
+- `style(palette): Contacts + Footer — premium v2.0 complete` — Contacts → ivory (4 подложки иконок и контейнер карты → white), Footer → indigo-dark (#33335E, контраст с белым текстом 12:1 AAA).
+
+**Системные изменения в токенах:**
+- `--color-indigo-soft: #6E78B4` переименован в `--color-indigo-muted` (имя `indigo-soft` освобождено под новый фоновый `#DDE0EE`).
+- Удалены `--color-blue-soft` и `--color-cream` из `@theme` (decorative-цвета `#A0EBFF` и `#FFDCB4` живут только в SVG-иконках OfferCards, зашиты HEX-ом).
+- Дефолтный body-текст переведён с `indigo` на `ink` (`#2B2A29`).
+- `--color-cta-hover` → `--color-cta-dark` (синхрон с DESIGN.md).
+
+**Финальный ритм фонов (16 секций):** Header ivory → Hero indigo → OfferCards ivory → WhyUs white → Philosophy beige → Kindergarten ivory → School indigo-soft → SummerCamp beige → AdditionalClasses white → Team beige → Reviews ivory → SchoolLife ivory → HowToEnroll beige → FAQ ivory → Contacts ivory → Footer indigo-dark. Дублей подряд нет.
+
 #### Финальные метрики Lighthouse (стейджинг, конец Диалога №3)
 
 | | Mobile | Desktop |
@@ -84,22 +102,18 @@ Header, Hero, OfferCards, WhyUs, Philosophy, Kindergarten, School, SummerCamp, A
 - [x] `DECISIONS.md` v2.0 + архив v1
 - [x] `CONTEXT.md` v2.0
 - [x] `DESIGN.md` v2.0
-- [ ] `PROGRESS.md` v2.0 (этот файл)
-- [ ] `Blueprint.md` v2.0 (последний крупный документ, ~30 КБ)
+- [x] `Blueprint.md` v2.0
+- [x] `PROGRESS.md` v2.1 (с фиксацией Фазы 1)
 
-После Blueprint — фиксирующий коммит блока документации, переход к рефакторингу кода.
+Документация v2.0 закрыта. Идёт волна рефакторинга кода.
 
 ---
 
 ### ⏭ Следующие шаги
 
-#### Фаза 1 — Палитра (атомарный style-коммит)
+#### Фаза 1 — Палитра ✅ Завершено 2026-05-21
 
-- [ ] `style(palette): premium v2.0 — ivory + smoky beige + indigo-soft`
-  - Правка `src/styles/global.css` в блоке `@theme`: заменить 4 фоновых токена + добавить `--color-indigo-soft`
-  - Точечные правки в `.astro` (~15 мест в 11 секциях): обновить классы фонов под новые токены
-  - Проверить, что decorative-цвета `#A0EBFF` / `#FFDCB4` остались только в SVG-иконках OfferCards
-  - Контроль контраста: 13:1 ink на indigo-soft (AAA), 7:1 indigo на beige (AAA)
+5 коммитов, см. раздел «✅ Готово / Диалог №4 (Фаза 1 — палитра v2.0 в коде)» выше. Все 16 секций переведены на palette v2.0. Decorative-цвета остались только в SVG OfferCards. Lighthouse-замер отложен до финала проекта.
 
 #### Фаза 2 — Контент по секциям (отдельный коммит на каждую)
 
@@ -208,7 +222,7 @@ Header, Hero, OfferCards, WhyUs, Philosophy, Kindergarten, School, SummerCamp, A
 ### 📌 Регламент работы
 
 - Каждый подтверждённый шаг → коммит. `PROGRESS.md` и `DECISIONS.md` обновляются раз в 3–4 секции или на смене фазы.
-- **Порядок проверки правок:** сначала commit + push, потом замер Lighthouse (стейджинг видит только закоммиченную версию).
+- **Порядок проверки правок:** `pnpm build && pnpm preview` после каждой правки → визуальный QA → коммит. Пуш — пакетами по 2 коммита. Lighthouse-замер на стейджинге отложен до финала проекта.
 - **Источники истины (приоритет, v2.0):**
   1. Последние сообщения клиента в чате
   2. Клиентские docx (`SAJT.docx`, `SAJT_Detskiy_sad.docx`, `SAJT_Lager.docx`)
