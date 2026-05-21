@@ -3,23 +3,27 @@ import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import Button from '../ui/Button.astro';
 import RatingBadge from '../ui/RatingBadge.astro';
+import SocialIcons from '../ui/SocialIcons.astro';
 import { site } from '../../data/site';
 import heroImage from '../../assets/hero/hero-01-08-05-375.jpg';
 import telegramSvg from '../../icons/telegram.svg?raw';
 import maxSvg from '../../icons/max.svg?raw';
+import vkSvg from '../../icons/vk.svg?raw';
 
-// Чипы под H1 (рейтинг рендерится отдельно через RatingBadge)
+// 5 чипов под слоганом (дословно из texts.md §1)
 const chips = [
-  { icon: 'lucide:users', label: 'Классы до 10 детей' },
-  { icon: 'lucide:trees', label: 'Сосновый бор, закрытая территория' },
-  { icon: 'lucide:train-front', label: site.address.nearestStation },
+  { icon: 'lucide:users', label: 'Единая образовательная среда от 2,5 до 11 лет' },
+  { icon: 'lucide:user-check', label: 'Небольшие группы и классы' },
+  { icon: 'lucide:shield-check', label: 'Закрытая охраняемая территория' },
+  { icon: 'lucide:languages', label: 'Углублённое изучение английского языка' },
+  { icon: 'lucide:home', label: 'Атмосфера «второго дома»' },
 ];
 ---
 
-<section class="relative min-h-[600px] lg:min-h-[640px] flex items-center overflow-hidden">
+<section class="relative min-h-[640px] lg:min-h-[680px] flex items-center overflow-hidden">
   <Image
     src={heroImage}
-    alt="Дети школы-сада «Доброе Начало» на прогулке в сосновом лесу"
+    alt="Дети школы-сада «Доброе Начало» на прогулке"
     class="absolute inset-0 w-full h-full object-cover"
     loading="eager"
     fetchpriority="high"
@@ -28,44 +32,64 @@ const chips = [
     sizes="100vw"
   />
 
-  {/* Градиент: на мобиле вертикальный (текст внизу читаем), на десктопе — слева направо */}
-  <div class="absolute inset-0 bg-gradient-to-b from-indigo/40 via-indigo/70 to-indigo/90 md:bg-gradient-to-r md:from-indigo/85 md:via-indigo/60 md:to-transparent"></div>
+  {/* Градиент: на мобиле вертикальный, на десктопе слева направо */}
+  <div class="absolute inset-0 bg-gradient-to-b from-indigo-dark/50 via-indigo-dark/75 to-indigo-dark/90 md:bg-gradient-to-r md:from-indigo-dark/90 md:via-indigo-dark/65 md:to-indigo-dark/20"></div>
 
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 w-full">
     <div class="max-w-2xl text-text-inverse">
-      <p class="text-sm uppercase tracking-wider mb-4 opacity-90 font-sans">
-        {site.tagline}
-      </p>
-
-      <h1 class="text-hero mb-6">
-        Частная школа-сад в сосновом лесу под Москвой
+      {/* H1 — Cormorant (заголовок) */}
+      <h1 class="text-hero mb-5 leading-tight">
+        Частная семейная школа-сад «Доброе Начало»
       </h1>
 
-      <p class="text-lg md:text-xl mb-8 opacity-95 font-sans">
-        От {site.ageRange.from.toString().replace('.', ',')} лет до уверенного старта в 5 классе. Единый путь сад → школа → лагерь.
+      {/* Слоган — Manrope */}
+      <p class="font-sans text-xl md:text-2xl lg:text-3xl mb-3 leading-snug opacity-95">
+        Доброе начало большого пути
       </p>
 
-      <div class="flex flex-wrap items-center gap-2 md:gap-3 mb-8">
-        <RatingBadge size="sm" variant="on-dark" />
+      {/* Подстрочник — мелко, с разделителями-точками */}
+      <p class="text-base md:text-lg mb-8 opacity-90 font-sans tracking-wide">
+        Сад · Школа · Кружки
+      </p>
+
+      {/* 5 чипов */}
+      <ul class="flex flex-wrap gap-2 md:gap-2.5 mb-6 list-none p-0">
         {chips.map((chip) => (
-          <span class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-full px-3 py-1.5 text-sm">
-            <Icon name={chip.icon} class="w-4 h-4" aria-hidden="true" />
+          <li class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-full px-3 py-1.5 text-sm">
+            <Icon name={chip.icon} class="w-4 h-4 shrink-0" aria-hidden="true" />
             <span>{chip.label}</span>
-          </span>
+          </li>
         ))}
+      </ul>
+
+      {/* Бейдж рейтинга — отдельным рядом под чипами */}
+      <div class="mb-8">
+        <RatingBadge size="sm" variant="on-dark" href="#reviews" />
       </div>
 
-      <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-        <Button href={site.phone.href} variant="primary" size="lg">
-          Записаться на пробный день
-        </Button>
+      {/* CTA-блок */}
+      <div class="flex flex-col gap-4">
+        {/* Главная кнопка */}
+        <div>
+          <Button href={site.phone.href} variant="primary" size="lg">
+            Записаться на пробный день — 2 900 ₽
+          </Button>
+        </div>
 
-        <div class="flex flex-wrap items-center gap-3 text-base">
-          <a href={site.phone.href} class="font-semibold hover:text-cta transition-colors">
+        {/* Телефон */}
+        <p class="text-base md:text-lg">
+          <span class="opacity-85">или позвоните:&nbsp;</span>
+          <a
+            href={site.phone.href}
+            class="font-semibold hover:text-cta transition-colors whitespace-nowrap"
+          >
             {site.phone.display}
           </a>
-          <span aria-hidden="true" class="opacity-50">|</span>
-          <span class="opacity-90">Написать в</span>
+        </p>
+
+        {/* Три канала: TG · Макс · VK */}
+        <div class="flex flex-wrap items-center gap-3 text-base">
+          <span class="opacity-85">Или напишите:</span>
           <a
             href={site.social.telegram.contact}
             target="_blank"
@@ -73,7 +97,7 @@ const chips = [
             class="inline-flex items-center hover:opacity-80 transition-opacity"
             aria-label="Написать в Telegram"
           >
-            <span class="w-6 h-6 inline-block" set:html={telegramSvg} />
+            <span class="w-7 h-7 inline-block" set:html={telegramSvg} />
           </a>
           <a
             href={site.social.max.url}
@@ -82,7 +106,16 @@ const chips = [
             class="inline-flex items-center hover:opacity-80 transition-opacity"
             aria-label="Написать в Макс"
           >
-            <span class="w-6 h-6 inline-block" set:html={maxSvg} />
+            <span class="w-7 h-7 inline-block" set:html={maxSvg} />
+          </a>
+          <a
+            href={site.social.vk.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center hover:opacity-80 transition-opacity"
+            aria-label="ВКонтакте"
+          >
+            <span class="w-7 h-7 inline-block" set:html={vkSvg} />
           </a>
         </div>
       </div>
