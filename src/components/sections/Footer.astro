@@ -8,7 +8,7 @@ const currentYear = new Date().getFullYear();
 const nav = [
   { href: '#kindergarten', label: 'Сад' },
   { href: '#school', label: 'Школа' },
-  { href: '#camp', label: 'Лагерь' },
+  { href: '#summer', label: 'Лето' },
   { href: '#classes', label: 'Кружки' },
   { href: '#team', label: 'Команда' },
   { href: '#reviews', label: 'Отзывы' },
@@ -38,7 +38,7 @@ const nav = [
 
     <div>
       <h3 class="text-sm font-bold mb-4 font-sans uppercase tracking-wider">Контакты</h3>
-      <ul class="space-y-2 text-sm opacity-90">
+      <ul class="space-y-2 text-sm opacity-90 list-none p-0">
         <li>
           <a href={site.phone.href} class="hover:text-cta transition-colors font-semibold">
             {site.phone.display}
@@ -46,7 +46,6 @@ const nav = [
         </li>
         <li>{site.address.locality}, {site.address.street}</li>
         <li>{site.address.district}, {site.address.region}</li>
-        <li class="opacity-75">{site.address.nearestStation}</li>
       </ul>
     </div>
 
