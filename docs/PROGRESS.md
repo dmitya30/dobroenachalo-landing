@@ -1,7 +1,7 @@
 # PROGRESS.md — Журнал прогресса разработки
 
-**Версия:** 2.1
-**Последнее обновление:** 2026-05-21
+**Версия:** 2.2
+**Последнее обновление:** 2026-05-22
 **Назначение:** живой снимок состояния проекта. Обновляется раз в 3–4 секции или на смене фазы. Источник истины «что готово / в работе / впереди».
 
 ---
@@ -81,6 +81,29 @@ Header, Hero, OfferCards, WhyUs, Philosophy, Kindergarten, School, SummerCamp, A
   Устранены дубли фонов Reviews↔SchoolLife и FAQ↔Contacts.
   Фаза 1 закрыта полностью.
 
+#### Диалог №4 (Фаза 2 — контент по секциям, 2026-05-21 — 2026-05-22)
+
+7 коммитов первой волны контентного рефакторинга:
+
+- `content(hero): премиум v2.0 — слоган + 5 чипов + 3-канальный CTA` — H1 без эйброва, слоган Cormorant + подстрочник Manrope, 5 чипов из docx, RatingBadge кликабельный (якорь `#reviews`), 3 канала (TG/Макс/VK) в одной строке. Sub-фикс шрифтов H1↔слоган (1 follow-up коммит, разнесён).
+- `content(site-data): убраны запрещённые формулировки (МЦД, сосновый лес)` — `site.ts`: `description` переписан, `nearestStation` → пустая строка.
+- `content(offer-cards): премиум v2.0 — направления без цен, «Доброе лето»` — H2 «Выберите направление…», удалены price/priceNote, индивидуальные CTA, карточка `#camp` → `#summer`. Параллельно `SummerCamp.astro` id `camp` → `summer`.
+- `content(why-us): премиум v2.0 — 6 плиток ценностей от заказчицы` — H2 одной строкой без эйброва, иконки `eye/infinity/heart-handshake/salad/home/sprout`, тексты дословно из docx.
+- `content(philosophy): premium v2.0 — слово директора, SMART CLASS` — eyebrow «Слово директора · Белякова Ирина Юрьевна», 8 абзацев из docx, SMART CLASS и Ясюкова Л.А. выделены indigo+bold, эмоциональный пик стилизован, sticky-photo на десктопе, подпись с разделителем.
+- `content(kindergarten): премиум v2.0 — детский сад по docx заказчицы` — возраст 2–7, 5 чипов, 4 расширенных преимущества, цены 2 900/38 000/49 900, программа Выготского (без триады), 3 ExpandableBlock (Расписание/Меню/FAQ), 3-канальный CTA.
+- `content(school): премиум v2.0 — начальная школа по docx + сайту` — H2 «Начальная школа», 5 чипов, 5 преимуществ (Камерность/Индивидуальность/Питание/Пространство/Педагоги), Программа с 5 учебниками, 6 ExpandableBlock (12 предметов / 6 спорт / Расписание / После 4 класса / Не уходим на каникулы / Атмосфера), цены без изменений, документы, 3-канальный CTA.
+- `content(summer): премиум v2.0 — Доброе лето` — H2 «Доброе лето», слоган «Время отдыхать — время открывать новое», 5 преимуществ, Что включено + Режим работы, календарь 12 смен из коллекции (июнь expanded), ритм дня в ExpandableBlock, новые тарифы 29 000/24 000 + 4 типа скидок не суммируются, пробный день 6 400 ₽, FAQ 7Q, 3-канальный CTA. Бейдж «−5 000 ₽» удалён, фраза про телефоны смягчена.
+- `fix(summer): плюрализация «смен/смены» + синхронизация коллекции с docx` — хелпер `pluralizeSessions()` для корректных форм русских числительных в сводках месяцев календаря; 5 JSON в `src/content/camp-sessions/` синхронизированы с docx (01 — добавлен «!», 02 — снят подзаголовок, 06 — «АРТ-Фест», 10 — убран запрещённый «сосновый лес», 12 — «…в Страну чудес»).
+
+**Что сделано параллельно (вне content-коммитов):**
+- `SocialIcons.astro` — VK добавлен инлайн в hero/CTA-блоках без правки компонента (mode="channels").
+- `texts.md` (130 КБ) разбит на 5 чанков: `texts-1-5.md`, `texts-6-7.md`, `texts-8-12.md`, `texts-13-palette.md`, `texts-journal-end.md`. Старый файл сохранён как `texts-all.md`. TOC-индекс `texts.md` будет создан после завершения Фазы 2.
+
+**Что НЕ сделано в этой волне (перенесено):**
+- SMART CLASS в секции School — остаётся только в Philosophy до правки заказчицы.
+- Фото секций (Hero, Philosophy, Kindergarten, School, SummerCamp) — старые, замена следующей волной.
+- Логотип `logo-summer.svg` положен в `src/assets/logo/`, использование — при следующих правках Summer (header/CTA-блок).
+
 #### Финальные метрики Lighthouse (стейджинг, конец Диалога №3)
 
 | | Mobile | Desktop |
@@ -123,13 +146,13 @@ Header, Hero, OfferCards, WhyUs, Philosophy, Kindergarten, School, SummerCamp, A
 
 Порядок повторяет нисходящий порядок секций на странице:
 
-- [ ] `content(hero): v2.0 — H1 + slogan + 5 chips + multi-channel CTA + rating badge 4.7/5.0`
-- [ ] `content(offer-cards): v2.0 — remove prices, rename «Лагерь» → «Доброе лето»`
-- [ ] `content(why-us): v2.0 — 6 tiles verbatim, heading update`
-- [ ] `content(philosophy): v2.0 — director text ~280 words + SMART CLASS / Ясюкова bold`
-- [ ] `content(kindergarten): v2.0 — price 49 900, age 2–7, Vygotsky only, 4 advantages, FAQ 5Q`
-- [ ] `content(school): v2.0 — subtitle, 5 advantages, programme + textbooks, 12 subjects, 6 sports`
-- [ ] `content(summer-camp): v2.0 — «Доброе лето», 12 сессий, prices 29/24 + discounts, trial 6 400`
+- [x] `content(hero): v2.0 — H1 + slogan + 5 chips + multi-channel CTA + rating badge 4.7/5.0`
+- [x] `content(offer-cards): v2.0 — remove prices, rename «Лагерь» → «Доброе лето»`
+- [x] `content(why-us): v2.0 — 6 tiles verbatim, heading update`
+- [x] `content(philosophy): v2.0 — director text ~280 words + SMART CLASS / Ясюкова bold`
+- [x] `content(kindergarten): v2.0 — price 49 900, age 2–7, Vygotsky only, 4 advantages, FAQ 5Q`
+- [x] `content(school): v2.0 — subtitle, 5 advantages, programme + textbooks, 12 subjects, 6 sports`
+- [x] `content(summer-camp): v2.0 — «Доброе лето», 12 сессий, prices 29/24 + discounts, trial 6 400`
 - [ ] `content(additional): v2.0 — 7 кружков (3+3+1 grid), новые педагоги, обновлённые цены`
 - [ ] `content(team): v2.0 — 5 featured cards (3+2 grid), Галан → завуч, +Комкова, +Паломанова, +Ревенко`
 - [ ] `content(school-life): v2.0 — heading update, photo briefs (фото pending от клиента)`
