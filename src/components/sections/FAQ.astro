@@ -5,6 +5,7 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import { site } from '../../data/site';
 import telegramSvg from '../../icons/telegram.svg?raw';
 import maxSvg from '../../icons/max.svg?raw';
+import vkSvg from '../../icons/vk.svg?raw';
 
 const faqItems = (await getCollection('faq')).sort(
   (a, b) => a.data.order - b.data.order
@@ -13,9 +14,8 @@ const faqItems = (await getCollection('faq')).sort(
 <section id="faq" class="bg-bg py-16 md:py-20 lg:py-24">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading
-      eyebrow="Частые вопросы"
-      title="Вопросы родителей"
-      lead="Собрали то, что спрашивают чаще всего. Если что-то осталось — позвоните, расскажем подробно."
+      title="Частые вопросы"
+      lead="Собрали то, что спрашивают чаще всего. Если что‑то осталось — позвоните, расскажем подробно."
       class="mb-12 md:mb-16"
     />
 
@@ -31,7 +31,7 @@ const faqItems = (await getCollection('faq')).sort(
                 aria-hidden="true"
               />
             </summary>
-            <div class="pb-6 pr-9 text-base text-text-muted leading-relaxed">
+            <div class="pb-6 pr-9 text-base text-text-muted leading-relaxed whitespace-pre-line">
               {item.data.answer}
             </div>
           </details>
@@ -44,32 +44,39 @@ const faqItems = (await getCollection('faq')).sort(
         Не нашли ответ? Позвоните —{' '}
         <a
           href={site.phone.href}
-          class="font-medium text-indigo hover:text-cta transition-colors whitespace-nowrap"
+          class="font-semibold text-indigo hover:text-cta transition-colors whitespace-nowrap"
         >
           {site.phone.display}
         </a>
       </p>
-      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-base">
-        <span class="text-text-muted">или напишите в</span>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-base text-text-muted">
+        <span>или напишите:</span>
         <a
           href={site.social.telegram.contact}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 font-medium text-indigo hover:text-cta transition-colors"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
           aria-label="Написать в Telegram"
         >
-          <span class="w-5 h-5 inline-block" set:html={telegramSvg} />
-          Telegram
+          <span class="w-6 h-6 inline-block" set:html={telegramSvg} />
         </a>
         <a
           href={site.social.max.url}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 font-medium text-indigo hover:text-cta transition-colors"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
           aria-label="Написать в Макс"
         >
-          <span class="w-5 h-5 inline-block" set:html={maxSvg} />
-          Макс
+          <span class="w-6 h-6 inline-block" set:html={maxSvg} />
+        </a>
+        <a
+          href={site.social.vk.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="ВКонтакте"
+        >
+          <span class="w-6 h-6 inline-block" set:html={vkSvg} />
         </a>
       </div>
     </div>
