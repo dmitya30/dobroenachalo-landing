@@ -5,101 +5,285 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import ExpandableBlock from '../ui/ExpandableBlock.astro';
 import Button from '../ui/Button.astro';
 import { site } from '../../data/site';
+import telegramSvg from '../../icons/telegram.svg?raw';
+import maxSvg from '../../icons/max.svg?raw';
+import vkSvg from '../../icons/vk.svg?raw';
 import imgMain from '../../assets/school/school-01-08-03-photo-2026-02-25-18-58-56.jpg';
 import imgSecondary1 from '../../assets/school/school-02-08-04-473.jpg';
 import imgSecondary2 from '../../assets/school/school-03-08-05-490.jpg';
 
-interface Feature {
+interface Chip {
+  icon: string;
+  label: string;
+}
+
+const chips: Chip[] = [
+  { icon: 'lucide:users', label: 'Небольшие классы — максимум внимания каждому' },
+  { icon: 'lucide:target', label: 'Углублённое обучение через вовлечённость' },
+  { icon: 'lucide:route', label: 'Индивидуальная траектория внутри общей программы' },
+  { icon: 'lucide:heart-handshake', label: 'Опытные педагоги-наставники' },
+  { icon: 'lucide:salad', label: 'Сбалансированное меню от нутрициолога' },
+];
+
+interface Advantage {
   icon: string;
   title: string;
   text: string;
+  highlight?: string;
 }
 
-const features: Feature[] = [
+const advantages: Advantage[] = [
   {
-    icon: 'lucide:user-check',
-    title: 'Класс — до 10 детей',
-    text: 'Каждый ребёнок отвечает у доски на каждом уроке.',
+    icon: 'lucide:users-round',
+    title: 'Камерность',
+    text: 'Ребёнок не должен растворяться в толпе. Небольшие классы создают пространство доверия. Это позволяет знать сильные и слабые стороны каждого, подбирать индивидуальный темп обучения, создавать комфортную атмосферу без стресса. Здесь каждого ребёнка видят, слышат и ценят.',
+    highlight: 'Классы до 10 человек.',
   },
   {
-    icon: 'lucide:calculator',
-    title: 'Математика — флагман',
-    text: 'Логика, олимпиадные задачи, нестандартные подходы с 1 класса.',
+    icon: 'lucide:route',
+    title: 'Индивидуальность',
+    text: 'Мы понимаем, что дети воспринимают мир по-разному. Поэтому мы реализуем индивидуальную траекторию внутри общей программы. Стандарт знаний остаётся высоким и единым для всех, но путь к этому стандарту каждый ребёнок проходит комфортно для себя.',
   },
   {
-    icon: 'lucide:languages',
-    title: 'Английский с 1 класса',
-    text: 'Без перевода, через погружение.',
+    icon: 'lucide:salad',
+    title: 'Питание',
+    text: 'Правильное питание — фундамент гармоничного развития ребёнка. Наше меню — продуманная система поддержки здоровья. Мы учитываем возрастные особенности и потребности растущего организма, необходимые витамины и микроэлементы. Используем только свежие, проверенные продукты от надёжных поставщиков.',
   },
   {
-    icon: 'lucide:home',
-    title: 'Группа продлённого дня',
-    text: 'Все уроки сделаны до прихода домой.',
+    icon: 'lucide:shield-check',
+    title: 'Пространство',
+    text: 'Закрытая, безопасная, охраняемая территория. Школа находится в отдельном здании, в живописном экологически чистом месте, где царят тишина и спокойствие. Организована воркаут-площадка для полезного времяпровождения на улице. В тёплое время года некоторые уроки проходят на улице.',
   },
   {
-    icon: 'lucide:drama',
-    title: 'Жизнь, а не только учёба',
-    text: 'Театр, музеи, праздники, лыжи зимой.',
+    icon: 'lucide:heart-handshake',
+    title: 'Педагоги',
+    text: 'Мы собираем команду единомышленников, для которых педагогика — это призвание, а не просто работа. Наши учителя умеют слушать, вдохновлять и верить в ребёнка. Именно эта искренняя вовлечённость создаёт атмосферу доверия, в которой хочется учиться.',
   },
-  {
-    icon: 'lucide:coins',
-    title: 'Внутренняя валюта «Альтики»',
-    text: 'Дети учатся обращаться с деньгами через игровую экономику класса.',
-  },
+];
+
+const teacherQualities = [
+  { title: 'Компетентность', text: 'наши педагоги постоянно развиваются и знают современные методики.' },
+  { title: 'Человечность', text: 'они видят в ученике личность.' },
+  { title: 'Безопасность', text: 'в их классе ошибка воспринимается как точка роста.' },
+];
+
+const textbooks = [
+  { subject: 'Математика', authors: 'Виленкин, Петерсон', text: 'культивируют логику и точность.' },
+  { subject: 'Русский язык', authors: 'Белавина, Есюкова', text: 'учат грамотности через понимание.' },
+  { subject: 'Окружающий мир', authors: 'Чудинова', text: 'развивает исследовательский интерес.' },
+  { subject: 'Литература', authors: 'Матвеева', text: 'воспитывает вкус и эмпатию.' },
+  { subject: 'Английский язык', authors: 'Kids Box и Rainbow English', text: 'современный коммуникативный подход.' },
+];
+
+const subjects = [
+  { name: 'Математика', text: 'логика и порядок в мыслях' },
+  { name: 'Русский язык', text: 'культура грамотного общения' },
+  { name: 'Литературное чтение', text: 'воспитание души и эмпатии' },
+  { name: 'Окружающий мир', text: 'любопытство к устройству жизни' },
+  { name: 'Физкультура', text: 'энергия здоровья и движения' },
+  { name: 'Школа экспериментов', text: 'наука через удивление и опыт' },
+  { name: 'Финансовая грамотность', text: 'ответственность и независимость' },
+  { name: 'Музыка', text: 'гармония чувств и ритма' },
+  { name: 'ИЗО', text: 'пространство для творчества' },
+  { name: 'ТРИЗ', text: 'искусство находить решения' },
+  { name: 'Эмолект', text: 'понимание себя и других' },
+  { name: 'Целеполагание', text: 'умение достигать мечты' },
+];
+
+const sports = ['Футбол', 'Баскетбол', 'Настольный теннис', 'Акробатика', 'Вышибалы', 'Лыжи'];
+
+const documents = [
+  'Паспорт родителя',
+  'Свидетельство о рождении ребёнка',
+  'Форма №8 (прописка)',
+  'Медицинский полис',
+  'СНИЛС',
 ];
 ---
 
 <section id="school" class="bg-indigo-soft py-20 lg:py-28">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading
-      eyebrow="Начальная школа"
-      title="Начальная школа: 1–4 классы"
-      lead="Программа развивающего обучения Выготского — Эльконина — Давыдова"
+      title="Начальная школа"
+      lead="Из «Доброго Начала» — в большое будущее"
       class="mb-12 md:mb-16"
     />
 
-    <!-- Лид + главное фото -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12 md:mb-16">
-      <div class="order-2 lg:order-1">
+    <!-- Лид + 5 чипов (слева) + главное фото (справа) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch mb-12 md:mb-16">
+      <div class="order-2 lg:order-1 flex flex-col gap-6">
         <p class="text-lg leading-relaxed text-ink">
-          Мы не «натаскиваем на ВПР». Мы учим думать. Программа развивающего обучения формирует у ребёнка понятийное мышление: способность видеть суть задачи, связи между явлениями, искать решение там, где другие сдаются. Углублённая математика, английский с первого класса, чтение настоящих книг — а не выдержек из учебника.
+          Наша школа — место, где таланты ребёнка раскрываются бережно и естественно. Где образование становится живым путём роста — в ритме ребёнка, с уважением к его уникальному темпу и способностям. Мы не просто школа, а развивающая среда, в которой ребёнку естественно хочется расти.
         </p>
+
+        <ul class="flex flex-wrap gap-2 md:gap-2.5 list-none p-0 m-0">
+          {chips.map((chip) => (
+            <li class="inline-flex items-center gap-1.5 bg-bg rounded-full px-3 py-1.5 text-sm text-indigo">
+              <Icon name={chip.icon} class="w-4 h-4 shrink-0 text-cta" aria-hidden="true" />
+              <span>{chip.label}</span>
+            </li>
+          ))}
+        </ul>
       </div>
+
       <div class="order-1 lg:order-2">
         <Image
           src={imgMain}
           alt="Класс начальной школы «Доброе Начало»"
           widths={[400, 600, 800, 1200]}
           sizes="(min-width: 1024px) 50vw, 100vw"
-          class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+          class="w-full h-full rounded-2xl shadow-[var(--shadow-card)] object-cover min-h-[300px] lg:min-h-[500px]"
           loading="lazy"
         />
       </div>
     </div>
 
-    <!-- 6 фич сеткой 3×2 -->
-    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 list-none p-0 mb-12 md:mb-16">
-      {features.map((f) => (
-        <li class="flex flex-col gap-4 bg-bg rounded-2xl p-6 shadow-[var(--shadow-card)]">
-          <div class="flex items-center justify-center w-14 h-14 rounded-xl bg-bg-warm text-cta shrink-0">
-            <Icon name={f.icon} class="w-8 h-8" aria-hidden="true" />
+    <!-- 5 развёрнутых карточек преимуществ -->
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 list-none p-0 mb-12 md:mb-16">
+      {advantages.map((adv) => (
+        <li class="bg-bg rounded-2xl p-6 md:p-7 shadow-[var(--shadow-card)] flex flex-col gap-3">
+          <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-bg-soft text-cta shrink-0">
+            <Icon name={adv.icon} class="w-6 h-6" aria-hidden="true" />
           </div>
-          <h3 class="text-lg font-semibold text-indigo leading-snug">
-            {f.title}
+          <h3 class="text-xl font-semibold text-indigo leading-snug">
+            {adv.title}
           </h3>
           <p class="text-base text-text-muted leading-relaxed">
-            {f.text}
+            {adv.text}
           </p>
+          {adv.highlight && (
+            <p class="text-base font-semibold text-indigo mt-auto pt-2">{adv.highlight}</p>
+          )}
+          {adv.title === 'Педагоги' && (
+            <ul class="list-none p-0 m-0 space-y-1.5 pt-2 border-t border-border">
+              {teacherQualities.map((q) => (
+                <li class="text-sm leading-relaxed">
+                  <span class="font-semibold text-indigo">{q.title}:</span>{' '}
+                  <span class="text-text-muted">{q.text}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </li>
       ))}
     </ul>
 
+    <!-- Блок «Программа» -->
+    <div class="bg-bg rounded-2xl p-8 md:p-10 mb-10 md:mb-12 shadow-[var(--shadow-card)]">
+      <h3 class="text-2xl md:text-3xl font-semibold text-indigo mb-5">
+        Программа — классическая сила знаний в современном формате
+      </h3>
+      <div class="space-y-4 text-base md:text-lg leading-relaxed text-text mb-6">
+        <p>
+          В школе «Доброе Начало» мы выбрали Систему развивающего обучения. Почему? Потому что она учит не просто запоминать, а понимать и мыслить.
+        </p>
+        <p>
+          Мы взяли за основу золотой стандарт образования. Советская фундаментальная школа считалась лучшей в мире благодаря строгой логике построения программы. Мы сохранили эту логику, но сделали её живой и доступной.
+        </p>
+      </div>
+
+      <h4 class="text-lg font-semibold text-indigo mb-3">Наши учебники — знак качества:</h4>
+      <ul class="list-none p-0 m-0 space-y-2.5 mb-6">
+        {textbooks.map((t) => (
+          <li class="text-base leading-relaxed">
+            <span class="font-semibold text-indigo">{t.subject}:</span>{' '}
+            <span class="text-indigo">{t.authors}</span>{' '}
+            <span class="text-text-muted">— {t.text}</span>
+          </li>
+        ))}
+      </ul>
+
+      <p class="text-base text-text leading-relaxed">
+        Основа — логика классических учебников, адаптированная под восприятие современных школьников. Ребёнок получает прочные знания, потому что ему понятно, зачем и как это устроено.
+      </p>
+    </div>
+
+    <!-- ExpandableBlocks -->
+    <div class="space-y-3 mb-10 md:mb-12">
+      <ExpandableBlock summary="Основные предметы (12)" defaultOpen={false}>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 list-none p-0 m-0">
+          {subjects.map((s) => (
+            <li class="bg-bg rounded-xl px-4 py-3">
+              <p class="font-semibold text-indigo text-sm mb-0.5">{s.name}</p>
+              <p class="text-sm text-text-muted leading-snug">{s.text}</p>
+            </li>
+          ))}
+        </ul>
+      </ExpandableBlock>
+
+      <ExpandableBlock summary="Спортивная программа" defaultOpen={false}>
+        <ul class="flex flex-wrap gap-2 list-none p-0 m-0">
+          {sports.map((sport) => (
+            <li class="inline-flex items-center px-4 py-2 rounded-full bg-bg text-indigo text-sm font-medium">
+              {sport}
+            </li>
+          ))}
+        </ul>
+      </ExpandableBlock>
+
+      <ExpandableBlock summary="Расписание учебного дня" defaultOpen={false}>
+        <p class="text-base text-text-muted italic leading-relaxed">
+          Подробное расписание учебного дня по урокам предоставляется при поступлении.
+        </p>
+      </ExpandableBlock>
+
+      <ExpandableBlock summary="Что после 4 класса?" defaultOpen={false}>
+        <div class="space-y-4 text-base leading-relaxed text-text">
+          <p>
+            Мы реализуем единую образовательную систему «детский сад — школа». Дети могут поступить к нам с 2 лет и пройти весь путь начального образования в привычной среде, без стресса при переходе на новую ступень.
+          </p>
+          <p>
+            Наша учебная программа углублённая и превышает требования федеральных стандартов (ФГОС). Это гарантирует высокий уровень знаний, поэтому переход в другую школу не станет проблемой. Если обстоятельства изменятся — благодаря сильной базе ребёнок легко адаптируется в любой другой школе.
+          </p>
+          <p class="font-semibold text-indigo text-lg">
+            Средняя школа планируется к открытию с 2028 учебного года.
+          </p>
+        </div>
+      </ExpandableBlock>
+
+      <ExpandableBlock summary="Мы не уходим на каникулы" defaultOpen={false}>
+        <div class="space-y-4 text-base leading-relaxed text-text">
+          <p>
+            Школа-сад «Доброе Начало» работает без длительных перерывов:
+          </p>
+          <ul class="list-none p-0 m-0 space-y-2 ml-2">
+            <li><span class="font-semibold text-indigo">Детский сад</span> летом продолжает работу в обычном режиме.</li>
+            <li><span class="font-semibold text-indigo">Начальная школа:</span> учебный год завершается в мае. С июня — летние смены на выбор: отдых, творческие проекты, прогулки или углублённые занятия.</li>
+          </ul>
+          <p>
+            Дети под ежедневным присмотром с 8:00 до 19:00 — можно спокойно планировать рабочий график, не подстраиваясь под каникулы.
+          </p>
+        </div>
+      </ExpandableBlock>
+
+      <ExpandableBlock summary="Атмосфера школы — фото" defaultOpen={false}>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+          <Image
+            src={imgSecondary1}
+            alt="Урок в начальной школе"
+            widths={[400, 600, 800]}
+            sizes="(min-width: 640px) 50vw, 100vw"
+            class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+            loading="lazy"
+          />
+          <Image
+            src={imgSecondary2}
+            alt="Школьная жизнь и мероприятия"
+            widths={[400, 600, 800]}
+            sizes="(min-width: 640px) 50vw, 100vw"
+            class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+            loading="lazy"
+          />
+        </div>
+      </ExpandableBlock>
+    </div>
+
     <!-- Цены -->
-    <div class="bg-bg rounded-2xl p-8 md:p-10 mb-4 shadow-[var(--shadow-card)]">
+    <div class="bg-bg rounded-2xl p-8 md:p-10 mb-6 md:mb-8 shadow-[var(--shadow-card)]">
       <h3 class="text-2xl font-semibold text-indigo mb-6">Стоимость</h3>
-      <dl class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-6">
+      <dl class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         <div>
-          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Без питания</dt>
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Обучение</dt>
           <dd class="text-2xl font-semibold text-indigo">48 000 ₽ <span class="text-base font-normal text-text-muted">/ мес</span></dd>
         </div>
         <div>
@@ -111,43 +295,62 @@ const features: Feature[] = [
           <dd class="text-2xl font-semibold text-indigo">+20 000 ₽ <span class="text-base font-normal text-text-muted">/ мес</span></dd>
         </div>
       </dl>
-      <p class="text-sm text-text-muted">
-        Подробные условия и состав программы — уточняйте при звонке.
-      </p>
     </div>
 
-    <!-- Бейдж под прайсом -->
-    <p class="text-sm text-text-muted text-center italic mb-8 md:mb-10">
-      Программа разработана на основе наследия Л.С. Выготского, Д.Б. Эльконина, В.В. Давыдова.
-    </p>
+    <!-- Документы для поступления -->
+    <div class="bg-bg rounded-2xl p-8 md:p-10 mb-10 md:mb-12 shadow-[var(--shadow-card)]">
+      <h3 class="text-xl font-semibold text-indigo mb-4">Документы для поступления</h3>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 list-none p-0 m-0">
+        {documents.map((doc) => (
+          <li class="flex items-start gap-2 text-base text-text">
+            <Icon name="lucide:check" class="w-5 h-5 text-cta shrink-0 mt-0.5" aria-hidden="true" />
+            <span>{doc}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
 
-    <!-- Expand: дополнительные фото -->
-    <ExpandableBlock summary="Атмосфера школы и учебный процесс" defaultOpen={false}>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
-        <Image
-          src={imgSecondary1}
-          alt="Урок в начальной школе"
-          widths={[400, 600, 800]}
-          sizes="(min-width: 640px) 50vw, 100vw"
-          class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
-          loading="lazy"
-        />
-        <Image
-          src={imgSecondary2}
-          alt="Школьная жизнь и мероприятия"
-          widths={[400, 600, 800]}
-          sizes="(min-width: 640px) 50vw, 100vw"
-          class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
-          loading="lazy"
-        />
-      </div>
-    </ExpandableBlock>
-
-    <!-- CTA -->
-    <div class="text-center mt-10 md:mt-12">
+    <!-- CTA с тремя каналами -->
+    <div class="flex flex-col items-center gap-4 text-center">
       <Button href={site.phone.href} variant="primary" size="lg">
-        Записаться на пробный день
+        Записаться на пробный день в школу
       </Button>
+      <p class="text-base text-text-muted">
+        или позвоните:{' '}
+        <a href={site.phone.href} class="font-semibold text-indigo hover:text-cta transition-colors whitespace-nowrap">
+          {site.phone.display}
+        </a>
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-base text-text-muted">
+        <span>или напишите:</span>
+        <a
+          href={site.social.telegram.contact}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="Написать в Telegram"
+        >
+          <span class="w-6 h-6 inline-block" set:html={telegramSvg} />
+        </a>
+        <a
+          href={site.social.max.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="Написать в Макс"
+        >
+          <span class="w-6 h-6 inline-block" set:html={maxSvg} />
+        </a>
+        <a
+          href={site.social.vk.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="ВКонтакте"
+        >
+          <span class="w-6 h-6 inline-block" set:html={vkSvg} />
+        </a>
+      </div>
     </div>
   </div>
 </section>
