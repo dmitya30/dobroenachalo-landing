@@ -47,6 +47,8 @@ const team = defineCollection({
     name: z.string(),
     role: z.string(),
     bio: z.string().optional(),
+	/** Цитата для featured-карточек */
+    quote: z.string().optional(),
     photo: z.string().optional(),
     /** В 4 ключевых на первом экране */
     featured: z.boolean().default(false),

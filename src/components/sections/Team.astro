@@ -15,10 +15,13 @@ import photo08 from '../../assets/team/team-08-efremova-tatyana.jpg';
 import photo09 from '../../assets/team/team-09-popova-svetlana.jpg';
 import photo10 from '../../assets/team/team-10-belyakova-marina.jpg';
 import photo11 from '../../assets/team/team-11-finyashina-nataliya.jpg';
+import photo12 from '../../assets/team/team-12.jpg';
+import photo13 from '../../assets/team/team-13.jpg';
 
 const photoMap: Record<number, ImageMetadata> = {
   1: photo01, 2: photo02, 3: photo03, 4: photo04, 5: photo05,
-  6: photo06, 7: photo07, 8: photo08, 9: photo09, 10: photo10, 11: photo11,
+  6: photo06, 7: photo07, 8: photo08, 9: photo09, 10: photo10,
+  11: photo11, 12: photo12, 13: photo13,
 };
 
 const all = (await getCollection('team')).sort((a, b) => a.data.order - b.data.order);
@@ -35,25 +38,28 @@ function getInitials(name: string): string {
 <section id="team" class="bg-bg-soft py-16 md:py-20 lg:py-24">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading
-      eyebrow="Команда"
-      title="Педагоги, с которыми ваш ребёнок проведёт годы"
-      lead="Стабильный коллектив без текучки. Те же учителя ведут детей из сада в школу — ребёнок не теряет привычную среду."
-      class="mb-12 md:mb-16"
+      title="Наша команда"
+      lead="Наши учителя и воспитатели — люди с опытом, внутренней теплотой и любовью к детям. Они сочетают знания детской психологии с умением слышать и вести за собой."
+      class="mb-8 md:mb-10"
     />
 
-    <!-- 4 ключевые карточки: фото слева, текст справа, 2×2 на десктопе -->
+    <p class="text-center text-base md:text-lg text-text-muted max-w-3xl mx-auto mb-12 md:mb-16">
+      Команда профессионалов, вдохновлённых идеей сделать образование увлекательным и осмысленным.
+    </p>
+
+    <!-- 5 ключевых карточек с цитатами: фото слева, текст справа, сетка 3×2 на десктопе (6-я ячейка пустая) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
       {featured.map((member) => {
         const photo = photoMap[member.data.order];
         return (
-          <article class="bg-bg rounded-2xl overflow-hidden shadow-sm flex flex-col sm:flex-row">
-            <div class="sm:w-2/5 shrink-0 bg-bg-soft aspect-[4/5] sm:aspect-auto">
+          <article class="bg-bg rounded-2xl overflow-hidden shadow-sm flex flex-col sm:flex-row lg:flex-col xl:flex-row">
+            <div class="sm:w-2/5 lg:w-full xl:w-2/5 shrink-0 bg-bg-soft aspect-[4/5] sm:aspect-auto lg:aspect-[4/5] xl:aspect-auto">
               {photo ? (
                 <Image
                   src={photo}
                   alt={member.data.name}
                   widths={[400, 600, 800]}
-                  sizes="(max-width: 640px) 100vw, 280px"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 280px, (max-width: 1280px) 33vw, 220px"
                   class="w-full h-full object-cover object-top"
                   loading="lazy"
                 />
@@ -64,16 +70,20 @@ function getInitials(name: string): string {
               )}
             </div>
             <div class="p-6 md:p-7 flex flex-col gap-2">
-              <h3 class="text-xl font-semibold text-indigo leading-snug">{member.data.name}</h3>
+              <h3 class="text-lg md:text-xl font-semibold text-indigo leading-snug">{member.data.name}</h3>
               <p class="text-sm font-medium text-cta">{member.data.role}</p>
-              {member.data.bio && <p class="text-base text-text-muted leading-relaxed mt-2">{member.data.bio}</p>}
+              {member.data.quote && (
+                <blockquote class="relative mt-3 pl-4 border-l-2 border-cta/40">
+                  <p class="text-sm md:text-base text-text-muted leading-relaxed italic">{member.data.quote}</p>
+                </blockquote>
+              )}
             </div>
           </article>
         );
       })}
     </div>
 
-    <!-- Остальные 12 в expand -->
+    <!-- Остальные в expand -->
     <ExpandableBlock summary={`Показать всю команду (${rest.length} человек)`}>
       <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 list-none p-0 pt-2">
         {rest.map((member) => {
