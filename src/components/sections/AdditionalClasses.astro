@@ -6,50 +6,57 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import Card from '../ui/Card.astro';
 import Button from '../ui/Button.astro';
 import { site } from '../../data/site';
-import imgExtra1 from '../../assets/additional-classes/additional-classes-01-08-01-613.jpg';
-import imgExtra2 from '../../assets/additional-classes/additional-classes-02-08-07-468.jpg';
-import imgExtra3 from '../../assets/additional-classes/additional-classes-03-08-09-xxxl-61.jpg';
-import imgExtra4 from '../../assets/additional-classes/additional-classes-04-08-12-xxxl-54.jpg';
+import telegramSvg from '../../icons/telegram.svg?raw';
+import maxSvg from '../../icons/max.svg?raw';
+import vkSvg from '../../icons/vk.svg?raw';
+import imgExtra1 from '../../assets/additional-classes/additional-classes-01.jpg';
+import imgExtra2 from '../../assets/additional-classes/additional-classes-02.jpg';
+import imgExtra3 from '../../assets/additional-classes/additional-classes-03.jpg';
+import imgExtra4 from '../../assets/additional-classes/additional-classes-04.jpg';
 
 // Маппинг логических имён иконок из JSON на Lucide
 const iconMap: Record<string, string> = {
+  'book-open': 'lucide:book-open',
+  speech: 'lucide:mic',
+  'heart-pulse': 'lucide:heart-pulse',
+  dance: 'lucide:music-2',
   chess: 'lucide:crown',
   hammer: 'lucide:hammer',
-  speech: 'lucide:mic',
   activity: 'lucide:activity',
-  'book-open': 'lucide:book-open',
 };
 
-// Желаемый порядок отображения: верхний ряд — короткие (Шахматы/Столярка/Акробатика),
-// нижний — длинные (Логопед/Подготовка) на всю ширину по половине
-const displayOrder = ['Шахматы', 'Столярная мастерская', 'Акробатика', 'Логопед', 'Подготовка к школе'];
-
+// Сортировка по полю order (1 — самая «продающая», 7 — базовая физкультура)
 const allClasses = await getCollection('classes');
-const classes = allClasses
-  .slice()
-  .sort((a, b) => displayOrder.indexOf(a.data.title) - displayOrder.indexOf(b.data.title));
+const classes = allClasses.slice().sort((a, b) => a.data.order - b.data.order);
+
+// Фикс-сетка 3×3: 7 карточек + 2 пустые ячейки (для гибкости при удалении/добавлении)
+const gridSlots = 9;
+const emptySlots = gridSlots - classes.length;
 ---
 
 <section id="classes" class="bg-bg-warm py-20 lg:py-28">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading
-      eyebrow="Кружки и секции"
       title="Кружки и секции"
-      lead="Для воспитанников школы и приходящих детей"
+      lead="Хотите, чтобы кружки стали местом, где талант растёт естественно, а время пролетает незаметно?"
       class="mb-12 md:mb-16"
     />
 
-    <!-- 5 карточек: 3 в верхнем ряду (col-span-2 из 6) + 2 в нижнем (col-span-3 из 6) -->
-    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 md:gap-8 list-none p-0 mb-12 md:mb-16">
-      {classes.map((c, i) => {
-        const span = i < 3 ? 'lg:col-span-2' : 'lg:col-span-3';
+    <p class="text-center text-base md:text-lg text-text-muted max-w-3xl mx-auto mb-10 md:mb-12">
+      Наши секции — для воспитанников сада, школы и приходящих детей. Каждое занятие — маленькое приключение, после которого ребёнок возвращается домой с горящими глазами и желанием творить ещё.
+    </p>
+
+    <!-- Фикс-сетка 3×3: 7 карточек + 2 пустые ячейки -->
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 list-none p-0 mb-12 md:mb-16">
+      {classes.map((c) => {
+        const isHoreo = c.data.title === 'Хореография';
         return (
-          <Card as="li" variant="soft" class={`flex flex-col gap-4 ${span}`}>
+          <Card as="li" variant="soft" class="flex flex-col gap-4">
             <div class="flex items-start gap-4">
               <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-bg text-cta shrink-0">
                 <Icon name={iconMap[c.data.icon ?? ''] ?? 'lucide:sparkles'} class="w-6 h-6" aria-hidden="true" />
               </div>
-              <div class="flex-1">
+              <div class="flex-1 min-w-0">
                 <h3 class="text-lg font-semibold text-indigo leading-snug">
                   {c.data.title}
                 </h3>
@@ -78,26 +85,48 @@ const classes = allClasses
             </div>
 
             <dl class="grid grid-cols-1 gap-2 pt-4 mt-auto border-t border-white/40">
-              {c.data.pricing.trial && (
-                <div class="flex justify-between gap-2 text-sm">
-                  <dt class="text-text-muted">Пробное:</dt>
-                  <dd class="font-semibold text-cta">{c.data.pricing.trial}</dd>
-                </div>
-              )}
-              <div class="flex justify-between gap-2 text-sm">
-                <dt class="text-text-muted">Разовое:</dt>
-                <dd class="font-semibold text-indigo">{c.data.pricing.single}</dd>
-              </div>
-              {c.data.pricing.package && (
-                <div class="flex justify-between gap-2 text-sm">
-                  <dt class="text-text-muted">Абонемент:</dt>
-                  <dd class="font-semibold text-indigo text-right">{c.data.pricing.package}</dd>
-                </div>
+              {isHoreo ? (
+                <Fragment>
+                  <div class="flex justify-between gap-2 text-sm">
+                    <dt class="text-text-muted">{c.data.pricing.single.split(':')[0]}:</dt>
+                    <dd class="font-semibold text-indigo text-right">{c.data.pricing.single.split(':').slice(1).join(':').trim()}</dd>
+                  </div>
+                  {c.data.pricing.package && (
+                    <div class="flex justify-between gap-2 text-sm">
+                      <dt class="text-text-muted">{c.data.pricing.package.split(':')[0]}:</dt>
+                      <dd class="font-semibold text-indigo text-right">{c.data.pricing.package.split(':').slice(1).join(':').trim()}</dd>
+                    </div>
+                  )}
+                </Fragment>
+              ) : (
+                <Fragment>
+                  {c.data.pricing.trial && (
+                    <div class="flex justify-between gap-2 text-sm">
+                      <dt class="text-text-muted">Пробное:</dt>
+                      <dd class="font-semibold text-cta">{c.data.pricing.trial}</dd>
+                    </div>
+                  )}
+                  <div class="flex justify-between gap-2 text-sm">
+                    <dt class="text-text-muted">Стоимость:</dt>
+                    <dd class="font-semibold text-indigo text-right">{c.data.pricing.single}</dd>
+                  </div>
+                  {c.data.pricing.package && (
+                    <div class="flex justify-between gap-2 text-sm">
+                      <dt class="text-text-muted">Абонемент:</dt>
+                      <dd class="font-semibold text-indigo text-right">{c.data.pricing.package}</dd>
+                    </div>
+                  )}
+                </Fragment>
               )}
             </dl>
           </Card>
         );
       })}
+
+      {/* Пустые ячейки для сохранения сетки 3×3 при добавлении/удалении кружков */}
+      {Array.from({ length: emptySlots }).map(() => (
+        <li class="hidden lg:block" aria-hidden="true"></li>
+      ))}
     </ul>
 
     <!-- Атмосфера занятий (4 фото) -->
@@ -108,11 +137,41 @@ const classes = allClasses
       <Image src={imgExtra4} alt="Работа в мастерской" widths={[300, 500]} sizes="(min-width: 1024px) 25vw, 50vw" class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-square" loading="lazy" />
     </div>
 
-    <!-- CTA -->
-    <div class="text-center">
+    <!-- CTA с тремя каналами -->
+    <div class="flex flex-col items-center gap-4 text-center">
       <Button href={site.phone.href} variant="primary" size="lg">
-        Записаться на занятие
+        Записаться на пробное занятие
       </Button>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-base text-text-muted">
+        <span>или напишите:</span>
+        <a
+          href={site.social.telegram.contact}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="Написать в Telegram"
+        >
+          <span class="w-6 h-6 inline-block" set:html={telegramSvg} />
+        </a>
+        <a
+          href={site.social.max.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="Написать в Макс"
+        >
+          <span class="w-6 h-6 inline-block" set:html={maxSvg} />
+        </a>
+        <a
+          href={site.social.vk.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="ВКонтакте"
+        >
+          <span class="w-6 h-6 inline-block" set:html={vkSvg} />
+        </a>
+      </div>
     </div>
   </div>
 </section>
