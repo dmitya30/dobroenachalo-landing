@@ -5,13 +5,14 @@ import Button from '../ui/Button.astro';
 import { site } from '../../data/site';
 import telegramSvg from '../../icons/telegram.svg?raw';
 import maxSvg from '../../icons/max.svg?raw';
+import vkSvg from '../../icons/vk.svg?raw';
 
 interface Step {
   num: string;
   icon: string;
   title: string;
   text: string;
-  extra?: boolean;
+  docs?: string[];
 }
 
 const steps: Step[] = [
@@ -23,31 +24,42 @@ const steps: Step[] = [
   },
   {
     num: '02',
-    icon: 'lucide:map-pin',
-    title: 'Приходите на бесплатную экскурсию',
-    text: 'Покажем здание и территорию, познакомим с педагогами, поможем понять, какой формат подойдёт ребёнку.',
+    icon: 'lucide:users',
+    title: 'Диагностика',
+    text: 'Игровое собеседование с педагогом — знакомимся с ребёнком, смотрим на интересы и темп.',
   },
   {
     num: '03',
-    icon: 'lucide:file-check-2',
-    title: 'Запишите ребёнка',
-    text: 'Пробный день в саду — 2 900 ₽, в школе — бесплатно, разовое занятие в кружке — от 1 000 ₽. Документы оформляем при заключении договора.',
-    extra: true,
+    icon: 'lucide:door-open',
+    title: 'Экскурсия и пробный день',
+    text: 'Покажем здание и территорию, познакомим с педагогами. Пробный день в саду — 2 900 ₽, в школе — бесплатно, разовое занятие в кружке — от 1 000 ₽.',
+  },
+  {
+    num: '04',
+    icon: 'lucide:file-text',
+    title: 'Подписание документов',
+    text: 'Оформляем договор и зачисляем ребёнка. Понадобятся:',
+    docs: [
+      'паспорт родителя',
+      'свидетельство о рождении ребёнка',
+      'регистрация ребёнка',
+      'медицинский полис',
+      'СНИЛС',
+    ],
   },
 ];
 ---
 <section id="how-to-enroll" class="bg-bg-soft py-16 md:py-20 lg:py-24">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading
-      eyebrow="Запись"
-      title="С чего начать"
+      title="Как попасть в «Доброе Начало»"
       lead="Не нужно собирать документы заранее или сдавать тесты. Достаточно одного звонка — дальше всё подскажем."
       class="mb-12 md:mb-16"
     />
 
-    <ol class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 list-none p-0 mb-10 md:mb-12">
+    <ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 list-none p-0 mb-10 md:mb-12">
       {steps.map((step) => (
-        <li class="relative bg-bg rounded-2xl p-6 md:p-8 shadow-sm flex flex-col gap-4">
+        <li class="relative bg-bg rounded-2xl p-6 md:p-7 shadow-sm flex flex-col gap-4">
           <div class="flex items-center justify-between">
             <span class="text-5xl md:text-6xl font-bold text-bg-soft leading-none select-none" aria-hidden="true">{step.num}</span>
             <div class="flex items-center justify-center w-14 h-14 rounded-xl bg-bg-soft text-cta shrink-0">
@@ -56,44 +68,52 @@ const steps: Step[] = [
           </div>
           <h3 class="text-xl font-semibold text-indigo leading-snug">{step.title}</h3>
           <p class="text-base text-text-muted leading-relaxed flex-1">{step.text}</p>
-          {step.extra && (
-            <p class="text-sm text-text-muted/80 pt-2 border-t border-text-muted/15">
-              Список документов — в разделе{' '}
-              <a href="#faq" class="text-indigo font-medium hover:text-cta transition-colors underline underline-offset-2">«Частые вопросы»</a>
-              {' '}ниже
-            </p>
+          {step.docs && (
+            <ul class="text-sm text-text-muted leading-relaxed list-disc pl-5 space-y-1">
+              {step.docs.map((doc) => <li>{doc}</li>)}
+            </ul>
           )}
         </li>
       ))}
     </ol>
 
-    <!-- CTA -->
-    <div class="flex flex-col items-center gap-5">
+    <!-- CTA с тремя каналами -->
+    <div class="flex flex-col items-center gap-4 text-center">
       <Button href={site.phone.href} variant="primary" size="lg">
         <Icon name="lucide:phone" class="w-5 h-5" aria-hidden="true" />
         Записаться на экскурсию
       </Button>
-      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-base">
-        <span class="text-text-muted">или напишите в</span>
+      <p class="text-base text-text-muted">
+        или позвоните: <a href={site.phone.href} class="font-semibold text-indigo hover:text-cta transition-colors whitespace-nowrap">{site.phone.display}</a>
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-base text-text-muted">
+        <span>или напишите:</span>
         <a
           href={site.social.telegram.contact}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 font-medium text-indigo hover:text-cta transition-colors"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
           aria-label="Написать в Telegram"
         >
-          <span class="w-5 h-5 inline-block" set:html={telegramSvg} />
-          Telegram
+          <span class="w-6 h-6 inline-block" set:html={telegramSvg} />
         </a>
         <a
           href={site.social.max.url}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 font-medium text-indigo hover:text-cta transition-colors"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
           aria-label="Написать в Макс"
         >
-          <span class="w-5 h-5 inline-block" set:html={maxSvg} />
-          Макс
+          <span class="w-6 h-6 inline-block" set:html={maxSvg} />
+        </a>
+        <a
+          href={site.social.vk.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="ВКонтакте"
+        >
+          <span class="w-6 h-6 inline-block" set:html={vkSvg} />
         </a>
       </div>
     </div>
