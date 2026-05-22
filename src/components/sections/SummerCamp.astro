@@ -1,10 +1,14 @@
 ---
 import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
 import { getCollection } from 'astro:content';
 import SectionHeading from '../ui/SectionHeading.astro';
 import ExpandableBlock from '../ui/ExpandableBlock.astro';
 import Button from '../ui/Button.astro';
 import { site } from '../../data/site';
+import telegramSvg from '../../icons/telegram.svg?raw';
+import maxSvg from '../../icons/max.svg?raw';
+import vkSvg from '../../icons/vk.svg?raw';
 import imgMain from '../../assets/summer-camp/summer-camp-02-09-01-altik-kemp-deti.jpg';
 import imgExtra1 from '../../assets/summer-camp/summer-camp-01-08-06-8658.jpg';
 import imgExtra2 from '../../assets/summer-camp/summer-camp-03-09-02-216.jpg';
@@ -45,43 +49,227 @@ const monthBlocks = [
   { key: 'july', emoji: '☀️', title: 'Июль', sessions: byMonth.july, open: false },
   { key: 'august', emoji: '🌻', title: 'Август', sessions: byMonth.august, open: false },
 ];
+
+interface Advantage {
+  icon: string;
+  title: string;
+  text: string;
+}
+
+const advantages: Advantage[] = [
+  {
+    icon: 'lucide:sparkles',
+    title: 'Каникулы с пользой',
+    text: 'Дети полюбят английский, научатся выступать публично, найдут новое хобби, получат заряд мотивации, здоровья и отличного настроения.',
+  },
+  {
+    icon: 'lucide:shield-check',
+    title: 'Ваше спокойствие',
+    text: 'Пока вы на работе, ребёнок находится под присмотром профессионалов в полной безопасности.',
+  },
+  {
+    icon: 'lucide:trees',
+    title: 'Максимум детской свободы под присмотром',
+    text: 'Каникулы проходят в компании друзей и опытных наставников, а интересная программа переключает с компьютера и телефона.',
+  },
+  {
+    icon: 'lucide:calendar-days',
+    title: 'Калейдоскоп событий',
+    text: 'Мастер-классы, праздники, соревнования, выездные мероприятия, квесты, викторины и исследования.',
+  },
+  {
+    icon: 'lucide:clock',
+    title: 'Мы расширили границы',
+    text: 'Приём детей осуществляется с 8:00, а забрать ребёнка можно до 19:00.',
+  },
+];
+
+const included = [
+  'Закрытая собственная охраняемая территория',
+  'Сбалансированное 4-разовое питание',
+  'Совместные игры, командные проекты, мастер-классы, театральные постановки, спортивные игры, эстафеты',
+  'Доброжелательная атмосфера, поддержка при адаптации, возможность проявить себя',
+  'Тематические недели и итоговое мероприятие с участием родителей',
+];
+
+interface ScheduleRow {
+  time: string;
+  activity: string;
+}
+
+const schedule: ScheduleRow[] = [
+  { time: '8:00', activity: 'Встреча — обнимашки' },
+  { time: '9:00', activity: 'Динамичная зарядка' },
+  { time: '9:15', activity: 'Утренний круг (планы — обсуждения)' },
+  { time: '9:45', activity: 'Вкусный завтрак' },
+  { time: '10:10', activity: 'Трудовые минутки' },
+  { time: '10:30', activity: 'Познаём, двигаемся, исследуем (выездные мероприятия, походы, квесты, спорт) / Английский клуб' },
+  { time: '13:00', activity: 'Аппетитный обед' },
+  { time: '13:30', activity: 'Просмотр тематических фильмов, настольные игры, личные проекты' },
+  { time: '15:00', activity: 'Полдник — вкусняшка' },
+  { time: '15:30', activity: 'Лаборатория вожатских идей' },
+  { time: '16:10', activity: 'Студия «Академия творчества»' },
+  { time: '17:30', activity: 'Полезный ужин' },
+  { time: '18:00', activity: 'Вечерний круг. Дерево настроения' },
+  { time: '19:00', activity: 'Возвращение домой' },
+];
+
+interface FaqItem {
+  q: string;
+  a: string;
+}
+
+const faq: FaqItem[] = [
+  {
+    q: 'Что делать, если ребёнок заболел во время смены?',
+    a: 'Если ребёнок почувствовал себя нехорошо — он остаётся дома до полного выздоровления. После возвращения пропущенные дни спокойно отрабатываются в удобное для вас время — в рамках текущей смены или с переносом на следующие недели. Главное — чтобы ребёнок вернулся бодрым и с улыбкой.',
+  },
+  {
+    q: 'Что ребёнку нужно приносить каждый день?',
+    a: 'Головной убор; ёмкость для воды (бутылка, поильник); рюкзачок с запасными вещами, кофта; купальник для обливаний, небольшое полотенце.',
+  },
+  {
+    q: 'Можно ли давать ребёнку мобильный телефон?',
+    a: 'Мобильный телефон можно взять с собой — мы забираем его на хранение к вожатому и выдаём по просьбе для связи с вами. В течение дня гаджеты не используются: программа настолько насыщенная и интересная, что у детей просто не остаётся времени и желания скучать у экрана.',
+  },
+  {
+    q: 'Что если ребёнок не хочет участвовать в общем мероприятии?',
+    a: 'Наши вожатые умеют мягко вовлечь даже самых сдержанных. Если ребёнок пока хочет понаблюдать со стороны или отдохнуть — мы уважаем его границы. Главное — чтобы в смене было комфортно.',
+  },
+  {
+    q: 'Сколько взрослых приходится на группу детей?',
+    a: 'В группе трое взрослых: двое сертифицированных вожатых и один помощник.',
+  },
+  {
+    q: 'Можно ли купить отдельные дни или только на неделю?',
+    a: 'Можно приобрести смену полностью, либо посетить пробный день по стоимости 6 400 ₽. Если вы захотите остаться после пробного дня, он будет пересчитан по стоимости смены.',
+  },
+  {
+    q: 'Что если у ребёнка день рождения во время смены?',
+    a: 'Мы с радостью поможем создать праздничную атмосферу: поздравим именинника вместе с отрядом, выделим время для поздравлений и поможем с организацией момента. Угощения и детали праздника родители готовят заранее по договорённости с вожатыми.',
+  },
+  {
+    q: 'Можно ли оставить ребёнка на несколько недель — не будут ли повторяться программы?',
+    a: 'Конечно. Каждая неделя у нас уникальна и наполнена новыми темами, квестами и открытиями. Программа не повторяется: мы заранее продумываем разные направления, чтобы даже самые частые гости возвращались домой с яркими впечатлениями и новыми историями.',
+  },
+];
+
+const discounts = [
+  'Покупка следующей смены в последний день текущей: −15% (24 000 → 20 400 ₽)',
+  'Третья и последующие смены: −20% (24 000 → 19 200 ₽ за каждую)',
+  'За второго и последующих детей: −10%',
+  '«Приведи друга»: −5% каждому',
+];
+
+// Плюрализация для русских числительных: 1 смена / 2-4 смены / 5+ смен
+function pluralizeSessions(n: number): string {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod10 === 1 && mod100 !== 11) return 'смена';
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'смены';
+  return 'смен';
+}
+
 ---
 
 <section id="summer" class="bg-bg-soft py-20 lg:py-28">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading
-      eyebrow="Летний лагерь 2026"
-      title="Летний лагерь 2026: 12 тематических смен"
-      lead="Без телефонов и компьютеров. Настоящее счастливое детство"
+      title="Доброе лето"
+      lead="Время отдыхать — время открывать новое"
       class="mb-12 md:mb-16"
     />
 
-    <!-- Лид + главное фото с бейджем -->
+    <!-- Лид + главное фото -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12 md:mb-16">
       <div class="order-2 lg:order-1">
         <p class="text-lg leading-relaxed text-ink">
-          Каждая смена — это законченное приключение длиной в 5 дней. Дети живут в роли исследователей, детективов, космонавтов или богатырей. Спорт, творчество, наука, общение — всё на свежем воздухе, в кругу друзей и под присмотром педагогов, которых ребёнок знает.
+          Летние смены для детей от 6 до 11 лет. Главная ценность — развитие и отдых без отрыва от дома. Каждая смена — это законченное приключение длиной в 5 дней. Мы расположились в живописном месте по соседству с озером и лесом. Сбалансированное питание, оборудованные спортивные площадки, эко-тропа, водные процедуры в жаркую погоду, уютные комнаты отдыха и специализированные студии.
         </p>
       </div>
-      <div class="order-1 lg:order-2 relative">
+      <div class="order-1 lg:order-2">
         <Image
           src={imgMain}
-          alt="Дети в летнем лагере «Доброе Начало»"
+          alt="Дети на летней смене «Доброе лето»"
           widths={[400, 600, 800, 1200]}
           sizes="(min-width: 1024px) 50vw, 100vw"
           class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
           loading="lazy"
         />
-        <div class="absolute top-4 right-4 bg-cta text-indigo px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-          Раннее бронирование −5 000 ₽
+      </div>
+    </div>
+
+    <!-- 5 преимуществ -->
+    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 list-none p-0 mb-12 md:mb-16">
+      {advantages.map((adv) => (
+        <li class="bg-bg rounded-2xl p-6 md:p-7 shadow-[var(--shadow-card)] flex flex-col gap-3">
+          <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-bg-soft text-cta shrink-0">
+            <Icon name={adv.icon} class="w-6 h-6" aria-hidden="true" />
+          </div>
+          <h3 class="text-xl font-semibold text-indigo leading-snug">
+            {adv.title}
+          </h3>
+          <p class="text-base text-text-muted leading-relaxed">
+            {adv.text}
+          </p>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Что включено + Режим работы (2 колонки) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
+      <div class="bg-bg rounded-2xl p-6 md:p-8 shadow-[var(--shadow-card)]">
+        <h3 class="text-xl font-semibold text-indigo mb-4">Что включено в смену</h3>
+        <ul class="space-y-2 list-none p-0 m-0">
+          {included.map((item) => (
+            <li class="flex items-start gap-2 text-base text-text">
+              <Icon name="lucide:check" class="w-5 h-5 text-cta shrink-0 mt-0.5" aria-hidden="true" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="bg-bg rounded-2xl p-6 md:p-8 shadow-[var(--shadow-card)]">
+        <h3 class="text-xl font-semibold text-indigo mb-4">Режим работы</h3>
+        <ul class="space-y-3 list-none p-0 m-0 mb-4">
+          <li>
+            <p class="font-semibold text-indigo">Пн–Пт</p>
+            <p class="text-base text-text-muted">дневное пребывание с 8:00 до 19:00 (можно приводить позже и забирать раньше)</p>
+          </li>
+          <li>
+            <p class="font-semibold text-indigo">Пт–Сб</p>
+            <p class="text-base text-text-muted">ночёвка (специальная программа)</p>
+          </li>
+          <li>
+            <p class="font-semibold text-indigo">Вс</p>
+            <p class="text-base text-text-muted">выходной</p>
+          </li>
+        </ul>
+        <div class="pt-4 border-t border-border space-y-3">
+          <div>
+            <p class="font-semibold text-indigo mb-1">Питание</p>
+            <p class="text-sm text-text-muted leading-relaxed">
+              Сбалансированное 5-разовое питание. Разработано нутрициологом, включает полезные перекусы, сезонные фрукты и овощи, а также вкусняшки и мороженое.
+            </p>
+          </div>
+          <div>
+            <p class="font-semibold text-indigo mb-1">Финальная ночёвка</p>
+            <p class="text-sm text-text-muted leading-relaxed">
+              В конце каждой смены — с пятницы на субботу. Костёр, игры, дискотека и завтрак на природе. Детей забирают после завтрака в субботу.
+            </p>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Календарь смен по месяцам -->
+    <h3 class="text-2xl md:text-3xl font-semibold text-indigo text-center mb-6 md:mb-8">
+      12 смен лета 2026
+    </h3>
     <div class="space-y-4 mb-12 md:mb-16">
       {monthBlocks.map((block) => (
-        <ExpandableBlock summary={`${block.emoji} ${block.title} — ${block.sessions.length} смен`} defaultOpen={block.open}>
+        <ExpandableBlock summary={`${block.emoji} ${block.title} — ${block.sessions.length} ${pluralizeSessions(block.sessions.length)}`} defaultOpen={block.open}>
           <ul class="space-y-3 list-none p-0 m-0">
             {block.sessions.map((s) => (
               <li class="grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-2 sm:gap-6 items-start p-4 bg-bg rounded-xl">
@@ -103,7 +291,21 @@ const monthBlocks = [
       ))}
     </div>
 
-    <!-- Доп. фото лагеря (атмосфера, не прячем) -->
+    <!-- Ритм дня (expand) -->
+    <div class="mb-12 md:mb-16">
+      <ExpandableBlock summary="Наш нескучный ритм дня" defaultOpen={false}>
+        <ul class="space-y-2 list-none p-0 m-0">
+          {schedule.map((row) => (
+            <li class="grid grid-cols-[60px_1fr] sm:grid-cols-[80px_1fr] gap-3 sm:gap-6 items-baseline py-2 border-b border-border last:border-0">
+              <span class="text-sm font-semibold text-cta">{row.time}</span>
+              <span class="text-base text-text">{row.activity}</span>
+            </li>
+          ))}
+        </ul>
+      </ExpandableBlock>
+    </div>
+
+    <!-- Доп. фото -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-12 md:mb-16">
       <Image
         src={imgExtra1}
@@ -115,7 +317,7 @@ const monthBlocks = [
       />
       <Image
         src={imgExtra2}
-        alt="Творческие занятия в лагере"
+        alt="Творческие занятия на смене"
         widths={[400, 600, 800]}
         sizes="(min-width: 640px) 50vw, 100vw"
         class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
@@ -123,37 +325,109 @@ const monthBlocks = [
       />
     </div>
 
-    <!-- Прайс -->
-    <div class="bg-bg rounded-2xl p-8 md:p-10 mb-8 md:mb-10 shadow-[var(--shadow-card)]">
-      <h3 class="text-2xl font-semibold text-indigo mb-6">Стоимость смены</h3>
-      <dl class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-6">
-        <div>
-          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Стандартная цена</dt>
+    <!-- Тарифы -->
+    <div class="bg-bg rounded-2xl p-8 md:p-10 mb-6 md:mb-8 shadow-[var(--shadow-card)]">
+      <h3 class="text-2xl font-semibold text-indigo mb-2">Тарифы за неделю</h3>
+      <p class="text-sm text-text-muted mb-6">Стандартные цены за 5-дневную смену</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
+        <div class="bg-bg-soft rounded-xl p-5">
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">С ночёвкой</dt>
+          <dd class="text-2xl font-semibold text-indigo">29 000 ₽</dd>
+        </div>
+        <div class="bg-bg-soft rounded-xl p-5">
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Без ночёвки</dt>
           <dd class="text-2xl font-semibold text-indigo">24 000 ₽</dd>
         </div>
-        <div class="relative">
-          <dt class="text-sm font-semibold uppercase tracking-wider text-cta mb-2">За 60 дней до начала</dt>
-          <dd class="text-2xl font-semibold text-indigo">19 000 ₽ <span class="text-sm font-normal text-cta">−5 000 ₽</span></dd>
+      </div>
+
+      <h4 class="text-lg font-semibold text-indigo mb-4">Скидки за раннее бронирование</h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
+        <div class="bg-cta/10 rounded-xl p-5 border-2 border-cta">
+          <dt class="text-sm font-semibold uppercase tracking-wider text-cta mb-2">За 60 дней до начала — лучшая цена</dt>
+          <dd class="text-2xl font-semibold text-indigo">24 000 ₽</dd>
         </div>
-        <div>
+        <div class="bg-bg-soft rounded-xl p-5">
           <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">За 30 дней до начала</dt>
-          <dd class="text-2xl font-semibold text-indigo">21 000 ₽ <span class="text-sm font-normal text-text-muted">−3 000 ₽</span></dd>
+          <dd class="text-2xl font-semibold text-indigo">26 000 ₽</dd>
         </div>
-        <div>
-          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Ночёвка чт-пт</dt>
-          <dd class="text-2xl font-semibold text-indigo">+5 000 ₽</dd>
-        </div>
-      </dl>
-      <p class="text-sm text-text-muted">
-        Цена указана за смену (5 дней). Все занятия, питание и материалы включены.
-      </p>
+      </div>
+
+      <h4 class="text-lg font-semibold text-indigo mb-3">Дополнительные скидки</h4>
+      <ul class="space-y-2 list-none p-0 m-0 mb-5">
+        {discounts.map((d) => (
+          <li class="flex items-start gap-2 text-base text-text">
+            <Icon name="lucide:tag" class="w-5 h-5 text-cta shrink-0 mt-0.5" aria-hidden="true" />
+            <span>{d}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div class="pt-5 border-t border-border space-y-2">
+        <p class="text-base text-text">
+          <span class="font-semibold text-indigo">Пробный день:</span> 6 400 ₽. Если ребёнок остаётся на смену — пробный день пересчитывается по стоимости смены.
+        </p>
+        <p class="text-sm text-text-muted italic">
+          Скидки не суммируются. Вы выбираете самый выгодный вариант.
+        </p>
+      </div>
     </div>
 
-    <!-- CTA -->
-    <div class="text-center">
+    <!-- FAQ -->
+    <div class="mb-10 md:mb-12">
+      <ExpandableBlock summary="Частые вопросы по лету" defaultOpen={false}>
+        <ul class="space-y-5 list-none p-0 m-0">
+          {faq.map((item) => (
+            <li>
+              <p class="font-semibold text-indigo mb-1.5">{item.q}</p>
+              <p class="text-base text-text-muted leading-relaxed">{item.a}</p>
+            </li>
+          ))}
+        </ul>
+      </ExpandableBlock>
+    </div>
+
+    <!-- CTA с тремя каналами -->
+    <div class="flex flex-col items-center gap-4 text-center">
       <Button href={site.phone.href} variant="primary" size="lg">
         Забронировать смену
       </Button>
+      <p class="text-base text-text-muted">
+        или позвоните:{' '}
+        <a href={site.phone.href} class="font-semibold text-indigo hover:text-cta transition-colors whitespace-nowrap">
+          {site.phone.display}
+        </a>
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-base text-text-muted">
+        <span>или напишите:</span>
+        <a
+          href={site.social.telegram.contact}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="Написать в Telegram"
+        >
+          <span class="w-6 h-6 inline-block" set:html={telegramSvg} />
+        </a>
+        <a
+          href={site.social.max.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="Написать в Макс"
+        >
+          <span class="w-6 h-6 inline-block" set:html={maxSvg} />
+        </a>
+        <a
+          href={site.social.vk.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-indigo hover:opacity-70 transition-opacity"
+          aria-label="ВКонтакте"
+        >
+          <span class="w-6 h-6 inline-block" set:html={vkSvg} />
+        </a>
+      </div>
     </div>
   </div>
 </section>
