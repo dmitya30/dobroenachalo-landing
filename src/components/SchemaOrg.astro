@@ -36,7 +36,7 @@ const organization = {
   '@type': ['EducationalOrganization', 'LocalBusiness'],
   '@id': orgId,
   name: site.name,
-  alternateName: ['Альтик Садик в Нахабино', 'Альтскул Нахабино'],
+  alternateName: ['Частная школа-сад Нахабино', 'Семейная школа Истра'],
   description: site.description,
   url: Astro.site?.toString(),
   logo: logoURL,
@@ -82,15 +82,6 @@ const organization = {
     opens: slot.opens,
     closes: slot.closes,
   })),
-  hasCredential: {
-    '@type': 'EducationalOccupationalCredential',
-    credentialCategory: 'license',
-    recognizedBy: {
-      '@type': 'GovernmentOrganization',
-      name: site.license.issuedBy,
-    },
-    dateCreated: site.license.issueDate,
-  },
   priceRange: '38000-55000 RUB/month',
   aggregateRating: {
     '@type': 'AggregateRating',
