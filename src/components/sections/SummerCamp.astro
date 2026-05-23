@@ -13,6 +13,7 @@ import imgMain from '../../assets/summer-camp/summer-camp-01.webp';
 import imgExtra1 from '../../assets/summer-camp/summer-camp-02.webp';
 import imgExtra2 from '../../assets/summer-camp/summer-camp-03.webp';
 import imgExtra3 from '../../assets/summer-camp/summer-camp-04.webp';
+import logoSummer from '../../assets/logo/logo-summer.svg?url';
 
 // Получаем смены и сортируем
 const allSessions = await getCollection('campSessions');
@@ -175,6 +176,14 @@ function pluralizeSessions(n: number): string {
 
 <section id="summer" class="bg-bg-soft py-20 lg:py-28">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-center mb-6 md:mb-8">
+      <img
+        src={logoSummer}
+        alt="Доброе лето — логотип летней программы"
+        class="h-20 md:h-24 lg:h-28 w-auto"
+        loading="lazy"
+      />
+    </div>
     <SectionHeading
       title="Доброе лето"
       lead="Время отдыхать — время открывать новое"
