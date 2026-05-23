@@ -8,9 +8,10 @@ import { site } from '../../data/site';
 import telegramSvg from '../../icons/telegram.svg?raw';
 import maxSvg from '../../icons/max.svg?raw';
 import vkSvg from '../../icons/vk.svg?raw';
-import imgMain from '../../assets/kindergarten/kindergarten-02-08-05-ds-dn-1.jpg';
-import imgSecondary1 from '../../assets/kindergarten/kindergarten-01-08-05-xxxl-2026-05-15t144403-857.jpg';
-import imgSecondary2 from '../../assets/kindergarten/kindergarten-03-09-02-xxxl-84.jpg';
+import imgMain from '../../assets/kindergarten/kindergarten-01.webp';
+import imgSecondary1 from '../../assets/kindergarten/kindergarten-02.webp';
+import imgSecondary2 from '../../assets/kindergarten/kindergarten-03.webp';
+import imgSecondary3 from '../../assets/kindergarten/kindergarten-04.webp';
 
 interface Chip {
   icon: string;
@@ -129,7 +130,7 @@ const faq: FaqItem[] = [
       <div class="order-1 lg:order-2">
         <Image
           src={imgMain}
-          alt="Дети на занятии в детском саду «Доброе Начало»"
+          alt="Счастливый ребёнок смеётся во время прогулки в частном детском саду"
           widths={[400, 600, 800, 1200]}
           sizes="(min-width: 1024px) 50vw, 100vw"
           class="w-full h-full rounded-2xl shadow-[var(--shadow-card)] object-cover min-h-[300px] lg:min-h-[500px]"
@@ -201,20 +202,28 @@ const faq: FaqItem[] = [
           <p class="text-sm text-text-muted italic">
             Подробное расписание для младшей, средней и старшей групп предоставляется при поступлении.
           </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             <Image
               src={imgSecondary1}
-              alt="Прогулка детей детского сада"
+              alt="Двое воспитанников частного детского сада обнимаются во время прогулки"
               widths={[400, 600, 800]}
-              sizes="(min-width: 640px) 50vw, 100vw"
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
               loading="lazy"
             />
             <Image
               src={imgSecondary2}
-              alt="Игровая зона детского сада"
+              alt="Двое мальчиков играют в футбольных воротах на территории частного детского сада"
               widths={[400, 600, 800]}
-              sizes="(min-width: 640px) 50vw, 100vw"
++              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
++              class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
++              loading="lazy"
++            />
++            <Image
++              src={imgSecondary3}
++              alt="Дети в народных костюмах празднуют Масленицу на территории частного детского сада"
++              widths={[400, 600, 800]}
++              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
               class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
               loading="lazy"
             />
