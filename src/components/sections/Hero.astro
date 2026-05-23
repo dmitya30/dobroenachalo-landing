@@ -2,7 +2,6 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import Button from '../ui/Button.astro';
-import RatingBadge from '../ui/RatingBadge.astro';
 import SocialIcons from '../ui/SocialIcons.astro';
 import { site } from '../../data/site';
 import heroImage from '../../assets/hero/hero-01.webp';
@@ -60,12 +59,19 @@ const chips = [
             <span>{chip.label}</span>
           </li>
         ))}
+        <li>
+          <a
+            href="#reviews"
+            class="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-full px-3 py-1.5 text-sm hover:bg-white/25 transition-colors"
+            aria-label="Перейти к отзывам: Яндекс.Карты 4,7 и 2ГИС 5,0"
+          >
+            <Icon name="lucide:star" class="w-4 h-4 shrink-0 text-[#FFCC00] fill-[#FFCC00]" aria-hidden="true" />
+            <span>Отзывы: Яндекс · 4,7 / 2ГИС · 5,0</span>
+          </a>
+        </li>
       </ul>
 
-      {/* Бейдж рейтинга — отдельным рядом под чипами */}
-      <div class="mb-8">
-        <RatingBadge size="sm" variant="on-dark" href="#reviews" />
-      </div>
+      <div class="mb-8"></div>
 
       {/* CTA-блок */}
       <div class="flex flex-col gap-4">
