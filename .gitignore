@@ -34,3 +34,6 @@ raw-assets/
 # misc
 *.log
 .DS_Store
+
+# временный бэкап ассетов перед миграцией на webp
+/src/assets.bak/
