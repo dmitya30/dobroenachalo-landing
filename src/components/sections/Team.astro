@@ -4,25 +4,20 @@ import { getCollection } from 'astro:content';
 import SectionHeading from '../ui/SectionHeading.astro';
 import ExpandableBlock from '../ui/ExpandableBlock.astro';
 
-import photo01 from '../../assets/team/team-01-belyakova-irina.jpg';
-import photo02 from '../../assets/team/team-02-galan-marina.jpg';
-import photo03 from '../../assets/team/team-03-zakharova-natalya.jpg';
-import photo04 from '../../assets/team/team-04-gogoleva-natalya.jpg';
-import photo05 from '../../assets/team/team-05-sokolskaya-olga.jpg';
-import photo06 from '../../assets/team/team-06-popova-yuliya.jpg';
-import photo07 from '../../assets/team/team-07-afonicheva-valeriya.jpg';
-import photo08 from '../../assets/team/team-08-efremova-tatyana.jpg';
-import photo09 from '../../assets/team/team-09-popova-svetlana.jpg';
-import photo10 from '../../assets/team/team-10-belyakova-marina.jpg';
-import photo11 from '../../assets/team/team-11-finyashina-nataliya.jpg';
-import photo12 from '../../assets/team/team-12.jpg';
-import photo13 from '../../assets/team/team-13.jpg';
+// Glob по обоим форматам — маппинг строго по имени файла из JSON (entry.data.photo).
+// Записи без photo рендерятся плейсхолдером с инициалами.
+const photoModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/team/*.{jpg,webp}',
+  { eager: true }
+);
+const photoMap: Record<string, ImageMetadata> = {};
+for (const path in photoModules) {
+  const filename = path.split('/').pop()!;
+  photoMap[filename] = photoModules[path].default;
+}
 
-const photoMap: Record<number, ImageMetadata> = {
-  1: photo01, 2: photo02, 3: photo03, 4: photo04, 5: photo05,
-  6: photo06, 7: photo07, 8: photo08, 9: photo09, 10: photo10,
-  11: photo11, 12: photo12, 13: photo13,
-};
+// Групповое фото команды
+const groupPhoto = photoMap['team-all.webp'] ?? null;
 
 const all = (await getCollection('team')).sort((a, b) => a.data.order - b.data.order);
 const featured = all.filter((m) => m.data.featured);
@@ -50,7 +45,7 @@ function getInitials(name: string): string {
     <!-- 5 ключевых карточек с цитатами: фото слева, текст справа, сетка 3×2 на десктопе (6-я ячейка пустая) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
       {featured.map((member) => {
-        const photo = photoMap[member.data.order];
+        const photo = member.data.photo ? photoMap[member.data.photo] : null;
         return (
           <article class="bg-bg rounded-2xl overflow-hidden shadow-sm flex flex-col sm:flex-row lg:flex-col xl:flex-row">
             <div class="sm:w-2/5 lg:w-full xl:w-2/5 shrink-0 bg-bg-soft aspect-[4/5] sm:aspect-auto lg:aspect-[4/5] xl:aspect-auto">
@@ -85,9 +80,24 @@ function getInitials(name: string): string {
 
     <!-- Остальные в expand -->
     <ExpandableBlock summary={`Показать всю команду (${rest.length} человек)`}>
+      {groupPhoto && (
+        <figure class="mb-8">
+          <Image
+            src={groupPhoto}
+            alt="Команда школы «Доброе Начало» — все педагоги и сотрудники"
+            widths={[600, 900, 1200, 1600]}
+            sizes="(max-width: 1024px) 100vw, 900px"
+            class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover"
+            loading="lazy"
+          />
+          <figcaption class="text-center text-sm text-text-muted mt-3 italic">
+            Команда «Доброго Начала»
+          </figcaption>
+        </figure>
+      )}
       <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 list-none p-0 pt-2">
         {rest.map((member) => {
-          const photo = photoMap[member.data.order];
+          const photo = member.data.photo ? photoMap[member.data.photo] : null;
           return (
             <li class="flex flex-col items-center text-center gap-3">
               {photo ? (
