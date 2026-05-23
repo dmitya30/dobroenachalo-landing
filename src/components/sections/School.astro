@@ -8,9 +8,10 @@ import { site } from '../../data/site';
 import telegramSvg from '../../icons/telegram.svg?raw';
 import maxSvg from '../../icons/max.svg?raw';
 import vkSvg from '../../icons/vk.svg?raw';
-import imgMain from '../../assets/school/school-01-08-03-photo-2026-02-25-18-58-56.jpg';
-import imgSecondary1 from '../../assets/school/school-02-08-04-473.jpg';
-import imgSecondary2 from '../../assets/school/school-03-08-05-490.jpg';
+import imgMain from '../../assets/school/school-01.webp';
+import imgSecondary1 from '../../assets/school/school-02.webp';
+import imgSecondary2 from '../../assets/school/school-03.webp';
+import imgSecondary3 from '../../assets/school/school-04.webp';
 
 interface Chip {
   icon: string;
@@ -129,7 +130,7 @@ const documents = [
       <div class="order-1 lg:order-2">
         <Image
           src={imgMain}
-          alt="Класс начальной школы «Доброе Начало»"
+          alt="Учитель помогает ученице начальной школы на уроке в частной школе"
           widths={[400, 600, 800, 1200]}
           sizes="(min-width: 1024px) 50vw, 100vw"
           class="w-full h-full rounded-2xl shadow-[var(--shadow-card)] object-cover min-h-[300px] lg:min-h-[500px]"
@@ -257,20 +258,28 @@ const documents = [
       </ExpandableBlock>
 
       <ExpandableBlock summary="Атмосфера школы — фото" defaultOpen={false}>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           <Image
             src={imgSecondary1}
-            alt="Урок в начальной школе"
+            alt="Ученицы начальной школы за партами во время развивающего обучения"
             widths={[400, 600, 800]}
-            sizes="(min-width: 640px) 50vw, 100vw"
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
             loading="lazy"
           />
           <Image
             src={imgSecondary2}
-            alt="Школьная жизнь и мероприятия"
+            alt="Ученица начальной школы за партой внимательно слушает учителя на уроке"
             widths={[400, 600, 800]}
-            sizes="(min-width: 640px) 50vw, 100vw"
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+            loading="lazy"
+          />
+          <Image
+            src={imgSecondary3}
+            alt="Ученица начальной школы за партой во время развивающего обучения"
+            widths={[400, 600, 800]}
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
             loading="lazy"
           />
