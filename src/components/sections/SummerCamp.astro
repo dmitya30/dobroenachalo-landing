@@ -176,14 +176,6 @@ function pluralizeSessions(n: number): string {
 
 <section id="summer" class="bg-bg-soft py-20 lg:py-28">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-center mb-6 md:mb-8">
-      <img
-        src={logoSummer}
-        alt="Доброе лето — логотип летней программы"
-        class="h-20 md:h-24 lg:h-28 w-auto"
-        loading="lazy"
-      />
-    </div>
     <SectionHeading
       title="Доброе лето"
       lead="Время отдыхать — время открывать новое"
@@ -197,13 +189,19 @@ function pluralizeSessions(n: number): string {
           Летние смены для детей от 6 до 11 лет. Главная ценность — развитие и отдых без отрыва от дома. Каждая смена — это законченное приключение длиной в 5 дней. Мы расположились в живописном месте по соседству с озером и лесом. Сбалансированное питание, оборудованные спортивные площадки, эко-тропа, водные процедуры в жаркую погоду, уютные комнаты отдыха и специализированные студии.
         </p>
       </div>
-      <div class="order-1 lg:order-2">
+      <div class="order-1 lg:order-2 relative">
         <Image
           src={imgMain}
           alt="Дети на прогулке в лесной зоне во время летней смены"
           widths={[400, 600, 800, 1200]}
           sizes="(min-width: 1024px) 50vw, 100vw"
           class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+          loading="lazy"
+        />
+        <img
+          src={logoSummer}
+          alt="Доброе лето — логотип летней программы"
+          class="absolute top-3 left-3 md:top-5 md:left-5 w-20 md:w-28 lg:w-32 h-auto drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)] pointer-events-none select-none"
           loading="lazy"
         />
       </div>
