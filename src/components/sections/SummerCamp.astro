@@ -9,9 +9,10 @@ import { site } from '../../data/site';
 import telegramSvg from '../../icons/telegram.svg?raw';
 import maxSvg from '../../icons/max.svg?raw';
 import vkSvg from '../../icons/vk.svg?raw';
-import imgMain from '../../assets/summer-camp/summer-camp-02-09-01-altik-kemp-deti.jpg';
-import imgExtra1 from '../../assets/summer-camp/summer-camp-01-08-06-8658.jpg';
-import imgExtra2 from '../../assets/summer-camp/summer-camp-03-09-02-216.jpg';
+import imgMain from '../../assets/summer-camp/summer-camp-01.webp';
+import imgExtra1 from '../../assets/summer-camp/summer-camp-02.webp';
+import imgExtra2 from '../../assets/summer-camp/summer-camp-03.webp';
+import imgExtra3 from '../../assets/summer-camp/summer-camp-04.webp';
 
 // Получаем смены и сортируем
 const allSessions = await getCollection('campSessions');
@@ -190,7 +191,7 @@ function pluralizeSessions(n: number): string {
       <div class="order-1 lg:order-2">
         <Image
           src={imgMain}
-          alt="Дети на летней смене «Доброе лето»"
+          alt="Дети на прогулке в лесной зоне во время летней смены"
           widths={[400, 600, 800, 1200]}
           sizes="(min-width: 1024px) 50vw, 100vw"
           class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
@@ -306,20 +307,28 @@ function pluralizeSessions(n: number): string {
     </div>
 
     <!-- Доп. фото -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-12 md:mb-16">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-12 md:mb-16">
       <Image
         src={imgExtra1}
-        alt="Активности на свежем воздухе"
+        alt="Дети лежат кругом на деревянном настиле во время летней смены"
         widths={[400, 600, 800]}
-        sizes="(min-width: 640px) 50vw, 100vw"
+        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
         class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
         loading="lazy"
       />
       <Image
         src={imgExtra2}
-        alt="Творческие занятия на смене"
+        alt="Дети и педагоги в костюмах на летней программе частной школы"
         widths={[400, 600, 800]}
-        sizes="(min-width: 640px) 50vw, 100vw"
+        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+        class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
+        loading="lazy"
+      />
+      <Image
+        src={imgExtra3}
+        alt="Дети и педагоги летней программы частной школы на спортивном празднике"
+        widths={[400, 600, 800]}
+        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
         class="w-full h-auto rounded-2xl shadow-[var(--shadow-card)] object-cover aspect-[4/3]"
         loading="lazy"
       />
