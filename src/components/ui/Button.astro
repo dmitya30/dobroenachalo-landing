@@ -8,6 +8,8 @@ interface Props {
   external?: boolean;
   /** aria-label, если внутри только иконка */
   label?: string;
+  /** Имя цели Yandex Metrika (data-goal). Срабатывает по клику. */
+  goal?: string;
   class?: string;
 }
 
@@ -18,6 +20,7 @@ const {
   type = 'button',
   external = false,
   label,
+  goal,
   class: className = '',
 } = Astro.props;
 
@@ -46,12 +49,13 @@ const isExternal = external || (href?.startsWith('http') ?? false);
     href={href}
     class={classes}
     aria-label={label}
+    data-goal={goal}
     {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
   >
     <slot />
   </a>
 ) : (
-  <button type={type} class={classes} aria-label={label}>
+  <button type={type} class={classes} aria-label={label} data-goal={goal}>
     <slot />
   </button>
 )}

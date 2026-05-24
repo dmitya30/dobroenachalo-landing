@@ -183,7 +183,7 @@ function pluralizeSessions(n: number): string {
     />
 
     <!-- Лид + главное фото -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12 md:mb-16">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch mb-12 md:mb-16">
       <div class="order-2 lg:order-1">
         <p class="text-lg leading-relaxed text-ink">
           Летние смены для детей от 6 до 11 лет. Главная ценность — развитие и отдых без отрыва от дома. Каждая смена — это законченное приключение длиной в 5 дней. Мы расположились в живописном месте по соседству с озером и лесом. Сбалансированное питание, оборудованные спортивные площадки, эко-тропа, водные процедуры в жаркую погоду, уютные комнаты отдыха и специализированные студии.
@@ -405,7 +405,7 @@ function pluralizeSessions(n: number): string {
 
     <!-- CTA с тремя каналами -->
     <div class="flex flex-col items-center gap-4 text-center">
-      <Button href={site.phone.href} variant="primary" size="lg">
+      <Button href={site.phone.href} variant="primary" size="lg" goal="cta_summer">
         Забронировать смену
       </Button>
       <p class="text-base text-text-muted">

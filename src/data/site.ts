@@ -74,7 +74,7 @@ export const site = {
 
   // --- Аналитика (заполнится в диалоге №2) ---
   analytics: {
-    yandexMetricaId: null as number | null,
+    yandexMetricaId: 109277739 as number | null,
   },
 
   // --- Возрастной диапазон (для Hero-плашек и schema.org) ---

@@ -1,0 +1,40 @@
+---
+/**
+ * Yandex.Metrika counter.
+ * Подключается из BaseLayout перед закрывающим </head>.
+ * ID берётся из site.analytics.yandexMetricaId — если null, ничего не рендерится.
+ *
+ * Цели (15 шт.) отправляются из src/scripts/metrika-goals.ts через делегирование событий
+ * по атрибутам data-goal и селекторам ссылок.
+ */
+import { site } from '../data/site';
+
+const id = site.analytics.yandexMetricaId;
+---
+
+{id && (
+  <>
+    <script is:inline define:vars={{ id }}>
+      (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+      })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=' + id, 'ym');
+
+      window.ym(id, 'init', {
+        ssr: true,
+        webvisor: true,
+        clickmap: true,
+        ecommerce: 'dataLayer',
+        accurateTrackBounce: true,
+        trackLinks: true,
+      });
+    </script>
+    <noscript>
+      <div>
+        <img src={`https://mc.yandex.ru/watch/${id}`} style="position:absolute; left:-9999px;" alt="" />
+      </div>
+    </noscript>
+  </>
+)}

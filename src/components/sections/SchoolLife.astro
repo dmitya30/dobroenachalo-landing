@@ -182,6 +182,9 @@ const lightboxItems = items
       btn.addEventListener('click', () => {
         const idx = Number(btn.dataset.idx);
         openAt(idx);
+        if (typeof window.ym === 'function') {
+          window.ym(109277739, 'reachGoal', 'lightbox_open');
+        }
       });
     });
 
