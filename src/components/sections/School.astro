@@ -68,14 +68,6 @@ const teacherQualities = [
   { title: 'Безопасность', text: 'в их классе ошибка воспринимается как точка роста.' },
 ];
 
-const textbooks = [
-  { subject: 'Математика', authors: 'Виленкин, Петерсон', text: 'культивируют логику и точность.' },
-  { subject: 'Русский язык', authors: 'Белавина, Есюкова', text: 'учат грамотности через понимание.' },
-  { subject: 'Окружающий мир', authors: 'Чудинова', text: 'развивает исследовательский интерес.' },
-  { subject: 'Литература', authors: 'Матвеева', text: 'воспитывает вкус и эмпатию.' },
-  { subject: 'Английский язык', authors: 'Kids Box и Rainbow English', text: 'современный коммуникативный подход.' },
-];
-
 const subjects = [
   { name: 'Математика', text: 'логика и порядок в мыслях' },
   { name: 'Русский язык', text: 'культура грамотного общения' },
@@ -86,6 +78,7 @@ const subjects = [
   { name: 'Финансовая грамотность', text: 'ответственность и независимость' },
   { name: 'Музыка', text: 'гармония чувств и ритма' },
   { name: 'ИЗО', text: 'пространство для творчества' },
+  { name: 'Технология', text: 'мастерство рук и инженерная смекалка' },
   { name: 'ТРИЗ', text: 'искусство находить решения' },
   { name: 'Эмолект', text: 'понимание себя и других' },
   { name: 'Целеполагание', text: 'умение достигать мечты' },
@@ -100,6 +93,60 @@ const documents = [
   'Медицинский полис',
   'СНИЛС',
 ];
+
+// Расписание (примерное, из CSV)
+interface Lesson { num: string; time: string; mon: string; tue: string; wed: string; thu: string; fri: string; }
+const lessons: Lesson[] = [
+  { num: '1', time: '9:00–9:40',   mon: 'Математика',     tue: 'Русский язык',    wed: 'Математика',     thu: 'Русский язык',    fri: 'English' },
+  { num: '2', time: '9:50–10:30',  mon: 'Русский язык',   tue: 'Математика',      wed: 'Русский язык',   thu: 'Математика',      fri: 'Окружающий мир' },
+  { num: '3', time: '10:40–11:20', mon: '—',              tue: '—',                wed: '—',              thu: '—',                fri: '—' },
+  { num: '4', time: '11:30–12:10', mon: 'Окружающий мир', tue: 'Чтение',          wed: 'Окружающий мир', thu: 'Литературное чтение', fri: 'English club' },
+  { num: '5', time: '12:20–13:00', mon: 'English',        tue: 'ИЗО',             wed: 'English',        thu: 'Технология',       fri: 'ИЗО' },
+  { num: '6', time: '13:10–13:50', mon: 'Смысловое чтение', tue: 'Каллиграфия',   wed: 'Смысловое чтение', thu: 'Каллиграфия',    fri: 'Технология' },
+  { num: '7', time: '14:00–14:40', mon: 'Кружки',         tue: 'Кружки',          wed: 'Кружки',         thu: 'Кружки',           fri: 'Кружки' },
+];
+// Точное расписание времён уточняйте — здесь приведена примерная сетка от заказчицы.
+
+// Программа (новые 4 учебника вместо старых 5)
+interface Textbook { subject: string; authors: string; publisher?: string; description: string; }
+const textbooks: Textbook[] = [
+  {
+    subject: 'Математика',
+    authors: 'Н.Я. Виленкин, Л.Г. Петерсон',
+    description: 'Деятельностный подход: ребёнок открывает новое сам через задачи и эксперименты, а не получает готовые правила. Развивает мышление, логику и привычку доводить решение до конца.',
+  },
+  {
+    subject: 'Русский язык',
+    authors: 'Л.В. Белавина, Л.А. Ясюкова',
+    publisher: 'SMART CLASS',
+    description: 'Программа учит детей понимать язык как систему: видеть смысл слова, его связь с другими и грамотно строить речь. Формирует осознанную грамотность, а не зубрёжку правил.',
+  },
+  {
+    subject: 'Окружающий мир',
+    authors: 'Л.В. Белавина, Л.А. Ясюкова',
+    publisher: 'SMART CLASS',
+    description: 'Целостная картина мира: природа, человек, общество рассматриваются во взаимосвязи. Ребёнок учится наблюдать, задавать вопросы и искать закономерности.',
+  },
+  {
+    subject: 'Введение в чтение',
+    authors: 'SMART CLASS',
+    description: 'Курс для первоклассников: от звука к слову и осмысленному чтению. Формирует устойчивый навык понимания текста, а не механическое озвучивание букв.',
+  },
+];
+
+// Принципы питания (копия из Kindergarten)
+const nutritionPrinciples: string[] = [
+  'Цельные, необработанные продукты — основа рациона.',
+  'Утренняя каша на органическом кокосовом молоке, 5 разных круп в течение недели.',
+  'Цельнозерновая или безглютеновая мука для выпечки.',
+  'Только нерафинированный тростниковый сахар.',
+  'Высокоолеиновое нерафинированное масло для приготовления.',
+  'Розовая гималайская соль вместо поваренной.',
+  'Мясо — индейка и курица; рыба минимум раз в неделю.',
+  'Свежие сезонные овощи и фрукты в каждом приёме пищи.',
+  'Натуральные напитки: какао, кисель, компот, морс, отвар шиповника с мёдом.',
+];
+
 ---
 
 <section id="school" class="bg-indigo-soft py-20 lg:py-28">
@@ -184,15 +231,20 @@ const documents = [
       </div>
 
       <h4 class="text-lg font-semibold text-indigo mb-3">Наши учебники — знак качества:</h4>
-      <ul class="list-none p-0 m-0 space-y-2.5 mb-6">
-        {textbooks.map((t) => (
-          <li class="text-base leading-relaxed">
-            <span class="font-semibold text-indigo">{t.subject}:</span>{' '}
-            <span class="text-indigo">{t.authors}</span>{' '}
-            <span class="text-text-muted">— {t.text}</span>
-          </li>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-4">
+        {textbooks.map(t => (
+          <div class="bg-bg-warm rounded-2xl p-5 md:p-6">
+            <h5 class="font-display text-lg md:text-xl text-ink mb-1">{t.subject}</h5>
+            <p class="text-sm text-ink-mute mb-3">
+              {t.authors}{t.publisher && <> · <span class="font-medium text-cta">{t.publisher}</span></>}
+            </p>
+            <p class="text-base text-ink leading-relaxed">{t.description}</p>
+          </div>
         ))}
-      </ul>
+      </div>
+      <p class="text-sm text-ink-mute italic mb-6">
+        Литературное чтение, ИЗО, технология, английский язык — по программам других ведущих издательств. Каллиграфия — авторская методика М.В. Мосягиной.
+      </p>
 
       <p class="text-base text-text leading-relaxed">
         Основа — логика классических учебников, адаптированная под восприятие современных школьников. Ребёнок получает прочные знания, потому что ему понятно, зачем и как это устроено.
@@ -201,7 +253,7 @@ const documents = [
 
     <!-- ExpandableBlocks -->
     <div class="space-y-3 mb-10 md:mb-12">
-      <ExpandableBlock summary="Основные предметы (12)" defaultOpen={false}>
+      <ExpandableBlock summary="Основные предметы" defaultOpen={false}>
         <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 list-none p-0 m-0">
           {subjects.map((s) => (
             <li class="bg-bg rounded-xl px-4 py-3">
@@ -223,8 +275,53 @@ const documents = [
       </ExpandableBlock>
 
       <ExpandableBlock summary="Расписание учебного дня" defaultOpen={false}>
-        <p class="text-base text-text-muted italic leading-relaxed">
-          Подробное расписание учебного дня по урокам предоставляется при поступлении.
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm md:text-base border-collapse">
+            <thead>
+              <tr class="bg-bg-warm">
+                <th class="text-left p-2 md:p-3 font-display">№</th>
+                <th class="text-left p-2 md:p-3 font-display">Время</th>
+                <th class="text-left p-2 md:p-3 font-display">Пн</th>
+                <th class="text-left p-2 md:p-3 font-display">Вт</th>
+                <th class="text-left p-2 md:p-3 font-display">Ср</th>
+                <th class="text-left p-2 md:p-3 font-display">Чт</th>
+                <th class="text-left p-2 md:p-3 font-display">Пт</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lessons.map(l => (
+                <tr class="border-b border-bg-warm last:border-0">
+                  <td class="p-2 md:p-3 font-medium text-ink-mute">{l.num}</td>
+                  <td class="p-2 md:p-3 whitespace-nowrap text-ink-mute">{l.time}</td>
+                  <td class="p-2 md:p-3">{l.mon}</td>
+                  <td class="p-2 md:p-3">{l.tue}</td>
+                  <td class="p-2 md:p-3">{l.wed}</td>
+                  <td class="p-2 md:p-3">{l.thu}</td>
+                  <td class="p-2 md:p-3">{l.fri}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-sm text-ink-mute italic mt-4">
+          Расписание примерное и может меняться в зависимости от класса, нагрузки и индивидуальных планов. Между уроками — перемены, прогулки и приёмы пищи. Точное расписание предоставляется при поступлении.
+        </p>
+      </ExpandableBlock>
+
+      <ExpandableBlock summary="Принципы питания" defaultOpen={false}>
+        <p class="text-base text-ink mb-4">
+          Меню разработано детским нутрициологом с учётом возрастных потребностей школьников.
+        </p>
+        <ul class="space-y-2">
+          {nutritionPrinciples.map(p => (
+            <li class="flex gap-3">
+              <Icon name="lucide:check" class="w-5 h-5 shrink-0 text-cta mt-0.5" aria-hidden="true" />
+              <span class="text-base text-ink">{p}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="text-sm text-ink-mute italic mt-4">
+          Подробное меню — по запросу или при поступлении.
         </p>
       </ExpandableBlock>
 
