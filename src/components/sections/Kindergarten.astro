@@ -60,17 +60,99 @@ const advantages: Advantage[] = [
   },
 ];
 
-const schedule = [
-  'Утренний приём',
-  'Завтрак',
-  'Развивающие занятия',
-  'Прогулка',
-  'Обед',
-  'Тихий час',
-  'Полдник',
-  'Кружки',
-  'Ужин',
-  'Встреча с родителями',
+interface DayStep {
+  time: string;
+  activity: string;
+}
+
+const daySchedule: DayStep[] = [
+  { time: '8:00–8:40', activity: 'Приём детей, самостоятельная деятельность' },
+  { time: '8:40–9:00', activity: 'Утренняя гимнастика' },
+  { time: '9:00–9:20', activity: 'Завтрак' },
+  { time: '9:20–9:30', activity: 'Гигиенические процедуры, рефлексивный круг' },
+  { time: '9:30–11:00', activity: 'Занятия с педагогом (2–3 занятия по 15–30 минут, в зависимости от возраста)' },
+  { time: '11:00–11:15', activity: 'Второй завтрак' },
+  { time: '11:15–12:10', activity: 'Прогулка' },
+  { time: '12:10–12:30', activity: 'Обед' },
+  { time: '12:30–15:30', activity: 'Сон' },
+  { time: '15:30–15:45', activity: 'Полдник' },
+  { time: '15:45–16:30', activity: 'Занятия, творчество' },
+  { time: '16:30–17:20', activity: 'Свободные игры' },
+  { time: '17:20–17:40', activity: 'Ужин' },
+  { time: '17:40–19:00', activity: 'Прогулка, уход домой' },
+];
+
+interface AgeGroup {
+  title: string;
+  age: string;
+  subjects: string[];
+}
+
+const ageGroups: AgeGroup[] = [
+  {
+    title: 'Младшая группа',
+    age: '2–3 года',
+    subjects: [
+      'Ознакомление с окружающим миром',
+      'ФЭМП',
+      'Развитие речи',
+      'Литературное чтение',
+      'Физкультура',
+      'Музыка',
+      'ИЗО',
+      'Лепка',
+      'Кулинариум',
+    ],
+  },
+  {
+    title: 'Средняя группа',
+    age: '3–5 лет',
+    subjects: [
+      'Окружающий мир',
+      'Логика, мышление, счёт',
+      'Развитие речи',
+      'ИЗО',
+      'Лепка',
+      'Аппликация и конструирование',
+      'Экспериментарий',
+      'Кулинариум',
+      'Физкультура',
+      'Музыкальные занятия «Смородина»',
+      'Эмолект',
+      'English Time (Наталья Дмитриевна)',
+    ],
+  },
+  {
+    title: 'Старшая и подготовительная группа',
+    age: '5–7 лет',
+    subjects: [
+      'Математика',
+      'Обучение грамоте',
+      'Подготовка руки к письму',
+      'Развитие речи',
+      'Литературное чтение',
+      'Окружающий мир',
+      'Лепка',
+      'ИЗО',
+      'Кулинариум',
+      'Физкультура',
+      'Музыкальные занятия «Смородина»',
+      'Эмолект',
+      'English Time (Наталья Дмитриевна)',
+    ],
+  },
+];
+
+const nutritionPrinciples = [
+  'Цельные, необработанные продукты — основа рациона.',
+  'Утренняя каша на органическом кокосовом молоке — без коровьего, разные крупы каждый день.',
+  'Цельнозерновая или безглютеновая мука — для всей выпечки и макарон.',
+  'Только тростниковый сахар нерафинированный — без обычного белого.',
+  'Высокоолеиновое нерафинированное масло — для готовки и заправок.',
+  'Розовая гималайская соль — вместо обычной поваренной.',
+  'Мясо — индейка и курица; рыба минимум раз в неделю.',
+  'Свежие овощи и фрукты на каждый приём пищи, в сезон — особенно много.',
+  'Натуральные напитки: какао, кисель, компот, морс, отвар шиповника с мёдом — никаких пакетных соков.',
 ];
 
 interface FaqItem {
@@ -185,23 +267,19 @@ const faq: FaqItem[] = [
 
     <!-- Expand: Расписание дня -->
     <div class="space-y-3 mb-10 md:mb-12">
-      <ExpandableBlock summary="Распорядок дня и атмосфера сада" defaultOpen={false}>
+      <ExpandableBlock summary="Как проходит день" defaultOpen={false}>
         <div class="space-y-6">
-          <ol class="flex flex-wrap gap-2 list-none p-0 m-0">
-            {schedule.map((step, i) => (
-              <li class="flex items-center gap-2">
-                <span class="inline-flex items-center px-4 py-2 rounded-full bg-bg-warm text-indigo text-sm font-medium">
-                  {step}
-                </span>
-                {i < schedule.length - 1 && (
-                  <Icon name="lucide:chevron-right" class="w-4 h-4 text-text-muted shrink-0" aria-hidden="true" />
-                )}
-              </li>
-            ))}
-          </ol>
           <p class="text-sm text-text-muted italic">
-            Подробное расписание для младшей, средней и старшей групп предоставляется при поступлении.
+            Усреднённый ритм дня. Точное расписание для каждой возрастной группы предоставляется при поступлении.
           </p>
+          <dl class="divide-y divide-border">
+            {daySchedule.map((step) => (
+              <div class="grid grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr] gap-3 sm:gap-6 py-2.5 items-baseline">
+                <dt class="text-sm font-semibold text-cta whitespace-nowrap">{step.time}</dt>
+                <dd class="text-base text-text leading-snug">{step.activity}</dd>
+              </div>
+            ))}
+          </dl>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             <Image
               src={imgSecondary1}
@@ -231,10 +309,52 @@ const faq: FaqItem[] = [
         </div>
       </ExpandableBlock>
 
-      <ExpandableBlock summary="Меню и принципы питания" defaultOpen={false}>
-        <p class="text-base text-text leading-relaxed">
-          Меню составляется детским нутрициологом с учётом возрастных потребностей. Подробное меню недели предоставляется при поступлении.
-        </p>
+      <ExpandableBlock summary="Программа по возрастным группам" defaultOpen={false}>
+        <div class="space-y-6">
+          <p class="text-base text-text leading-relaxed">
+            Программа выстроена по возрастам. С каждой группой растёт сложность и появляются новые направления.
+          </p>
+          <ul class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 list-none p-0 m-0">
+            {ageGroups.map((group) => (
+              <li class="bg-bg-warm rounded-2xl p-5 md:p-6 shadow-[var(--shadow-card)] flex flex-col gap-3">
+                <div>
+                  <h4 class="text-lg font-semibold text-indigo leading-snug">{group.title}</h4>
+                  <p class="text-sm font-medium text-cta">{group.age}</p>
+                </div>
+                <ul class="list-none p-0 m-0 space-y-1.5">
+                  {group.subjects.map((subj) => (
+                    <li class="flex items-start gap-2 text-sm text-text leading-snug">
+                      <Icon name="lucide:dot" class="w-4 h-4 shrink-0 text-cta mt-0.5" aria-hidden="true" />
+                      <span>{subj}</span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+          <p class="text-sm text-text-muted leading-relaxed">
+            Дополнительные занятия — Хореография, Шахматы, Подготовка к школе — проходят во второй половине дня, оплачиваются отдельно. Подробнее — в секции <a href="#classes" class="text-indigo font-medium hover:text-cta transition-colors underline underline-offset-2">Кружки и секции</a>.
+          </p>
+        </div>
+      </ExpandableBlock>
+
+      <ExpandableBlock summary="Принципы питания" defaultOpen={false}>
+        <div class="space-y-4">
+          <p class="text-base text-text leading-relaxed">
+            Мы тщательно подбираем продукты и готовим из цельных ингредиентов. Меню разработано детским нутрициологом.
+          </p>
+          <ul class="list-none p-0 m-0 space-y-2.5">
+            {nutritionPrinciples.map((item) => (
+              <li class="flex items-start gap-2.5 text-base text-text leading-relaxed">
+                <Icon name="lucide:check" class="w-5 h-5 shrink-0 text-cta mt-0.5" aria-hidden="true" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+          <p class="text-sm text-text-muted italic">
+            Подробное меню — по запросу или при поступлении.
+          </p>
+        </div>
       </ExpandableBlock>
 
       <ExpandableBlock summary="Частые вопросы родителей" defaultOpen={false}>
