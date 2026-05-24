@@ -193,8 +193,9 @@ const faq: FaqItem[] = [
     />
 
     <!-- Лид + 5 чипов (слева) и главное фото (справа) -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch mb-12 md:mb-16">
-      <div class="order-2 lg:order-1 flex flex-col gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-stretch mb-12 md:mb-16">
+      <!-- лид + чипы — занимают 2 колонки из 3 на lg -->
+      <div class="order-2 lg:order-1 lg:col-span-2 flex flex-col gap-6">
         <p class="text-lg leading-relaxed text-ink">
           Вам важно, чтобы ребёнок рос в среде, где его окружают забота и безопасность — и где ему одновременно спокойно, уютно и по-настоящему интересно? Приглашаем вас на тёплую экскурсию — покажем наш уютный мир изнутри: как играют дети, как общаются педагоги.
         </p>
@@ -214,8 +215,8 @@ const faq: FaqItem[] = [
           src={imgMain}
           alt="Счастливый ребёнок смеётся во время прогулки в частном детском саду"
           widths={[400, 600, 800, 1200]}
-          sizes="(min-width: 1024px) 50vw, 100vw"
-          class="w-full h-full rounded-2xl shadow-[var(--shadow-card)] object-cover min-h-[300px] lg:min-h-[500px]"
+          sizes="(min-width: 1024px) 25vw, 100vw"
+          class="w-full h-full rounded-2xl shadow-[var(--shadow-card)] object-cover min-h-[300px] lg:min-h-[400px]"
           loading="lazy"
         />
       </div>
