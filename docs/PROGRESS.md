@@ -191,27 +191,21 @@ Header, Hero, OfferCards, WhyUs, Philosophy, Kindergarten, School, SummerCamp, A
   - Accessibility 93 (было 95): нюанс в новых блоках (таблицы/чипы), не критично, AA соблюдён
   - SEO 66: стейджинг с `noindex`, после релиза → 100
 
-### Финальные метрики Lighthouse (стейджинг, конец Диалога №3)
+#### «Диалог №6 — Релиз на production-домен»:
 
-| | Mobile | Desktop |
-|---|---|---|
-| Performance | **79** | **82** |
-| Accessibility | **95** | **95** |
-| Best Practices | **100** | **100** |
-| SEO | 66¹ | 66¹ |
-| LCP | 2.1 с | 0.9 с |
-| TBT | 830 мс | 360 мс |
-| CLS | 0 | 0 |
-
-¹ Стейджинг с `noindex`. После переключения на dobroenachalo.ru → ожидаем 100.
-
-> Метрики будут перемеряны после завершения рефакторной волны v2.0 (новая палитра/тексты/компоненты не должны существенно повлиять на Performance, но проверим).
+- Кастомный домен dobroenachalo.ru подключён через Jino DNS (apex — 4 A-записи GitHub Pages, www — CNAME через Jino-редирект).
+- Создан public/CNAME с содержимым dobroenachalo.ru.
+- В .github/workflows/deploy.yml добавлены env-переменные на шаге build: SITE_URL=https://dobroenachalo.ru, SITE_BASE=/, PRODUCTION=1.
+- В src/pages/index.astro снят noindex={true} → noindex={false}, описание переведено на site.description.
+- GitHub Pages: Custom domain распознан, DNS check successful, Enforce HTTPS включён.
+- Финальный Lighthouse на продакшене: Performance 73, Accessibility 93, Best Practices 96, SEO 100.
+- Сайт индексируется, Яндекс.Метрика работает, все 15 целей активны.
 
 ---
 
 ### 🔧 В работе
 
-Активных задач нет. Все блоки Диалога №5 закрыты.
+Активных задач нет. Релиз завершён.
 
 ---
 
@@ -233,11 +227,11 @@ Header, Hero, OfferCards, WhyUs, Philosophy, Kindergarten, School, SummerCamp, A
 
 #### Фаза 4 — Релиз ⏭ Следующая сессия (Диалог №6)
 
-- [ ] `public/CNAME` с записью `dobroenachalo.ru`
-- [ ] DNS: A-записи apex на IP GitHub Pages + CNAME `www → dmitya30.github.io`
-- [ ] GH Actions env: `SITE_URL=https://dobroenachalo.ru`, `SITE_BASE=/`, `PRODUCTION=1`
-- [ ] Снять `noindex={true}` в `index.astro`
-- [ ] Финальный Lighthouse на проде (ожидаем SEO 66 → 100)
+- [x] `public/CNAME` с записью `dobroenachalo.ru`
+- [x] DNS: A-записи apex на IP GitHub Pages + CNAME `www → dmitya30.github.io`
+- [x] GH Actions env: `SITE_URL=https://dobroenachalo.ru`, `SITE_BASE=/`, `PRODUCTION=1`
+- [x] Снять `noindex={true}` в `index.astro`
+- [x] Финальный Lighthouse на проде (ожидаем SEO 66 → 100)
 - [ ] Яндекс.Вебмастер + Google Search Console (верификация, sitemap)
 - [ ] Сообщить Санычу о готовности счётчика и 15 целей для настройки в Метрике
 
@@ -246,18 +240,6 @@ Header, Hero, OfferCards, WhyUs, Philosophy, Kindergarten, School, SummerCamp, A
 - Чат-виджет (отказались)
 - Дальнейшая оптимизация Performance (текущие 65 после Метрики — потолок принят)
 - Schema.org Course для AdditionalClasses (опционально, на будущее)
-
----
-
-### 🚧 Открытые блокеры
-
-**Тексты от клиента**
-- Статус лицензии (для FAQ #08 и SchemaOrg `hasCredential`) — оба удалены до подтверждённой формулировки
-- Кружки «Рондо», «Лыжи», «Вокал» — действующие или планы?
-- SMART CLASS = Система развивающего обучения? (обе формулировки оставлены параллельно)
-
-**От оркестратора (для Диалога №6):**
-- Решение по кастомному домену — когда переключаем?
 
 ---
 
@@ -270,6 +252,7 @@ Header, Hero, OfferCards, WhyUs, Philosophy, Kindergarten, School, SummerCamp, A
 - **Mobile Performance ~79** — потолок для стэка (16 секций + Embla + Lightbox + iframe-карта)
 - **Lighthouse Performance 65** — просадка после подключения Metrika с webvisor. AA соблюдён, фокус на конверсию, а не на баллы
 - **Lighthouse Accessibility 93** — нюансы в новых блоках Kindergarten/School (таблицы расписания, чип отзывов). Не критично, AA
+- Performance 73 на проде объясняется загрузкой webvisor Яндекс.Метрики — приемлемо для лендинга.
 
 ---
 
