@@ -37,7 +37,8 @@ jobs:
         env:
           SITE_URL: https://dobroenachalo.ru
           SITE_BASE: /
-          PRODUCTION: '1'        run: pnpm build
+          PRODUCTION: '1'
+        run: pnpm build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
