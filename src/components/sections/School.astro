@@ -69,22 +69,25 @@ const teacherQualities = [
 ];
 
 const subjects = [
-  { name: 'Математика', text: 'логика и порядок в мыслях' },
-  { name: 'Русский язык', text: 'культура грамотного общения' },
+  { name: 'Мышлематика', text: 'логика и порядок в мыслях' },
+  { name: 'Нескучный русский', text: 'культура грамотного общения' },
   { name: 'Литературное чтение', text: 'воспитание души и эмпатии' },
-  { name: 'Окружающий мир', text: 'любопытство к устройству жизни' },
-  { name: 'Физкультура', text: 'энергия здоровья и движения' },
-  { name: 'Школа экспериментов', text: 'наука через удивление и опыт' },
-  { name: 'Финансовая грамотность', text: 'ответственность и независимость' },
-  { name: 'Музыка', text: 'гармония чувств и ритма' },
-  { name: 'ИЗО', text: 'пространство для творчества' },
+  { name: 'Природоведение', text: 'любопытство к устройству жизни' },
+  { name: 'English Time', text: 'открытость миру и свобода диалога' },
+  { name: 'Физкульт!Ура!', text: 'энергия здоровья и движения' },
+  { name: 'Музыкальная гостиная', text: 'гармония чувств и ритма' },
+  { name: 'Творчество', text: 'пространство для творчества' },
   { name: 'Технология', text: 'мастерство рук и инженерная смекалка' },
   { name: 'ТРИЗ', text: 'искусство находить решения' },
   { name: 'Эмолект', text: 'понимание себя и других' },
+  { name: 'Школа экспериментов', text: 'наука через удивление и опыт' },
+  { name: 'Финансовая грамотность', text: 'ответственность и независимость' },
   { name: 'Целеполагание', text: 'умение достигать мечты' },
 ];
 
 const sports = ['Футбол', 'Баскетбол', 'Настольный теннис', 'Акробатика', 'Вышибалы', 'Лыжи'];
+
+const additionals = ['Олимпиадная математика (тренажер для гибкости ума и нестандартного мышления)', 'Школа экспериментов', 'ТРИЗ', 'Финансовая грамотность', 'Целеполагание', 'Эмолект', 'Разговорный английский клуб'];
 
 const documents = [
   'Паспорт родителя',
@@ -131,7 +134,7 @@ const textbooks: Textbook[] = [
     description: 'Программа учит детей понимать язык как систему: видеть смысл слова, его связь с другими и грамотно строить речь. Формирует осознанную грамотность, а не зубрёжку правил.',
   },
   {
-    subject: 'Окружающий мир',
+    subject: 'Природоведение',
     authors: 'Л.В. Белавина, Л.А. Ясюкова',
     publisher: 'SMART CLASS',
     description: 'Целостная картина мира: природа, человек, общество рассматриваются во взаимосвязи. Ребёнок учится наблюдать, задавать вопросы и искать закономерности.',
@@ -232,9 +235,6 @@ const nutritionPrinciples: string[] = [
       </h3>
       <div class="space-y-4 text-base md:text-lg leading-relaxed text-text mb-6">
         <p>
-          В школе «Доброе Начало» мы выбрали Систему развивающего обучения. Почему? Потому что она учит не просто запоминать, а понимать и мыслить.
-        </p>
-        <p>
           Мы взяли за основу золотой стандарт образования. Советская фундаментальная школа считалась лучшей в мире благодаря строгой логике построения программы. Мы сохранили эту логику, но сделали её живой и доступной.
         </p>
       </div>
@@ -268,6 +268,16 @@ const nutritionPrinciples: string[] = [
             <li class="bg-bg rounded-xl px-4 py-3">
               <p class="font-semibold text-indigo text-sm mb-0.5">{s.name}</p>
               <p class="text-sm text-text-muted leading-snug">{s.text}</p>
+            </li>
+          ))}
+        </ul>
+      </ExpandableBlock>
+
+      <ExpandableBlock summary="Дополнительные предметы" defaultOpen={false}>
+        <ul class="flex flex-wrap gap-2 list-none p-0 m-0">
+          {additionals.map((addition) => (
+            <li class="inline-flex items-center px-4 py-2 rounded-full bg-bg text-indigo text-sm font-medium">
+              {addition}
             </li>
           ))}
         </ul>
@@ -406,7 +416,7 @@ const nutritionPrinciples: string[] = [
       <h3 class="text-2xl font-semibold text-indigo mb-6">Стоимость</h3>
       <dl class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         <div>
-          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Обучение<br>8:00-15:10<br></dt>
+          <dt class="text-sm font-semibold uppercase tracking-wider text-text-muted mb-2">Обучение + обед<br>8:00-15:10<br></dt>
           <dd class="text-2xl font-semibold text-indigo">59 000 ₽ <span class="text-base font-normal text-text-muted">/ мес</span></dd>
         </div>
         <div>
